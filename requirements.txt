@@ -1,0 +1,12 @@
+Django
+Pillow
+djangorestframework
+# djangorestframework-jwt abondaned no latest django support
+djangorestframework_simplejwt
+pytest
+pytest-django
+arrow
+requests
+# psycopg2
+psycopg2-binary
+dj-static==0.0.6
