@@ -155,7 +155,7 @@ class Client(models.Model):
 
 class Bank(models.Model):
 
-    account_num = models.CharField(max_length=255)
+    account = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
     country = models.CharField(max_length=255)
     city = models.CharField(max_length=255)

@@ -11,7 +11,7 @@ def test_check(apiclient):
 
 def test_contract_list(apiclient):
 
-    response = apiclient.get('api/contracts')
+    response = apiclient.get(reverse('api:v1:contract-list'))
 
     assert response.status_code == 200
     print(response.json())
