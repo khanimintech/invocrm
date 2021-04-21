@@ -34,34 +34,16 @@ class LoginSerializer(serializers.Serializer):
         email = attrs.get('email')
         password = attrs.get('password')
         try:
-            print('geldi')
-            print(email.lower())
-            print(CustomUser.objects.all().first().email)
-            print(CustomUser.objects.get(email__iexact=email), 'alalala')
             user = CustomUser.objects.get(email__iexact=email)
 
         except CustomUser.DoesNotExist:
 
             raise serializers.ValidationError('User with that email does not exist')
-        print(user.email, password)
+
         user = authenticate(self.context['request'], username=user.username, password=password)
         if user:
             return {'user': user}
         else:
-            print('EHEHEH')
+
             raise serializers.ValidationError('User with that email does not exist')
-
-        # return attrs
-
-
-class UserRegistrationSerializer(serializers.ModelSerializer):
-
-    password = PasswordField(required=False)
-
-    class Meta:
-
-        model = CustomUser
-        fields = [
-            'email', 'password', 'first_name', 'last_name'
-        ]
 

@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from api.models import Contract
-from api.serilizers import ContractSerializer, LoginSerializer, UserRegistrationSerializer
+from api.serilizers import ContractSerializer, LoginSerializer
 
 
 class LoginAPIView(APIView):
@@ -29,41 +29,17 @@ class LoginAPIView(APIView):
         # else:
         #     return Response(serializer.errors)
 
-class UserRegistrationView(CreateAPIView):
-
-    serializer_class = UserRegistrationSerializer
-
-    def create(self, request, *args, **kwargs):
-
-        register_serializer = self.get_serializer(data=request.data)
-        register_serializer.is_valid(raise_exception=True)
-
-        self.perform_create(register_serializer)
-
-        login_serializer = LoginSerializer(
-            data=register_serializer.validated_data, context=self.get_serializer_context()
-        )
-
-        login_serializer.is_valid(raise_exception=True)
-
-        user = login_serializer.validated_data.get('user')
-
-        response = Response({'user': LoginSerializer(user).data}, status=status.HTTP_201_CREATED)
-        login(request, response, user)
-
-        return response
-
 
 class ContractViewSet(ModelViewSet):
 
     queryset = Contract.objects.all()
     serializer_class = ContractSerializer
 
-    def get_queryset(self):
-
-        queryset = self.queryset
-        print(queryset, 'alaaaaa')
-        return queryset.filter(creator=self.request.user)
+    # def get_queryset(self):
+    #
+    #     queryset = self.queryset
+    #
+    #     return queryset.filter(creator=self.request.user)
 
     def get_serializer_context(self):
 

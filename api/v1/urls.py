@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import SimpleRouter
 
 from api.v1.views.contract import check_view
-from api.views import ContractViewSet, UserRegistrationView, LoginAPIView
+from api.views import ContractViewSet, LoginAPIView
 
 router = SimpleRouter()
 router.register('contracts', ContractViewSet, 'contracts')

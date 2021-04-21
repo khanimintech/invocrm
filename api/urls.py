@@ -1,8 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter, SimpleRouter
 
-from api.views import UserRegistrationView
-
 
 
 urlpatterns = [
