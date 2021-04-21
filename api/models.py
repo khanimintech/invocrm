@@ -1,9 +1,9 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 from django.db import models
 from django.utils import timezone
 
 
-class CustomUser(User):
+class CustomUser(AbstractUser):
     plant_name = models.CharField(max_length=100)
 
     def __str__(self):
@@ -101,7 +101,7 @@ class Contract(models.Model):
             (SERVICE, 'Service'),
         )
 
-    creator = models.ForeignKey('CustomUser', on_delete=models.CASCADE, null=True)
+    # creator = models.ForeignKey('CustomUser', on_delete=models.CASCADE, null=True)
     type = models.PositiveSmallIntegerField(
         'Type', choices=TYPE.CHOICES, default=TYPE.BUY_SALE,
     )
@@ -155,7 +155,7 @@ class Client(models.Model):
 
 class Bank(models.Model):
 
-    account = models.CharField(max_length=255)
+    account_num = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
     country = models.CharField(max_length=255)
     city = models.CharField(max_length=255)

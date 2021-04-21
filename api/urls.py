@@ -7,7 +7,7 @@ from api.views import UserRegistrationView
 
 urlpatterns = [
     path('v1.0/', include(('api.v1.urls', 'api'), namespace='v1')),
-    path('reg', UserRegistrationView.as_view(), name='reg'),
+
     # path('contracts', ContractViewSet.as_view({'get': 'list'})),
 
     # There are many methods for versioning, for simple one:

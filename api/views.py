@@ -12,7 +12,7 @@ from api.models import Contract
 from api.serilizers import ContractSerializer, LoginSerializer, UserRegistrationSerializer
 
 
-class LoginView(APIView):
+class LoginAPIView(APIView):
 
     serializer_class = LoginSerializer
 
@@ -20,13 +20,14 @@ class LoginView(APIView):
 
         serializer = self.serializer_class(data=request.data, context={'request': request})
 
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             user = serializer.validated_data.get('user')
 
             login(request, user)
 
             return Response({'user': LoginSerializer(user).data})
-
+        # else:
+        #     return Response(serializer.errors)
 
 class UserRegistrationView(CreateAPIView):
 
