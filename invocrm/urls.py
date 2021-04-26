@@ -20,7 +20,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include(('siteapp.urls', 'siteapp'), namespace='siteapp')),
+
     path('api/', include(('api.urls', 'api'), namespace='api')),
 ]
 
@@ -29,3 +29,8 @@ if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     # # static files (images, css, javascript, etc.)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += [
+    # this will be serve and allow any other url so it should be at the bottom
+    path('', include(('siteapp.urls', 'siteapp'), namespace='siteapp')),
+]
