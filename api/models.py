@@ -124,10 +124,11 @@ class DistributionAgreement(BaseContract):
     AG_TYPE = BaseContract.Type.DISTRIBUTION
     # TODO CountryField() waiting to approve or delete
     territory = models.CharField(max_length=256, verbose_name=_('Applied territory'))
-    subject_of_distribution = models.CharField(max_length=256, verbose_name=_('Subject of distribtion'))
+    subject_of_distribution = models.CharField(max_length=256, verbose_name=_('Subject of distribution'))
 
 
 class AgentAgreement(BaseContract):
+    AG_TYPE = BaseContract.Type.AGENT
     territory = models.CharField(max_length=256, verbose_name=_('Applied territory'))
 
 
