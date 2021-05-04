@@ -1,0 +1,27 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+ 
+*{
+    font-family: 'Montserrat', sans-serif;
+}
+
+.row {
+  display: flex;
+}
+
+.jc-sb{
+  justify-content: space-between;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.content{
+  padding: 20px;
+  width: 100%;
+  background-color: #F8F9FA;
+}

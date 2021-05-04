@@ -16,12 +16,14 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
-
+from django.urls import path, re_path, include
+from django.views.static import serve
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include(('siteapp.urls', 'siteapp'), namespace='siteapp')),
+   
     path('api/', include(('api.urls', 'api'), namespace='api')),
+    # this should be at the end because every other url will be one SPA  
+    
 ]
 
 
@@ -29,3 +31,5 @@ if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     # # static files (images, css, javascript, etc.)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += path('', include(('siteapp.urls', 'siteapp'), namespace='siteapp')),
