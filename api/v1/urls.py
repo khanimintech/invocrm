@@ -1,23 +1,20 @@
 from django.urls import path, include
 from rest_framework.routers import SimpleRouter
 
-from api.v1.views.contract import check_view
-from api.views import ContractViewSet, LoginAPIView
+from api.v1.views.contract import check_view, ContractListAPIView, TradeAgreementCreateAPIView
+from api.views import LoginAPIView
 
 router = SimpleRouter()
-router.register('contracts', ContractViewSet, 'contracts')
 
 urlpatterns = [
     path(
         r'check-django/', check_view, name='check-django'
     ),
-    path(
-        r'', include(router.urls)
-    ),
+    # path(
+    #     r'', include(router.urls)
+    # ),
+
+    path('contracts/', ContractListAPIView.as_view(), name='contracts'),
+    path('trade-create/', TradeAgreementCreateAPIView.as_view(), name='trade-create'),
     path('login', LoginAPIView.as_view(), name='login'),
 ]
-
-print(path(
-        r'contracts/', include(router.urls)
-    )
-)
