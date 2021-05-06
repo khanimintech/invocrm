@@ -6,11 +6,6 @@ from rest_framework.views import APIView
 from api.serializers import LoginSerializer
 
 
-def filter_status_count(qs, status):
-
-    return qs.filter(status=status).count()
-
-
 class LoginAPIView(APIView):
 
     serializer_class = LoginSerializer

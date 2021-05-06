@@ -1,3 +1,5 @@
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from api.main_models.contract import BaseContract
@@ -16,6 +18,11 @@ contract_create_serializer = {
     BaseContract.Type.INTERNATIONAL: InternationalCreateSerializer,
     BaseContract.Type.CUSTOMER: CustomerCreateSerializer
 }
+
+
+def filter_status_count(qs, status):
+
+    return qs.filter(status=status).count()
 
 
 class ContractViewSet(ModelViewSet):
@@ -42,3 +49,19 @@ class ContractViewSet(ModelViewSet):
             return contract_create_serializer[contract_type]
 
         return super().get_serializer_class()
+
+
+class ContractStatusStatAPIView(APIView):
+
+    def get(self, request):
+
+        qs = BaseContract.objects.filter(plant_name=request.user.plant_name)
+
+        response = {
+                'all_count': qs.count(),
+                'in_process_count': filter_status_count(qs, BaseContract.Status.IN_PROCESS),
+                'approved_count': filter_status_count(qs, BaseContract.Status.APPROVED),
+                'expired_count': filter_status_count(qs, BaseContract.Status.EXPIRED),
+                'expires_after_2_weeks': 0
+            }
+        return Response(response)
