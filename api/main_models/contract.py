@@ -6,6 +6,7 @@ from django.utils.translation import gettext as _
 class BaseContract(models.Model):
 
     class Status:
+
         IN_PROCESS, APPROVED, EXPIRED = range(0, 3) # expires after 2 weeks status - processing on view
 
         CHOICES = (
@@ -39,7 +40,7 @@ class BaseContract(models.Model):
     type = models.SmallIntegerField(choices=Type.CHOICES)
     created = models.DateTimeField(default=timezone.now)
     due_date = models.DateTimeField()
-    status = models.CharField(choices=Status.CHOICES, max_length=40, default=Status.IN_PROCESS)
+    status = models.SmallIntegerField(choices=Status.CHOICES, default=Status.IN_PROCESS)
     sales_manager = models.ForeignKey('Person', on_delete=models.CASCADE, related_name='contracts',
                                       null=True, blank=True)
 

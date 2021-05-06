@@ -26,12 +26,13 @@ class ContractListSerializer(serializers.ModelSerializer):
     sales_manager = serializers.CharField(source='sales_manager.fullname')
     type = serializers.SerializerMethodField()
     annex_count = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField()
 
     class Meta:
 
         model = BaseContract
 
-        fields = ['company_name', 'contract_no', 'type', 'created', 'due_date', 'sales_manager', 'annex_count']
+        fields = ['company_name', 'contract_no', 'type', 'created', 'due_date', 'sales_manager', 'annex_count', 'status']
 
     def get_type(self, obj):
 
@@ -40,6 +41,7 @@ class ContractListSerializer(serializers.ModelSerializer):
     def get_company_name(self, obj):
 
         if obj._is_individual_contract:
+
             return None
         else:
             return obj.company.name
@@ -47,6 +49,10 @@ class ContractListSerializer(serializers.ModelSerializer):
     def get_annex_count(self, obj):
 
         return 0
+
+    def get_status(self, obj):
+
+        return obj.get_status_display()
 
 
 class EntitySerializer(serializers.ModelSerializer):
