@@ -6,13 +6,15 @@ from django.utils.translation import gettext as _
 
 # This is fake pseudo annex just to store supplement for now,
 # because subject to change, will be added PO suppl file itself here, probably
+from api.models import Person
+
 
 class POAgreementAnnex(BaseContract):
     agreement = models.ForeignKey('POAgreement', on_delete=models.CASCADE)
     supplement_no = models.CharField(max_length=64,)
 
 
-class TradeAgreementAnnex(models.Model):
+class BaseAnnex(models.Model):
 
     request_no = models.CharField(max_length=256, unique=True)
     annex_date = models.DateTimeField()
@@ -22,6 +24,11 @@ class TradeAgreementAnnex(models.Model):
     delivery_terms = models.TextField()
     acquisition_terms = models.TextField()
     created = models.DateTimeField(default=timezone.now)
+    seller = models.OneToOneField(Person, on_delete=models.CASCADE)
+
+
+class TradeAgreementAnnex(BaseAnnex):
+
 
     @property
     def annex_total_price(self):  # TODO fix

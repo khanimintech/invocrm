@@ -1,47 +1,44 @@
-from django.http import JsonResponse
-from rest_framework.generics import ListAPIView, CreateAPIView
-from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
 from api.main_models.contract import BaseContract
-from api.serializers import ContractListSerializer, TradeCreateSerializer
-    # , InternationalCreateSerializer, \
-    # OneTimeCreateSerializer, RentCreateSerializer, POCreateSerializer, AgentCreateSerializer, \
-    # DistributionCreateSerializer, ServiceCreateSerializer,
+from api.serializers import ContractListSerializer, TradeCreateSerializer, ServiceCreateSerializer, \
+    DistributionCreateSerializer, AgentCreateSerializer, POCreateSerializer, RentCreateSerializer, \
+    OneTimeCreateSerializer, InternationalCreateSerializer, CustomerCreateSerializer
+
+contract_create_serializer = {
+    BaseContract.Type.TRADE: TradeCreateSerializer,
+    BaseContract.Type.SERVICE: ServiceCreateSerializer,
+    BaseContract.Type.DISTRIBUTION: DistributionCreateSerializer,
+    BaseContract.Type.AGENT: AgentCreateSerializer,
+    BaseContract.Type.PO: POCreateSerializer,
+    BaseContract.Type.RENT: RentCreateSerializer,
+    BaseContract.Type.ONE_TIME: OneTimeCreateSerializer,
+    BaseContract.Type.INTERNATIONAL: InternationalCreateSerializer,
+    BaseContract.Type.CUSTOMER: CustomerCreateSerializer
+}
 
 
-def check_view(request):
-
-    return JsonResponse({
-        'message': 'OK'
-    })
-
-
-class ContractListAPIView(ListAPIView):
+class ContractViewSet(ModelViewSet):
 
     queryset = BaseContract.objects.all()
     serializer_class = ContractListSerializer
 
     def get_queryset(self):
-
         queryset = self.queryset
         return queryset.filter(plant_name=self.request.user.plant_name)
 
     def get_serializer_context(self):
-
         context = super().get_serializer_context()
         context['user'] = self.request.user
 
         return context
 
+    def get_serializer_class(self):
 
-class TradeAgreementCreateAPIView(CreateAPIView):
+        contract_type = self.request.data.get('type', None)
 
-    serializer_class = TradeCreateSerializer
+        if self.action == 'create' and contract_type:
 
-    def get_serializer_context(self):
+            return contract_create_serializer[contract_type]
 
-        context = super().get_serializer_context()
-
-        context['user'] = self.request.user
-
-        return context
+        return super().get_serializer_class()

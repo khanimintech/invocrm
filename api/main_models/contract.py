@@ -16,7 +16,7 @@ class BaseContract(models.Model):
 
     class Type:
 
-        TRADE, SERVICE, DISTRIBUTION, AGENT, RENT, ONE_TIME, PO, INTERNATIONAL = range(1, 9)
+        TRADE, SERVICE, DISTRIBUTION, AGENT, RENT, ONE_TIME, PO, INTERNATIONAL, CUSTOMER = range(1, 10)
 
         CHOICES = (
             (TRADE, _('Trade')),
@@ -27,6 +27,7 @@ class BaseContract(models.Model):
             (ONE_TIME, _('One-time')),
             (PO, _('Purchase order')),
             (INTERNATIONAL, _('International')),
+            (CUSTOMER, _('Customer')),
         )
 
     AG_TYPE = None  # subclass should define one of the BaseContract.Type
@@ -34,42 +35,35 @@ class BaseContract(models.Model):
     plant_name = models.CharField(max_length=256, default=None)
 
     contract_no = models.CharField(max_length=256, null=True, blank=True)
-    entity = models.ForeignKey('api.AgreementEntity', on_delete=models.CASCADE, null=True, blank=True)
-    type = models.CharField(choices=Type.CHOICES, max_length=40)
+    company = models.ForeignKey('api.Company', on_delete=models.CASCADE, null=True, blank=True)
+    type = models.SmallIntegerField(choices=Type.CHOICES)
     created = models.DateTimeField(default=timezone.now)
     due_date = models.DateTimeField()
     status = models.CharField(choices=Status.CHOICES, max_length=40, default=Status.IN_PROCESS)
     sales_manager = models.ForeignKey('Person', on_delete=models.CASCADE, related_name='contracts',
                                       null=True, blank=True)
 
-    # TODO maybe entity's ceo - if company type
-    executive = models.ForeignKey('Person', on_delete=models.CASCADE, related_name='my_contracts',
-                                  null=True, blank=True)
+    responsible_person = models.OneToOneField('Person', on_delete=models.CASCADE, related_name='agreements',
+                                              null=True, blank=True)
 
     def _is_individual_contract(self):
-        if isinstance(self, AgentAgreement):
+        if not hasattr(self, 'company'):
             return True
 
-    # def save(self, **kwargs):
-    #
-    #     if issubclass(type(self), BaseContract):
-    #         self.type = self.Type[0]
-    #         if self._is_individual_contract():
-    #             self.entity.type = AgreementEntity.INDIVIDUAL
-    #
-    #     super(BaseContract, self).save(**kwargs)
+    def save(self, **kwargs):
+
+        if issubclass(type(self), BaseContract):
+            self.type = self.AG_TYPE
+
+        super(BaseContract, self).save(**kwargs)
 
 
 class TradeAgreement(BaseContract):
     AG_TYPE = BaseContract.Type.TRADE
-    responsible_person = models.OneToOneField('Person', on_delete=models.CASCADE, related_name='trade_agreements',
-                                              null=True, blank=True)
 
 
 class ServiceAgreement(BaseContract):
     AG_TYPE = BaseContract.Type.SERVICE
-    responsible_person = models.OneToOneField('Person', on_delete=models.CASCADE, related_name='service_agreements',
-                                              null=True, blank=True)
 
 
 class DistributionAgreement(BaseContract):
@@ -98,6 +92,16 @@ class OneTimeAgreement(BaseContract):
 
     AG_TYPE = BaseContract.Type.ONE_TIME
 
+    final_amount_with_writing = models.TextField()
+    price_offer = models.TextField()
+    price_offer_validity = models.TextField()
+    warranty_period = models.TextField()
+    unpaid_period = models.TextField()
+    unpaid_value = models.TextField()
+    part_payment = models.TextField()
+    part_acquisition = models.TextField()
+    standard = models.TextField()
+
 
 class InternationalAgreement(BaseContract):
 
@@ -106,34 +110,47 @@ class InternationalAgreement(BaseContract):
     payment_condition = models.CharField(max_length=256, null=True, blank=True)
 
 
+class CustomerTemplateAgreement(BaseContract):
+
+    class CustomerType:
+
+        TRADE, SERVICE, DISTRIBUTION, AGENT = range(1, 5)
+
+        CHOICES = (
+            (TRADE, _('Trade')),
+            (SERVICE, _('Service')),
+            (DISTRIBUTION, _('Distribution')),
+            (AGENT, _('Agent')),
+        )
+
+    AG_TYPE = BaseContract.Type.CUSTOMER
+    custom_contract_type = models.SmallIntegerField(choices=CustomerType.CHOICES)
+
+
 class Contact(models.Model):
 
     mobile = models.CharField(max_length=50, null=True, blank=True)
-    position = models.CharField(max_length=50, null=True, blank=True)
     address = models.CharField(max_length=50, null=True, blank=True)
     work_email = models.CharField(max_length=50, null=True, blank=True)
     personal_email = models.CharField(max_length=50, null=True, blank=True)
 
 
-class AgreementEntity(models.Model):
+class Company(models.Model):
 
     MMC = 1
     ASC = 2
     QSC = 3
-    INDIVIDUAL = 4
 
     _TYPE_CHOICES = {
         MMC: _('MMC'),
         ASC: _('ASC'),
         QSC: _('QSC'),
-        INDIVIDUAL: _('Individual'),  # one person
     }
     type = models.SmallIntegerField(choices=tuple(_TYPE_CHOICES.items()))
 
-    # better verbose?
-    name = models.CharField(max_length=256, verbose_name=_('Company') + '/' + _('Invidiual') + _('name'))
+    name = models.CharField(max_length=256, verbose_name=_('Company'))
+    address = models.CharField(max_length=512)
     tin = models.CharField(max_length=128, verbose_name=_('Taxpayer identification number'))
-    address = models.CharField(max_length=512)  # corporate
 
 
 class Bank(models.Model):
@@ -145,7 +162,7 @@ class Bank(models.Model):
 
 class BankAccount(models.Model):
 
-    owner = models.ForeignKey('AgreementEntity', on_delete=models.CASCADE)
+    owner = models.ForeignKey('Company', on_delete=models.CASCADE)
     default = models.BooleanField(default=False, verbose_name=_('Is primary account?'))
 
     account = models.CharField(max_length=256)
