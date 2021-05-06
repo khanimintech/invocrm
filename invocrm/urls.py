@@ -20,7 +20,6 @@ from django.urls import path, re_path, include
 from django.views.static import serve
 urlpatterns = [
     path('admin/', admin.site.urls),
-   
     path('api/', include(('api.urls', 'api'), namespace='api')),
     # this should be at the end because every other url will be one SPA  
     
@@ -32,4 +31,7 @@ if settings.DEBUG:
     # # static files (images, css, javascript, etc.)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-urlpatterns += path('', include(('siteapp.urls', 'siteapp'), namespace='siteapp')),
+urlpatterns += [
+    # this will be serve and allow any other url so it should be at the bottom
+    path('', include(('siteapp.urls', 'siteapp'), namespace='siteapp')),
+]
