@@ -6,6 +6,7 @@ from django.utils.translation import gettext as _
 
 # This is fake pseudo annex just to store supplement for now,
 # because subject to change, will be added PO suppl file itself here, probably
+from api.main_models.managers import AnnexQuerySet
 from api.models import Person
 
 
@@ -16,7 +17,13 @@ class POAgreementAnnex(BaseContract):
 
 class BaseAnnex(models.Model):
 
+    objects = AnnexQuerySet.as_manager()
+
+    contract = models.ForeignKey(BaseContract, on_delete=models.CASCADE, related_name='annex_list')
+
+    annex_no = models.IntegerField()
     request_no = models.CharField(max_length=256, unique=True)
+
     annex_date = models.DateTimeField()
     note = models.TextField()
     # extra_note =  TODO check Gunay if we can use note field above for all added notes.
@@ -24,7 +31,9 @@ class BaseAnnex(models.Model):
     delivery_terms = models.TextField()
     acquisition_terms = models.TextField()
     created = models.DateTimeField(default=timezone.now)
-    seller = models.OneToOneField(Person, on_delete=models.CASCADE)
+
+    seller = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='seller_annex_list')
+    sales_manager = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='sales_manager_annex_list')
 
 
 class TradeAgreementAnnex(BaseAnnex):
@@ -49,6 +58,9 @@ class UnitOfMeasure(models.Model):
 class ProductInvoiceItem(models.Model):
 
     name = models.CharField(max_length=400)
+
+    annex = models.ForeignKey(BaseAnnex, on_delete=models.CASCADE, related_name='products')
+
     unit = models.ForeignKey('UnitOfMeasure', on_delete=models.CASCADE)
     quantity = models.IntegerField()
     price = models.IntegerField()  # single

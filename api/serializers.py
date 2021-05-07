@@ -94,14 +94,6 @@ class BankAccountSerializer(serializers.ModelSerializer):
         fields = ['default', 'account', 'swift_no', 'correspondent_account']
 
 
-class AnnexSerializer(serializers.ModelSerializer):
-
-    class Meta:
-
-        model = TradeAgreementAnnex
-        fields = ['__all__']
-
-
 class ContractCreateBaseSerializer(serializers.ModelSerializer):
 
     entity = EntitySerializer(required=False)
@@ -230,16 +222,17 @@ class OneTimeCreateSerializer(serializers.ModelSerializer):
     entity = EntitySerializer()
     executive = PersonSerializer()
     executive_contact = ContactSerializer()
-    annex = AnnexSerializer()
+    # annex = AnnexSerializer()
 
     class Meta:
         model = OneTimeAgreement
 
         fields = [
             'sales_manager', 'created', 'due_date', 'entity', 'executive',
-            'executive_contact', 'type', 'annex', 'subtype', 'final_amount_with_writing',
+            'executive_contact', 'type', 'subtype', 'final_amount_with_writing',
             'price_offer', 'price_offer_validity', 'warranty_period', 'unpaid_period',
-            'unpaid_value', 'part_payment', 'part_acquisition', 'standard'
+            'unpaid_value', 'part_payment', 'part_acquisition', 'standard',
+            # 'annex',
         ]
 
     @atomic
