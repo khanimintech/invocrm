@@ -1,14 +1,15 @@
-import './App.scss';
 import React, { useState } from 'react';
 import Layout from './components/Layout/Layout';
 import Contracts from './pages/contracts/Contracts';
-import {  useSnackbar } from 'notistack';
+import Annexes from './pages/annexes/Annexes';
+import { useSnackbar } from 'notistack';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
 } from "react-router-dom";
+import Contacts from './pages/contacts/Contacts';
+import Banks from './pages/banks';
 
 import 'primereact/resources/themes/saga-blue/theme.css';
 import "primereact/resources/primereact.min.css"
@@ -41,7 +42,7 @@ const App = ({ history }) => {
               break;
             default:
               if (!suppressGlobalErrorToast)
-                enqueueSnackbar("Xeta bash verdi!", { variant: "error" });
+                enqueueSnackbar("Xəta baş verdi!", { variant: "error" });
           }
           reject(response);
         })
@@ -51,17 +52,36 @@ const App = ({ history }) => {
     });
   };
 
+  const props = {
+    loading,
+    user,
+    handleRequest,
+    enqueueSnackbar
+  }
+
+  const routes = [
+    { url: "/contracts", component: <Contracts /> },
+    { url: "/annexes", component: <Annexes /> },
+    { url: "/contacts", component: <Contacts /> },
+    { url: "/banks", component: <Banks /> },
+  ]
+
   return (
-    <Layout user={user}>
-        <Router>
-          <Switch>
-            <Route path="/contracts">
-              <Contracts loading={loading} user={user} handleRequest={handleRequest} />
+    <Router>
+      <Layout user={user}>
+        <Switch>
+          {routes.map(route => (
+            <Route key={route.url} path={route.url}>
+              {React.cloneElement(
+                route.component,
+                { ...props }
+              )}
             </Route>
-            </Switch>
-          </Router>
-    </Layout>
+          ))}
+        </Switch>
+      </Layout>
+    </Router>
   );
 }
 
-export default App ;
+export default App;

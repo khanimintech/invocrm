@@ -1,3 +1,5 @@
+@import 'src/styleVariables.scss';
+
 .header-row{
     display: flex;
     align-items: center;
@@ -7,7 +9,9 @@
         font-weight: 400;
     }
     svg {
+        color: $color-blue;
         font-size: 2em;
+        opacity: .7;
     }
 }
 
@@ -15,7 +19,6 @@
     display: flex;
     flex-direction: column;
     border-radius: 3px;
-    // box-shadow: 0 1px 3px rgb(0 0 0 / 12%);
     color: #fff;
     .overview-box-first-row {
         padding: 15px;
@@ -54,12 +57,12 @@
         height: 30px;
     }
     .csv-icon {
-        color: #43a5f5;
+        color: $color-blue;
     }
     .pdf-icon {
-        color: #66bb6a;
+        color: $color-green;
     }
     .add-icon {
-        color: #7e58c2;
+        color: $color-purple;
     }
 }

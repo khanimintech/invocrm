@@ -26,6 +26,9 @@ import InputBase from '@material-ui/core/InputBase';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import {
+  Link, withRouter
+} from "react-router-dom";
 
 
 const drawerWidth = 240;
@@ -149,8 +152,9 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function Layout(props) {
+const Layout = props => {
   const classes = useStyles();
+  const { location } = props;
   const [open, setOpen] = useState(false);
   const [isSubMenuVisible, toggleSubMenu] = useState(true)
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -185,9 +189,10 @@ export default function Layout(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Cixiw</MenuItem>
+      <MenuItem onClick={handleMenuClose}>Çıxış</MenuItem>
     </Menu>
   );
+
 
   return (
     <div className={classes.root}>
@@ -216,7 +221,7 @@ export default function Layout(props) {
               <SearchIcon />
             </div>
             <InputBase
-              placeholder="Search…"
+              placeholder="Axtar..."
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
@@ -264,30 +269,38 @@ export default function Layout(props) {
           </ListItem>
           <Collapse in={isSubMenuVisible} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
+            <Link to="/contracts" className={location.pathname == "/contracts" ? "active" : ""} >
               <ListItem button className={classes.nested}>
-                <ListItemIcon>
-                  <InsertDriveFileIcon />
-                </ListItemIcon>
-                <ListItemText primary="Muqavileler" />
-              </ListItem>
+                  <ListItemIcon>
+                    <InsertDriveFileIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Muqavileler" />
+                </ListItem>
+            </Link>
+            <Link to="/annexes" className={location.pathname == "/annexes" ? "active" : ""}>
               <ListItem button className={classes.nested}>
                 <ListItemIcon>
                   <PostAddIcon />
                 </ListItemIcon>
                 <ListItemText primary="Elaveler" />
               </ListItem>
+              </Link>
+              <Link to="/banks" className={location.pathname == "/banks" ? "active" : ""}>
               <ListItem button className={classes.nested}>
                 <ListItemIcon>
                   <AccountBalanceIcon />
                 </ListItemIcon>
                 <ListItemText primary="Bank" />
               </ListItem>
+              </Link>
+              <Link to="/contacts" className={location.pathname == "/contacts" ? "active" : ""}>
               <ListItem button className={classes.nested}>
                 <ListItemIcon>
                   <ContactPhoneIcon />
                 </ListItemIcon>
                 <ListItemText primary="Kontakt" />
               </ListItem>
+              </Link>
             </List>
           </Collapse>
           <ListItem button>
@@ -304,3 +317,6 @@ export default function Layout(props) {
     </div>
   );
 }
+
+
+export default withRouter(Layout); 
