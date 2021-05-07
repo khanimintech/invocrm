@@ -43,6 +43,8 @@ class BaseContract(models.Model):
     status = models.SmallIntegerField(choices=Status.CHOICES, default=Status.IN_PROCESS)
     sales_manager = models.ForeignKey('Person', on_delete=models.CASCADE, related_name='contracts',
                                       null=True, blank=True)
+    executor = models.OneToOneField('Person', on_delete=models.CASCADE, related_name='my_contracts',
+                                    null=True, blank=True)
 
     responsible_person = models.OneToOneField('Person', on_delete=models.CASCADE, related_name='agreements',
                                               null=True, blank=True)
