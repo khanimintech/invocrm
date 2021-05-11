@@ -39,8 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api',
     'siteapp',
-    'django_countries',
-    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -81,8 +79,11 @@ WSGI_APPLICATION = 'invocrm.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
     }
 }
 
@@ -143,10 +144,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
+        'invocrm.auth.CsrfExemptSessionAuthentication'
     ),
 }
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/index/'
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
+AUTH_USER_MODEL = 'api.CustomUser'
+

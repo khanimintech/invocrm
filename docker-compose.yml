@@ -9,16 +9,18 @@ services:
 
     environment:
       - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
   web:
     build: .
-    restart: on-failure
     volumes: 
       - .:/app
     ports:
       - "8003:8000"
     depends_on:
       - db
-
+    restart: always
+    environment:
+      - POSTGRES_HOST=db
     env_file:
       - ./env.secret
    
