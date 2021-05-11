@@ -3,10 +3,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from api.main_models.contract import BaseContract
-from api.serializers import ContractListSerializer, TradeCreateSerializer, ServiceCreateSerializer, \
+from api.main_models.contract import BaseContract, BankAccount, Contact
+from api.v1.serializers.contract import ContractListSerializer, TradeCreateSerializer, ServiceCreateSerializer, \
     DistributionCreateSerializer, AgentCreateSerializer, POCreateSerializer, RentCreateSerializer, \
-    OneTimeCreateSerializer, InternationalCreateSerializer, CustomerCreateSerializer
+    OneTimeCreateSerializer, InternationalCreateSerializer, CustomerCreateSerializer, BankListSerializer, \
+    ContactListSerializer
 
 contract_create_serializer = {
     BaseContract.Type.TRADE: TradeCreateSerializer,
@@ -100,3 +101,15 @@ class ContractStatusStatAPIView(APIView):
                 'expires_after_2_weeks': 0
             }
         return Response(response)
+
+
+class BankViewSet(ModelViewSet):
+
+    queryset = BankAccount.objects.all()
+    serializer_class = BankListSerializer
+
+
+class ContactViewSet(ModelViewSet):
+
+    queryset = Contact.objects.all()
+    serializer_class = ContactListSerializer

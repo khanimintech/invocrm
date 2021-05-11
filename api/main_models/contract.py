@@ -43,10 +43,10 @@ class BaseContract(models.Model):
     status = models.SmallIntegerField(choices=Status.CHOICES, default=Status.IN_PROCESS)
     sales_manager = models.ForeignKey('Person', on_delete=models.CASCADE, related_name='contracts',
                                       null=True, blank=True)
-    executor = models.OneToOneField('Person', on_delete=models.CASCADE, related_name='my_contracts',
+    executor = models.OneToOneField('Person', on_delete=models.CASCADE, related_name='contract',
                                     null=True, blank=True)
 
-    responsible_person = models.OneToOneField('Person', on_delete=models.CASCADE, related_name='agreements',
+    responsible_person = models.OneToOneField('Person', on_delete=models.CASCADE, related_name='agreement',
                                               null=True, blank=True)
 
     def _is_individual_contract(self):
@@ -136,6 +136,7 @@ class Contact(models.Model):
     address = models.CharField(max_length=50, null=True, blank=True)
     work_email = models.CharField(max_length=50, null=True, blank=True)
     personal_email = models.CharField(max_length=50, null=True, blank=True)
+    web_site = models.CharField(max_length=100, null=True, blank=True)
 
 
 class Company(models.Model):
@@ -171,6 +172,7 @@ class BankAccount(models.Model):
 
     account = models.CharField(max_length=256)
     bank = models.ForeignKey('Bank', on_delete=models.CASCADE)
-
+    address = models.CharField(max_length=256, null=True, blank=True)
+    city = models.CharField(max_length=256, null=True, blank=True)
     swift_no = models.CharField(max_length=256)
     correspondent_account = models.CharField(max_length=256)
