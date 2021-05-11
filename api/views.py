@@ -4,10 +4,11 @@ from rest_framework.views import APIView
 
 
 from api.serializers import LoginSerializer
+from invocrm.auth import CsrfExemptSessionAuthentication
 
 
 class LoginAPIView(APIView):
-
+    authentication_classes = (CsrfExemptSessionAuthentication, )
     serializer_class = LoginSerializer
 
     def post(self, request, *args, **kwargs):
