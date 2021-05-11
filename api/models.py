@@ -33,6 +33,8 @@ class Person(models.Model):
 
     type = models.SmallIntegerField(choices=TYPE.CHOICES)
 
+    tin = models.CharField(max_length=256, verbose_name=_('TIN'))
+
     @property
     def fullname(self):
 

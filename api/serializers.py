@@ -1,8 +1,10 @@
+from copy import copy
+
 from django.contrib.auth import authenticate
 from django.db.transaction import atomic
 from rest_framework import serializers
 
-from api.main_models.annex import TradeAgreementAnnex
+from api.main_models.annex import TradeAgreementAnnex, BaseAnnex
 from api.main_models.contract import BaseContract, TradeAgreement, Contact, Company, Bank, BankAccount, \
     ServiceAgreement, DistributionAgreement, AgentAgreement, POAgreement, RentAgreement, OneTimeAgreement, \
     InternationalAgreement, CustomerTemplateAgreement
@@ -18,6 +20,10 @@ contract_map = {
             BaseContract.Type.ONE_TIME: OneTimeAgreement,
             BaseContract.Type.INTERNATIONAL: InternationalAgreement
         }
+
+annex_map = {
+    BaseAnnex: 'Trade'
+}
 
 
 class ContractListSerializer(serializers.ModelSerializer):
@@ -94,43 +100,49 @@ class BankAccountSerializer(serializers.ModelSerializer):
         fields = ['default', 'account', 'swift_no', 'correspondent_account']
 
 
+
+
+
 class ContractCreateBaseSerializer(serializers.ModelSerializer):
 
-    entity = EntitySerializer(required=False)
-    executive = PersonSerializer(required=False)
+    company = EntitySerializer(required=False)
+    executor = PersonSerializer(required=False)
     bank = BankSerializer(required=False)
     contact = ContactSerializer(required=False)
     responsible_person = PersonSerializer(required=False)
     bank_account = BankAccountSerializer(required=False)
-    contract_no = serializers.CharField(required=False)
+    contract_no = serializers.CharField()
 
     @atomic
     def create(self, validated_data):
+
+        def create_pop_or_none(cls, field_name, **kwargs):
+            return cls.objects.create(**kwargs, **validated_data.pop(field_name)) if validated_data.get(field_name,
+                                                                                                        None) else None
         user = self.context.get('user')
 
-        contact_data = validated_data.pop('contact', None)
-        responsible_person_data = validated_data.pop('responsible_person', None)
-        entity_data = validated_data.pop('entity', None)
-        executive_data = validated_data.pop('executive', None)
-        bank_data = validated_data.pop('bank', None)
-        bank_account_data = validated_data.pop('bank_account', None)
+        annex_data = validated_data.pop('annex', None)
 
-        contact = Contact.objects.create(**contact_data) if contact_data else None
+        contact = create_pop_or_none(Contact, 'contact')
 
-        responsible_person = Person.objects.create(
-            type=Person.TYPE.CONTACT, **responsible_person_data, contact=contact) if responsible_person_data else None
+        responsible_person = create_pop_or_none(Person, 'responsible_person', **{'type': Person.TYPE.CONTACT, 'contact': contact})
 
-        executive = Person.objects.create(type=Person.TYPE.BUYER, **executive_data) if executive_data else None
+        executor = create_pop_or_none(Person, 'executor', **{'type': Person.TYPE.BUYER})
 
-        entity = Company.objects.create(executive=executive, **entity_data) if entity_data else None
+        company = create_pop_or_none(Company, 'company')
 
-        bank = Bank.objects.create(**bank_data) if bank_account_data else None
+        bank = create_pop_or_none(Bank, 'bank')
 
-        BankAccount.objects.create(owner=entity, bank=bank, **bank_account_data) if bank_account_data else None
+        create_pop_or_none(BankAccount, 'bank_account', **{'company_owner': company, 'personal_owner': executor, 'bank': bank})
 
-        contract = contract_map[validated_data['type']].objects.create(plant_name=user.plant_name, entity=entity,
+        contract = contract_map[validated_data['type']].objects.create(plant_name=user.plant_name, company=company,
                                                                        responsible_person=responsible_person,
-                                                                       **validated_data)
+                                                                       executor=executor, **validated_data)
+
+        if contract.type == BaseContract.Type.ONE_TIME and annex_data:
+
+            BaseAnnex.objects.create(contract=contract, **annex_data)
+
         return contract
 
 
@@ -141,7 +153,7 @@ class TradeCreateSerializer(ContractCreateBaseSerializer):
         model = TradeAgreement
 
         fields = [
-            'contract_no', 'sales_manager', 'created', 'due_date', 'entity', 'executive',
+            'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
             'bank', 'bank_account',  'contact', 'responsible_person', 'type'
         ]
 
@@ -152,7 +164,7 @@ class ServiceCreateSerializer(ContractCreateBaseSerializer):
 
         model = ServiceAgreement
         fields = [
-            'contract_no', 'sales_manager', 'created', 'due_date', 'entity', 'executive',
+            'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
             'bank', 'bank_account', 'contact', 'responsible_person', 'type'
 
         ]
@@ -164,46 +176,22 @@ class DistributionCreateSerializer(ContractCreateBaseSerializer):
         model = DistributionAgreement
 
         fields = [
-            'contract_no', 'sales_manager', 'created', 'due_date', 'entity', 'executive',
+            'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
             'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'territory',
             'subject_of_distribution'
 
         ]
 
 
-class AgentCreateSerializer(serializers.ModelSerializer):
+class AgentCreateSerializer(ContractCreateBaseSerializer):
 
     class Meta:
         model = AgentAgreement
 
         fields = [
-            'contract_no', 'sales_manager', 'created', 'due_date', 'entity', 'executive',
+            'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
             'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'territory',
         ]
-
-
-class POCreateSerializer(serializers.ModelSerializer):
-
-    entity = EntitySerializer()
-
-    class Meta:
-        model = POAgreement
-
-        fields = [
-            'po_number', 'sales_manager', 'created', 'due_date', 'entity', 'type'
-        ]
-
-    @atomic
-    def create(self, validated_data):
-
-        user = self.context.get('user')
-        entity_data = validated_data.pop('entity', None)
-
-        entity = Company.objects.create(**entity_data) if entity_data else None
-
-        contract = contract_map[validated_data['type']].objects.create(plant_name=user.plant_name, entity=entity,
-                                                                       **validated_data)
-        return contract
 
 
 class RentCreateSerializer(ContractCreateBaseSerializer):
@@ -212,47 +200,29 @@ class RentCreateSerializer(ContractCreateBaseSerializer):
 
         model = RentAgreement
         fields = [
-            'contract_no', 'sales_manager', 'created', 'due_date', 'entity', 'executive',
+            'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
             'bank', 'bank_account', 'contact', 'responsible_person', 'type'
         ]
 
 
-class OneTimeCreateSerializer(serializers.ModelSerializer):
+class OneTimeAnnexSerializer(serializers.ModelSerializer):
+    pass
 
-    entity = EntitySerializer()
-    executive = PersonSerializer()
-    executive_contact = ContactSerializer()
-    # annex = AnnexSerializer()
+
+class OneTimeCreateSerializer(ContractCreateBaseSerializer):
+
+    executor_contact = ContactSerializer()
+    annex = OneTimeAnnexSerializer()
 
     class Meta:
         model = OneTimeAgreement
 
         fields = [
-            'sales_manager', 'created', 'due_date', 'entity', 'executive',
-            'executive_contact', 'type', 'subtype', 'final_amount_with_writing',
+            'sales_manager', 'created', 'due_date', 'company', 'executor',
+            'executor_contact', 'type', 'subtype', 'final_amount_with_writing',
             'price_offer', 'price_offer_validity', 'warranty_period', 'unpaid_period',
-            'unpaid_value', 'part_payment', 'part_acquisition', 'standard',
-            # 'annex',
+            'unpaid_value', 'part_payment', 'part_acquisition', 'standard', 'annex'
         ]
-
-    @atomic
-    def create(self, validated_data):
-        user = self.context.get('user')
-
-        executive_contact_data = validated_data.pop('executive_contact', {})
-        entity_data = validated_data.pop('entity', {})
-        executive_data = validated_data.pop('executive', {})
-
-        contact = Contact.objects.create(**executive_contact_data) if executive_contact_data else None
-
-        executive = Person.objects.create(type=Person.TYPE.BUYER, contact=contact,
-                                          **executive_data) if executive_data else None
-
-        entity = Company.objects.create(executive=executive, **entity_data) if entity_data else None
-
-        contract = contract_map[validated_data['type']].objects.create(plant_name=user.plant_name, entity=entity,
-                                                                       **validated_data)
-        return contract
 
 
 class InternationalCreateSerializer(ContractCreateBaseSerializer):
@@ -261,7 +231,7 @@ class InternationalCreateSerializer(ContractCreateBaseSerializer):
 
         model = InternationalAgreement
         fields = [
-            'contract_no', 'sales_manager', 'created', 'due_date', 'entity', 'executive',
+            'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
             'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'country',
             'payment_condition'
         ]
@@ -272,8 +242,18 @@ class CustomerCreateSerializer(ContractCreateBaseSerializer):
     class Meta:
         model = CustomerTemplateAgreement
         fields = [
-            'contract_no', 'sales_manager', 'created', 'due_date', 'entity', 'executive',
+            'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
             'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'custom_contract_type'
+        ]
+
+
+class POCreateSerializer(ContractCreateBaseSerializer):
+
+    class Meta:
+        model = POAgreement
+
+        fields = [
+            'po_number', 'sales_manager', 'created', 'due_date', 'company', 'type'
         ]
 
 

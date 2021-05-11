@@ -1,8 +1,6 @@
 from django.db.models import QuerySet, Sum, OuterRef, Subquery
 
 
-
-
 class AnnexQuerySet(QuerySet):
 
     def a_sum_no_invoice(self):

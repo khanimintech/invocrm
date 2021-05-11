@@ -46,3 +46,59 @@ class TestAnnexViewSet:
         assert payload[1]['annex_no'] == 2
         assert payload[1]['sales_manager'] == sales_manager.id
         assert payload[1]['payment_terms'] == '1'
+
+    def test_annex_create(self, apiclient, admin_user, sales_manager):
+
+        contract = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager,
+                                                 due_date=timezone.now(),type=BaseContract.Type.TRADE)
+
+        unit = UnitOfMeasure.objects.create(name='w')
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+        response = apiclient.post(reverse('api:v1:annex-list'),
+                                  data={
+                                      'contract': contract.id,
+                                      'request_no': '123',
+                                      'annex_date': timezone.now(),
+                                      'payment_terms': 'payment terms',
+                                      'delivery_terms': 'delivery terms',
+                                      'acquisition_terms': 'acquisition terms',
+                                      'created': timezone.now(),
+                                      'seller': sales_manager.id,
+                                      'sales_manager': sales_manager.id,
+                                      'products': [
+                                          {
+                                              'name': '123',
+                                              'quantity': 1,
+                                              'price': 1,
+                                              'total': 1,
+                                              'unit': unit.id
+                                          },
+                                          {
+                                              'name': '123q',
+                                              'quantity': 11,
+                                              'price': 11,
+                                              'total': 11,
+                                              'unit': unit.id
+                                          }
+                                      ]
+
+                                  },
+                                  format='json'
+                                  )
+
+        assert response.status_code == 201, response.json()
+        assert BaseAnnex.objects.all().count() == 1
+
+        annex = BaseAnnex.objects.first()
+
+        assert annex.contract.id == contract.id
+        assert annex.request_no == '123'
+        assert annex.payment_terms == 'payment terms'
+        assert annex.delivery_terms == 'delivery terms'
+        assert annex.acquisition_terms == 'acquisition terms'
+        assert annex.seller.id == sales_manager.id
+        assert annex.sales_manager.id == sales_manager.id
+        assert annex.products.count() == 2

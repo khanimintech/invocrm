@@ -35,6 +35,12 @@ class BaseAnnex(models.Model):
     seller = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='seller_annex_list')
     sales_manager = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='sales_manager_annex_list')
 
+    def save(self, **kwargs):
+
+        self.annex_no = self.contract.annex_list.latest('created').annex_no + 1 if self.contract.annex_list.exists() else 1
+
+        super(BaseAnnex, self).save(**kwargs)
+
 
 class TradeAgreementAnnex(BaseAnnex):
 

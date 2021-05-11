@@ -165,7 +165,8 @@ class Bank(models.Model):
 
 class BankAccount(models.Model):
 
-    owner = models.ForeignKey('Company', on_delete=models.CASCADE)
+    company_owner = models.ForeignKey('Company', on_delete=models.CASCADE, null=True, blank=True)
+    personal_owner = models.ForeignKey('Person', on_delete=models.CASCADE, null=True, blank=True)
     default = models.BooleanField(default=False, verbose_name=_('Is primary account?'))
 
     account = models.CharField(max_length=256)
