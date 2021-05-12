@@ -29,9 +29,10 @@ export function makeAsyncCall(options){
     });
   }
 
+
   return fetch(url, {
     method,
-    headers,
+    headers: requestHeaders,
     body,
     ...(url.match('^' + BACKEND_URL) ? { credentials: 'include' } : {}),
   }).then((res) => {

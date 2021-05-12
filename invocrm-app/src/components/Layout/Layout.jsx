@@ -153,6 +153,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Layout = props => {
+  const { removeUser, history } = props;
   const classes = useStyles();
   const { location } = props;
   const [open, setOpen] = useState(false);
@@ -171,8 +172,10 @@ const Layout = props => {
   };
 
   const handleMenuClose = () => {
+    removeUser();
     setAnchorEl(null);
     handleMobileMenuClose();
+    history.push("/login")
   };
 
 

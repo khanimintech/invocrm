@@ -58,8 +58,10 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
         handleRequest(
             ContractsService.index()
         ).then(res => {
-            setContracts(res.body.data)
-            setStatuses(res.body.data.map(contract => contract.status))
+            if (res.body.data){
+                setContracts(res.body.data)
+                setStatuses(res.body.data.map(contract => contract.status))
+            }
         })
     }
 
