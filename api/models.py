@@ -29,7 +29,7 @@ class Person(models.Model):
     last_name = models.CharField(max_length=256)
     fathers_name = models.CharField(max_length=256)
     position = models.CharField(max_length=50, null=True, blank=True)
-    contact = models.OneToOneField(Contact, on_delete=models.CASCADE, null=True)
+    contact = models.OneToOneField(Contact, on_delete=models.CASCADE, null=True, blank=True)
 
     type = models.SmallIntegerField(choices=TYPE.CHOICES)
 
