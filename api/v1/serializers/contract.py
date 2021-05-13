@@ -51,10 +51,6 @@ class ContractListSerializer(serializers.ModelSerializer):
 
         return 0
 
-    def get_status(self, obj):
-
-        return obj.get_status_display()
-
 
 class EntitySerializer(serializers.ModelSerializer):
 
