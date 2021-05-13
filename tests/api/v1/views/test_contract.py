@@ -273,7 +273,7 @@ class TestBankViewSet:
 
         assert response.status_code == 200
         assert len(response.json()) == 1
-        assert response.json()[0]['type'] == 'Trade'
+        assert response.json()[0]['type'] == 1
 
     def test_contract_list_filter_by_sales_manager(self, apiclient, admin_user, sales_manager):
 

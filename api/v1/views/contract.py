@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.exceptions import ValidationError
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -88,11 +89,16 @@ class ContractViewSet(ModelViewSet):
 
         contract_type = self.request.data.get('type', None)
 
-        if self.action == 'create' and contract_type:
+        if self.action == 'create':
 
             return contract_create_serializer[contract_type]
 
         return super().get_serializer_class()
+
+    def create(self, request, *args, **kwargs):
+        if not request.data.get('type'):
+            raise ValidationError('Please provide contract type')
+        return super().create(request, *args, **kwargs)
 
 
 class ContractStatusStatAPIView(APIView):
