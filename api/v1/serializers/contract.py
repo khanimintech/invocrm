@@ -31,7 +31,6 @@ class ContractListSerializer(serializers.ModelSerializer):
     company_name = serializers.SerializerMethodField()
     sales_manager = serializers.CharField(source='sales_manager.fullname')
     annex_count = serializers.SerializerMethodField()
-    status = serializers.SerializerMethodField()
 
     class Meta:
 
