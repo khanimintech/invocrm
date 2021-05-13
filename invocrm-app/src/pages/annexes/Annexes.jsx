@@ -3,16 +3,8 @@ import PageContent from '../../components/PageContainer';
 import PriorityHighIcon from '@material-ui/icons/PriorityHigh';
 import AccessAlarmIcon from '@material-ui/icons/AccessAlarm';
 import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { Calendar } from 'primereact/calendar';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import Tooltip from '@material-ui/core/Tooltip';
 import { ContractsService } from '../../services/ContractsService';
-import IconButton from '@material-ui/core/IconButton';
-import { Grid } from '@material-ui/core';
 import ExtendedTable from '../../components/ExtendedTable';
 
 

@@ -4,7 +4,7 @@ import { ContractsService } from '../../services/ContractsService';
 import ExtendedTable from '../../components/ExtendedTable';
 import ContactPhoneIcon from '@material-ui/icons/ContactPhone';
 
-
+import "./styles.scss"
 const columns = [
     { field: 'company_name', header: 'Müştəri' },
     { field: 'contract_id', header: 'Ünvan' },

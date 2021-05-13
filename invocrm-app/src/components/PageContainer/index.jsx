@@ -32,19 +32,23 @@ const PageContent = ({overviewCards, title, titleIcon, sum, addIcon, children, o
       <Grid item md={6} sm={12} className="content-header">
         <h3>{`Ümumi say: ${sum}`}</h3>
       </Grid>
-      <Grid item md={6}  className="content-toolbar" justify="flex-end">
-      {addIcon}
-        <Tooltip title="CSV formatında yüklə" placement="top"  >
-            <IconButton onClick={onExportCSV} className="csv-icon">
-                <GetAppIcon  fontSize="medium"/>
-            </IconButton>
-        </Tooltip>
-        &nbsp;&nbsp;
-        <Tooltip title="PDF formatında yüklə" placement="top"  >
-            <IconButton  onClick={onExportPDF} className="pdf-icon" >
-                <PictureAsPdfIcon fontSize="medium" />
-            </IconButton>
-        </Tooltip>
+      <Grid item md={6}  className="content-toolbar" >
+        <Grid container spacing={0} justify="flex-end">
+          <Grid item md={12}>
+            {addIcon}
+              <Tooltip title="CSV formatında yüklə" placement="top"  >
+                  <IconButton onClick={onExportCSV} className="csv-icon">
+                      <GetAppIcon />
+                  </IconButton>
+              </Tooltip>
+              &nbsp;&nbsp;
+              <Tooltip title="PDF formatında yüklə" placement="top"  >
+                  <IconButton  onClick={onExportPDF} className="pdf-icon" >
+                      <PictureAsPdfIcon />
+                  </IconButton>
+              </Tooltip>
+            </Grid>
+        </Grid>
       </Grid>
     </Grid>
 

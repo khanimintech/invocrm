@@ -39,3 +39,10 @@ export function makeAsyncCall(options){
     return processResponse(res);
   });
 }
+
+
+export const validateRequired = value => {
+  let err;
+  if (!value) return err = "Bu sahə mütləqdir";
+  return err;
+}

@@ -28,24 +28,24 @@ const Login = ({ setUser, history , handleRequest}) => {
     return (
         <div class="login-wrapper">
             <div id="formContent">
-            <h2 class="active"> Welcome </h2>
+            <h2 class="active"> İnvoCRM </h2>
             <Formik
                 initialValues={{ email: '', password: '' }}
                 validate={values => {
                     const errors = {};
                     if (!values.email) {
-                    errors.email = 'Required';
+                    errors.email = 'Bu sahə mütləqdir';
                     }
                     return errors;
                 }}
                 onSubmit={handleSubmit}>
-                {({ isSubmitting, errors }) => (
+                {({  errors }) => (
                     <Form>
                         <Field type="email" name="email" id="login"  type="text" placeholder="E-mail" />
-                        <Field type="password" name="password"   id="password" placeholder="Password" />
+                        <Field type="password" name="password"   id="password" placeholder="Şifrə" />
                         <ErrorMessage name="password" component="div" />
                         <button type="submit" >
-                            Log In
+                            Daxil ol
                         </button>
                         {
                                 errors.email_or_password ? (

@@ -272,7 +272,7 @@ const Layout = props => {
           </ListItem>
           <Collapse in={isSubMenuVisible} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-            <Link to="/contracts" className={location.pathname == "/contracts" ? "active" : ""} >
+            <Link to="/contracts" className={location.pathname === "/contracts" ? "active" : ""} >
               <ListItem button className={classes.nested}>
                   <ListItemIcon>
                     <InsertDriveFileIcon />
@@ -280,7 +280,7 @@ const Layout = props => {
                   <ListItemText primary="Muqavileler" />
                 </ListItem>
             </Link>
-            <Link to="/annexes" className={location.pathname == "/annexes" ? "active" : ""}>
+            <Link to="/annexes" className={location.pathname === "/annexes" ? "active" : ""}>
               <ListItem button className={classes.nested}>
                 <ListItemIcon>
                   <PostAddIcon />
@@ -288,7 +288,7 @@ const Layout = props => {
                 <ListItemText primary="Elaveler" />
               </ListItem>
               </Link>
-              <Link to="/banks" className={location.pathname == "/banks" ? "active" : ""}>
+              <Link to="/banks" className={location.pathname === "/banks" ? "active" : ""}>
               <ListItem button className={classes.nested}>
                 <ListItemIcon>
                   <AccountBalanceIcon />
@@ -296,7 +296,7 @@ const Layout = props => {
                 <ListItemText primary="Bank" />
               </ListItem>
               </Link>
-              <Link to="/contacts" className={location.pathname == "/contacts" ? "active" : ""}>
+              <Link to="/contacts" className={location.pathname === "/contacts" ? "active" : ""}>
               <ListItem button className={classes.nested}>
                 <ListItemIcon>
                   <ContactPhoneIcon />

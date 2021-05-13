@@ -16,6 +16,7 @@ import { ITEM_HEIGHT } from '../../constants';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import './styles.scss';
+import CreateContractModal from '../contacts/CreateContractForm';
 
 
 const initialOverviews = [
@@ -41,10 +42,13 @@ const columns = [
 const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
 
     let dt = useRef(null);
+    
     const [overviews, setOverviews] = useState(initialOverviews);
     const [contracts, setContracts] = useState(null);
     const [statuses, setStatuses] = useState([]);
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [showCreateModal, toggleShowCreateModal] = useState(false);
+    const [contractType, setContractType] = useState();
     const openCreateMenu = Boolean(anchorEl);
 
 
@@ -58,9 +62,9 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
         handleRequest(
             ContractsService.index()
         ).then(res => {
-            if (res.body.data){
-                setContracts(res.body.data)
-                setStatuses(res.body.data.map(contract => contract.status))
+            if (res.body){
+                setContracts(res.body)
+                setStatuses(res.body.map(contract => contract.status))
             }
         })
     }
@@ -85,6 +89,13 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
         })
     }
 
+    const handleOpenContractModal =  contractType => {
+        toggleShowCreateModal(true);
+        setContractType(contractType);
+        setAnchorEl(null)
+    }
+
+
     const addIcon = (
         <>
             <Tooltip title="Sened yarat" placement="top-end">
@@ -95,7 +106,7 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                     onClick={event => setAnchorEl(event.currentTarget)}
                     className="add-icon"
                 >
-                    <PostAddIcon fontSize="medium" />
+                    <PostAddIcon />
                 </IconButton>
             </Tooltip>
 
@@ -113,16 +124,16 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 }}
             >
 
-                <MenuItem onClick={event => setAnchorEl(event.currentTarget)}>
+                <MenuItem onClick={() => handleOpenContractModal("sales")}>
                     Alqı-satqı
                 </MenuItem>
-                <MenuItem onClick={event => setAnchorEl(event.currentTarget)}>
+                <MenuItem onClick={() => handleOpenContractModal("sales")}>
                     Xidmət
                 </MenuItem>
-                <MenuItem onClick={event => setAnchorEl(event.currentTarget)}>
+                <MenuItem onClick={() => handleOpenContractModal("sales")}>
                     Agent
                 </MenuItem>
-                <MenuItem onClick={event => setAnchorEl(event.currentTarget)}>
+                <MenuItem onClick={() => handleOpenContractModal("sales")}>
                     Distribyutor
                 </MenuItem>
             </Menu>
@@ -153,7 +164,14 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 onDelete={deleteContract}
                 getData={getContracts}
             />
-
+            <CreateContractModal
+                open={showCreateModal}
+                handleClose={() => toggleShowCreateModal(false)}
+                formType={contractType}
+                handleRequest={handleRequest}
+                enqueueSnackbar={enqueueSnackbar}
+                reloadData={getContracts}
+            />
         </PageContent>
     )
 }

@@ -7,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import SalesForm from './SalesForm';
-
+import { ContractsService } from '../../services/ContractsService';
 
 const formTypes = {
     "sales": {
@@ -18,27 +18,31 @@ const formTypes = {
 
 
 
-const CreateContractModal = ({open, handleClose, formType}) => {
+const CreateContractModal = ({open, formType, handleRequest, handleClose, enqueueSnackbar, reloadData }) => {
 
+  const handleSubmit = vals => {
+    handleRequest(
+      ContractsService.save(vals)
+    )
+    .then(() => {
+      reloadData()
+      handleClose();
+      enqueueSnackbar("Əməliyyat uğurla tamamlandı.", { variant: "success"});
+    })
+  }
 
     return (
-        <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">{formTypes[formType].label}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-           {
-               formTypes[formType].component
+        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xl">
+        <DialogTitle id="form-dialog-title">{formType ? formTypes[formType].label: ""}</DialogTitle>
+        {  formType ?
+               React.cloneElement( formTypes[formType].component, {
+                 handleSubmit,
+                 handleRequest,
+                 handleClose
+
+                })
+             : null
            }
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleClose} color="primary">
-            Subscribe
-          </Button>
-        </DialogActions>
       </Dialog>
     )
 }
