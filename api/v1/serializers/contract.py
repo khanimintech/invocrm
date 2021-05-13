@@ -49,8 +49,8 @@ class ContractListSerializer(serializers.ModelSerializer):
         if obj._is_individual_contract:
 
             return None
-        else:
-            return obj.company.name
+
+        return obj.company.name
 
     def get_annex_count(self, obj):
 
@@ -98,9 +98,6 @@ class BankAccountSerializer(serializers.ModelSerializer):
 
         model = BankAccount
         fields = ['default', 'account', 'swift_no', 'correspondent_account']
-
-
-
 
 
 class ContractCreateBaseSerializer(serializers.ModelSerializer):
@@ -262,11 +259,24 @@ class BankListSerializer(serializers.ModelSerializer):
     name = serializers.CharField(source='bank.name')
     code = serializers.CharField(source='bank.code')
     tin = serializers.CharField(source='bank.tin')
+    company_name = serializers.SerializerMethodField()
+    company_tin = serializers.SerializerMethodField()
 
     class Meta:
 
         model = BankAccount
-        fields = ['name', 'code', 'tin', 'account', 'address', 'city', 'swift_no', 'correspondent_account']
+        fields = ['company_name', 'company_tin', 'name', 'code', 'tin', 'account', 'address', 'city',
+                  'swift_no', 'correspondent_account']
+
+    def get_company_name(self, obj):
+
+        if obj.company_owner:
+            return obj.company_owner.name
+
+    def get_company_tin(self, obj):
+
+        if obj.company_owner:
+            return obj.company_owner.tin
 
 
 class ContactListSerializer(serializers.ModelSerializer):
@@ -282,3 +292,11 @@ class ContactListSerializer(serializers.ModelSerializer):
     def get_responsible_person(self, obj):
 
         return obj.person.fullname
+
+
+class SalesManagerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Person
+        fields = ['id', 'fullname']

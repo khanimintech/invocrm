@@ -26,7 +26,7 @@ class TestAnnexViewSet:
         admin_user.plant_name = 'plant'
         admin_user.save()
         apiclient.force_login(admin_user)
-        response = apiclient.get(reverse('api:v1:annex-list'))
+        response = apiclient.get(reverse('api:v1:annexs-list'))
 
         assert response.status_code == 200
         payload = response.json()
@@ -50,14 +50,14 @@ class TestAnnexViewSet:
     def test_annex_create(self, apiclient, admin_user, sales_manager):
 
         contract = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager,
-                                                 due_date=timezone.now(),type=BaseContract.Type.TRADE)
+                                                 due_date=timezone.now(), type=BaseContract.Type.TRADE)
 
-        unit = UnitOfMeasure.objects.create(name='w')
+        unit = UnitOfMeasure.objects.create(name='KQ')
 
         admin_user.plant_name = 'plant'
         admin_user.save()
         apiclient.force_login(admin_user)
-        response = apiclient.post(reverse('api:v1:annex-list'),
+        response = apiclient.post(reverse('api:v1:annexs-list'),
                                   data={
                                       'contract': contract.id,
                                       'request_no': '123',

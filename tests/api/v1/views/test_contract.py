@@ -22,12 +22,12 @@ class TestContractViewSet:
     def test_contract_list_ok(self, apiclient, admin_user, sales_manager):
 
         TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
-                                      type=BaseContract.Type.TRADE)
+                                      type=BaseContract.Type.TRADE, contract_no='123')
 
         admin_user.plant_name = 'plant'
         admin_user.save()
         apiclient.force_login(admin_user)
-        response = apiclient.get(reverse('api:v1:contract-list'))
+        response = apiclient.get(reverse('api:v1:contracts-list') + '?contract_no=123')
 
         assert response.status_code == 200
 
@@ -36,7 +36,7 @@ class TestContractViewSet:
         admin_user.plant_name = 'plant'
         admin_user.save()
         apiclient.force_login(admin_user)
-        response = apiclient.post(reverse('api:v1:contract-list'),
+        response = apiclient.post(reverse('api:v1:contracts-list'),
                                   data={
                                       'contract_no': 123,
                                       'type': BaseContract.Type.TRADE,
@@ -163,7 +163,7 @@ class TestContactViewSet:
         admin_user.plant_name = 'plant'
         admin_user.save()
         apiclient.force_login(admin_user)
-        response = apiclient.get(reverse('api:v1:contact-list'))
+        response = apiclient.get(reverse('api:v1:contacts-list'))
 
         assert response.status_code == 200, response.json()
         payload = response.json()
@@ -200,7 +200,7 @@ class TestBankViewSet:
         admin_user.plant_name = 'plant'
         admin_user.save()
         apiclient.force_login(admin_user)
-        response = apiclient.get(reverse('api:v1:bank-list'))
+        response = apiclient.get(reverse('api:v1:banks-list'))
 
         assert response.status_code == 200, response.json()
         payload = response.json()
@@ -221,3 +221,119 @@ class TestBankViewSet:
         assert payload[1]['city'] == 'city1'
         assert payload[1]['swift_no'] == 'swift_1234'
         assert payload[1]['correspondent_account'] == 'cor_1234'
+
+    def test_contract_list_filter_by_contract_no(self, apiclient, admin_user, sales_manager):
+
+        TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                      type=BaseContract.Type.TRADE, contract_no='123')
+
+        TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                      type=BaseContract.Type.TRADE, contract_no='12')
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+        response = apiclient.get(reverse('api:v1:contracts-list') + '?contract_no=123')
+
+        assert response.status_code == 200
+        assert len(response.json()) == 1
+        assert response.json()[0]['contract_no'] == '123'
+
+    def test_contract_list_filter_status(self, apiclient, admin_user, sales_manager):
+
+        TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                      type=BaseContract.Type.TRADE, contract_no='123',
+                                      status=BaseContract.Status.IN_PROCESS)
+
+        TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                      type=BaseContract.Type.TRADE, contract_no='12',
+                                      status=BaseContract.Status.APPROVED)
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+        response = apiclient.get(reverse('api:v1:contracts-list') + f'?status={BaseContract.Status.APPROVED}')
+
+        assert response.status_code == 200
+        assert len(response.json()) == 1
+        assert response.json()[0]['status'] == 'Approved'
+
+    def test_contract_list_filter_by_type(self, apiclient, admin_user, sales_manager):
+
+        TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                      type=BaseContract.Type.TRADE, contract_no='123')
+
+        ServiceAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                        type=BaseContract.Type.SERVICE, contract_no='12')
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+        response = apiclient.get(reverse('api:v1:contracts-list') + f'?type={BaseContract.Type.TRADE}')
+
+        assert response.status_code == 200
+        assert len(response.json()) == 1
+        assert response.json()[0]['type'] == 'Trade'
+
+    def test_contract_list_filter_by_sales_manager(self, apiclient, admin_user, sales_manager):
+
+        TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                      type=BaseContract.Type.TRADE, contract_no='123')
+
+        ServiceAgreement.objects.create(plant_name='plant', due_date=timezone.now(),
+                                        type=BaseContract.Type.SERVICE, contract_no='12')
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+        response = apiclient.get(reverse('api:v1:contracts-list') + f'?sales_manager={sales_manager.id}')
+
+        assert response.status_code == 200
+        assert len(response.json()) == 1
+        assert response.json()[0]['sales_manager'] == 'First Last' #fullname
+
+    def test_contract_list_filter_by_company_name(self, apiclient, admin_user, sales_manager):
+
+        company = Company.objects.create(type=Company.MMC, name='company_name', address='company_address', tin='12345')
+
+        TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                      type=BaseContract.Type.TRADE, contract_no='123', company=company)
+
+        ServiceAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                        type=BaseContract.Type.SERVICE, contract_no='12')
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+        response = apiclient.get(reverse('api:v1:contracts-list') + '?company_name=company_name')
+
+        assert response.status_code == 200, response.json()
+        assert len(response.json()) == 1
+        assert response.json()[0]['company_name'] == 'company_name'
+
+
+class TestSalesMangerApiView:
+
+    def test_sales_list_ok(self, apiclient, admin_user, sales_manager):
+
+        sales_manager1 = Person.objects.create(
+            type=Person.TYPE.SALES_MANAGER,
+            first_name='First1',
+            last_name='Last1',
+            fathers_name='Father1'
+        )
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+        response = apiclient.get(reverse('api:v1:sales-managers'))
+
+        assert response.status_code == 200, response.json()
+        assert len(response.json()) == 2
+        payload = response.json()
+
+        assert payload[0]['id'] == sales_manager.id
+        assert payload[0]['fullname'] == sales_manager.fullname
+
+        assert payload[1]['id'] == sales_manager1.id
+        assert payload[1]['fullname'] == sales_manager1.fullname

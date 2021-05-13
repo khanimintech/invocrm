@@ -7,7 +7,7 @@ class BaseContract(models.Model):
 
     class Status:
 
-        IN_PROCESS, APPROVED, EXPIRED = range(0, 3) # expires after 2 weeks status - processing on view
+        IN_PROCESS, APPROVED, EXPIRED = range(0, 3)# expires after 2 weeks status - processing on view
 
         CHOICES = (
             (IN_PROCESS, _('In process')),
@@ -49,9 +49,13 @@ class BaseContract(models.Model):
     responsible_person = models.OneToOneField('Person', on_delete=models.CASCADE, related_name='agreement',
                                               null=True, blank=True)
 
+    @property
     def _is_individual_contract(self):
-        if not hasattr(self, 'company'):
+
+        if not self.company:
             return True
+        else:
+            return False
 
     def save(self, **kwargs):
 

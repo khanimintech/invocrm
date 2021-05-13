@@ -1,13 +1,19 @@
 from django.http import JsonResponse
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
+from api.filters.contact import ContractFilterSet, BankFilterSet, ContactFilterSet
 from api.main_models.contract import BaseContract, BankAccount, Contact
+from api.models import Person
 from api.v1.serializers.contract import ContractListSerializer, TradeCreateSerializer, ServiceCreateSerializer, \
     DistributionCreateSerializer, AgentCreateSerializer, POCreateSerializer, RentCreateSerializer, \
     OneTimeCreateSerializer, InternationalCreateSerializer, CustomerCreateSerializer, BankListSerializer, \
-    ContactListSerializer
+    ContactListSerializer, SalesManagerSerializer
+
+# from django_filters.rest_framework import DjangoFilterBackend
 
 contract_create_serializer = {
     BaseContract.Type.TRADE: TradeCreateSerializer,
@@ -65,6 +71,8 @@ class ContractViewSet(ModelViewSet):
 
     queryset = BaseContract.objects.all()
     serializer_class = ContractListSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = ContractFilterSet
 
     def get_queryset(self):
         queryset = self.queryset
@@ -107,9 +115,19 @@ class BankViewSet(ModelViewSet):
 
     queryset = BankAccount.objects.all()
     serializer_class = BankListSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = BankFilterSet
 
 
 class ContactViewSet(ModelViewSet):
 
     queryset = Contact.objects.all()
     serializer_class = ContactListSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = ContactFilterSet
+
+
+class SalesMangerApiView(ListAPIView):
+
+    queryset = Person.objects.filter(type=Person.TYPE.SALES_MANAGER)
+    serializer_class = SalesManagerSerializer
