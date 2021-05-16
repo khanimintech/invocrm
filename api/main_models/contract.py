@@ -62,6 +62,9 @@ class BaseContract(models.Model):
         if issubclass(type(self), BaseContract):
             self.type = self.AG_TYPE
 
+            if self.AG_TYPE == BaseContract.Type.PO:
+                self.contract_no = self.po_number
+
         super(BaseContract, self).save(**kwargs)
 
 
@@ -154,11 +157,12 @@ class Company(models.Model):
         ASC: _('ASC'),
         QSC: _('QSC'),
     }
-    type = models.SmallIntegerField(choices=tuple(_TYPE_CHOICES.items()))
+    type = models.SmallIntegerField(choices=tuple(_TYPE_CHOICES.items()), null=True, blank=True)
 
     name = models.CharField(max_length=256, verbose_name=_('Company'))
-    address = models.CharField(max_length=512)
-    tin = models.CharField(max_length=128, verbose_name=_('Taxpayer identification number'))
+    address = models.CharField(max_length=512, null=True, blank=True)
+    tin = models.CharField(max_length=128, verbose_name=_('Taxpayer identification number'), null=True, blank=True)
+    email = models.CharField(max_length=50, null=True, blank=True)
 
 
 class Bank(models.Model):

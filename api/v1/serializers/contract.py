@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate
 from django.db.transaction import atomic
 from rest_framework import serializers
 
-from api.main_models.annex import TradeAgreementAnnex, BaseAnnex
+from api.main_models.annex import TradeAgreementAnnex, BaseAnnex, POAgreementSupplements
 from api.main_models.contract import BaseContract, TradeAgreement, Contact, Company, Bank, BankAccount, \
     ServiceAgreement, DistributionAgreement, AgentAgreement, POAgreement, RentAgreement, OneTimeAgreement, \
     InternationalAgreement, CustomerTemplateAgreement
@@ -18,7 +18,8 @@ contract_map = {
             BaseContract.Type.PO: POAgreement,
             BaseContract.Type.RENT: RentAgreement,
             BaseContract.Type.ONE_TIME: OneTimeAgreement,
-            BaseContract.Type.INTERNATIONAL: InternationalAgreement
+            BaseContract.Type.INTERNATIONAL: InternationalAgreement,
+            BaseContract.Type.CUSTOMER: CustomerTemplateAgreement
         }
 
 annex_map = {
@@ -82,6 +83,14 @@ class ContactSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class SupplementsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = POAgreementSupplements
+        fields = ['supplement_no', ]
+
+
 class BankAccountSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -109,6 +118,7 @@ class ContractCreateBaseSerializer(serializers.ModelSerializer):
         user = self.context.get('user')
 
         annex_data = validated_data.pop('annex', None)
+        supplements_data = validated_data.pop('supplements', None)
 
         contact = create_pop_or_none(Contact, 'contact')
 
@@ -129,6 +139,12 @@ class ContractCreateBaseSerializer(serializers.ModelSerializer):
         if contract.type == BaseContract.Type.ONE_TIME and annex_data:
 
             BaseAnnex.objects.create(contract=contract, **annex_data)
+
+        if contract.type == BaseContract.Type.PO and supplements_data:
+
+            for s in supplements_data:
+
+                POAgreementSupplements.objects.create(agreement=contract, **s)
 
         return contract
 
@@ -236,11 +252,13 @@ class CustomerCreateSerializer(ContractCreateBaseSerializer):
 
 class POCreateSerializer(ContractCreateBaseSerializer):
 
+    supplements = SupplementsSerializer(required=False, many=True)
+
     class Meta:
         model = POAgreement
 
         fields = [
-            'po_number', 'sales_manager', 'created', 'due_date', 'company', 'type'
+            'po_number', 'sales_manager', 'created', 'due_date', 'company', 'type', 'supplements'
         ]
 
 

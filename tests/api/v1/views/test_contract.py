@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.utils import timezone
 
 from rest_framework.reverse import reverse
@@ -30,6 +32,29 @@ class TestContractViewSet:
         response = apiclient.get(reverse('api:v1:contracts-list') + '?contract_no=123')
 
         assert response.status_code == 200
+
+    def test_po_create(self, apiclient, admin_user, sales_manager):
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+        response = apiclient.post(reverse('api:v1:contracts-list'),
+                                  data={
+                                      "due_date":"2021-05-16T13:14:03.488Z",
+                                        "created":"2021-05-16T13:14:03.488Z",
+
+                                        "supplements":[{"supplement_no":"dsf"},
+                                                       {"supplement_no":"qqdsf"}],
+
+                                        "po_number":"sdf",
+                                        "sales_manager":sales_manager.id,
+                                        "company":{"name":"dsf"},
+
+                                      "type":BaseContract.Type.PO},
+                                  format='json'
+                                  )
+
+        assert response.status_code == 201, response.json()
 
     def test_trade_create(self, apiclient, admin_user, sales_manager):
 
@@ -310,6 +335,26 @@ class TestBankViewSet:
         assert response.status_code == 200, response.json()
         assert len(response.json()) == 1
         assert response.json()[0]['company_name'] == 'company_name'
+
+    def test_contract_list_filter_created(self, apiclient, admin_user, sales_manager):
+
+        crea = timezone.now() - timedelta(days=1)
+
+        ta1 = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                      type=BaseContract.Type.TRADE, contract_no='123',
+                                      status=BaseContract.Status.IN_PROCESS, created=crea)
+
+        ta = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                           type=BaseContract.Type.TRADE, contract_no='12',
+                                           status=BaseContract.Status.APPROVED)
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+        response = apiclient.get(reverse('api:v1:contracts-list') + '?created=2021-05-16')
+
+        assert response.status_code == 200, response.json()
+        assert len(response.json()) == 1
 
 
 class TestSalesMangerApiView:

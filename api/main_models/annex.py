@@ -10,8 +10,8 @@ from api.main_models.managers import AnnexQuerySet
 from api.models import Person
 
 
-class POAgreementAnnex(BaseContract):
-    agreement = models.ForeignKey('POAgreement', on_delete=models.CASCADE)
+class POAgreementSupplements(models.Model):
+    agreement = models.ForeignKey('POAgreement', on_delete=models.CASCADE, related_name='supplements')
     supplement_no = models.CharField(max_length=64,)
 
 
