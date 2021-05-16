@@ -5,7 +5,7 @@ services:
   db:
     image: postgres:10
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata1:/var/lib/postgresql/data
 
     environment:
       - POSTGRES_PASSWORD=postgres
@@ -25,4 +25,4 @@ services:
       - ./env.secret
    
 volumes:
-    pgdata:
+    pgdata1:
