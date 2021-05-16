@@ -102,3 +102,20 @@ class TestAnnexViewSet:
         assert annex.seller.id == sales_manager.id
         assert annex.sales_manager.id == sales_manager.id
         assert annex.products.count() == 2
+
+
+class TestUnitOfMeasureAPIView:
+
+    def test_units_list(self, apiclient, admin_user):
+
+        UnitOfMeasure.objects.create(name='KQ')
+        UnitOfMeasure.objects.create(name='Metr')
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+
+        response = apiclient.get(reverse('api:v1:units'))
+
+        assert response.status_code == 200, response.json()
+        assert len(response.json()) == 2

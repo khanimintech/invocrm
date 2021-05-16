@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from api.main_models.annex import BaseAnnex, ProductInvoiceItem
+from api.main_models.annex import BaseAnnex, ProductInvoiceItem, UnitOfMeasure
 from django.utils import timezone
 
 
@@ -68,3 +68,11 @@ class AnnexCreateSerializer(serializers.ModelSerializer):
             ProductInvoiceItem.objects.bulk_create(ProductInvoiceItem(annex=annex, **p) for p in products)
 
         return annex
+
+
+class UnitSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = UnitOfMeasure
+        fields = '__all__'

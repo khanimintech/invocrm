@@ -1,9 +1,10 @@
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.generics import ListAPIView
 from rest_framework.viewsets import ModelViewSet
 
 from api.filters.annex import AnnexFilter
-from api.main_models.annex import BaseAnnex
-from api.v1.serializers.annex import AnnexSerializer, AnnexCreateSerializer
+from api.main_models.annex import BaseAnnex, UnitOfMeasure
+from api.v1.serializers.annex import AnnexSerializer, AnnexCreateSerializer, UnitSerializer
 
 
 class AnnexViewSet(ModelViewSet):
@@ -27,3 +28,8 @@ class AnnexViewSet(ModelViewSet):
 
         return super().get_serializer_class()
 
+
+class UnitOfMeasureAPIView(ListAPIView):
+
+    queryset = UnitOfMeasure.objects.all()
+    serializer_class = UnitSerializer
