@@ -169,7 +169,7 @@ class Bank(models.Model):
 
     name = models.CharField(max_length=256)
     code = models.CharField(max_length=256)
-    tin = models.CharField(max_length=256, verbose_name=_('TIN'))
+    tin = models.CharField(max_length=256, verbose_name=_('TIN'), null=True)
 
 
 class BankAccount(models.Model):
