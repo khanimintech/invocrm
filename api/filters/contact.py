@@ -9,6 +9,9 @@ class ContractFilterSet(django_filters.rest_framework.FilterSet):
 
     company_name = django_filters.CharFilter(method='filter_company_name')
 
+    created = django_filters.DateTimeFilter(field_name='created', lookup_expr='lte')
+    due_date = django_filters.DateTimeFilter(field_name='due_date', lookup_expr='lte')
+
     def filter_company_name(self, queryset, name, value):
 
         if value:
