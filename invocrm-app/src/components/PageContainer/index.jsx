@@ -33,8 +33,8 @@ const PageContent = ({overviewCards, title, titleIcon, sum, addIcon, children, o
         <h3>{`Ümumi say: ${sum}`}</h3>
       </Grid>
       <Grid item md={6}  className="content-toolbar" >
-        <Grid container spacing={0} justify="flex-end">
-          <Grid item md={12}>
+        <Grid container spacing={0}>
+          <Grid item md={12} className="align-right">
             {addIcon}
               <Tooltip title="CSV formatında yüklə" placement="top"  >
                   <IconButton onClick={onExportCSV} className="csv-icon">
@@ -52,7 +52,6 @@ const PageContent = ({overviewCards, title, titleIcon, sum, addIcon, children, o
       </Grid>
     </Grid>
 
-  
     <Grid container spacing={3}>
       {children}
     </Grid>

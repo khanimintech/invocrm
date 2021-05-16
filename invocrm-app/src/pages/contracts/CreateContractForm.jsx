@@ -1,19 +1,12 @@
-import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import React  from 'react';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import SalesForm from './SalesForm';
 import { ContractsService } from '../../services/ContractsService';
+import { contractTypes } from '../../constants';
 
 const formTypes = {
-    "sales": {
-        label: "Alqı-satqı",
-        component: <SalesForm />,
-    }
+    1: <SalesForm />
 }
 
 
@@ -33,9 +26,9 @@ const CreateContractModal = ({open, formType, handleRequest, handleClose, enqueu
 
     return (
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xl">
-        <DialogTitle id="form-dialog-title">{formType ? formTypes[formType].label: ""}</DialogTitle>
+        <DialogTitle id="form-dialog-title">{formType ?  contractTypes[formType] : ""}</DialogTitle>
         {  formType ?
-               React.cloneElement( formTypes[formType].component, {
+               React.cloneElement( formTypes[formType], {
                  handleSubmit,
                  handleRequest,
                  handleClose

@@ -1,10 +1,10 @@
-import { makeAsyncCall } from "../utils"
+import { makeAsyncCall, createFilterUrl } from "../utils"
 import {BACKEND_URL} from './../constants'
 
 
-const index = () =>
+const index = (filters) =>
     makeAsyncCall({
-        url: `${BACKEND_URL}contracts/`,
+        url: createFilterUrl(`${BACKEND_URL}contracts/`, filters),
         method: 'GET',
     });
 
@@ -29,7 +29,7 @@ const remove = (id) =>
     });
 
 export const ContractsService = {
-    index: () => index(),
+    index: (filters) => index(filters),
     remove: id => remove(id),
     getSalesManagers: () => getSalesManagers(),
     save: values => save(values)

@@ -3,17 +3,15 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import {
   MuiPickersUtilsProvider,
-  KeyboardTimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
-import { parseISO, format } from 'date-fns';
 import MenuItem from '@material-ui/core/MenuItem';
 
 const Input = ({field, form, meta, label, placeholder, required, defaultValue, select, options, readOnly, type, date }) => {
     const { name, value } = field;
     const { setFieldValue, submitCount } = form;
-    const { touched, error } = meta;
+    const { error } = meta;
     if (date)
         return (
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -66,7 +64,6 @@ const Input = ({field, form, meta, label, placeholder, required, defaultValue, s
          readOnly={readOnly}
          error={submitCount && error }
          fullWidth
-         required={required}
          variant="outlined"
         />
     )

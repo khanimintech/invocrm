@@ -1,18 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PageContent from '../../components/PageContainer';
-import { ContractsService } from '../../services/ContractsService';
 import ExtendedTable from '../../components/ExtendedTable';
 import ContactPhoneIcon from '@material-ui/icons/ContactPhone';
+import { ContactsService } from '../../services/ContactsService';
 
-import "./styles.scss"
+import "./styles.scss";
+
+
 const columns = [
-    { field: 'company_name', header: 'Müştəri' },
-    { field: 'contract_id', header: 'Ünvan' },
-    { field: 'contract_id', header: 'Əlaqədar şəxs' },
-    { field: 'type', header: 'Əlaqə nömrəsi' },
-    { field: 'contract_id', header: 'Əlavə №' },
-    { field: 'sales_name', header: "Şəxsi e-ünvan" },
-    { field: 'sales_name', header: "WEB sayt" },
+    { field: 'company_name', header: 'Müştəri', filter: true},
+    { field: 'contract_id', header: 'Ünvan' , filter: true},
+    { field: 'contract_id', header: 'Əlaqədar şəxs' , filter: true},
+    { field: 'type', header: 'Əlaqə nömrəsi' , filter: true},
+    { field: 'contract_id', header: 'Əlavə №', filter: true },
+    { field: 'sales_name', header: "Şəxsi e-ünvan" , filter: true},
+    { field: 'sales_name', header: "WEB sayt" , filter: true},
 ];
 
 
@@ -21,15 +23,10 @@ const Contacts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     const [contacts, setContacts] = useState(null);
 
 
-    useEffect(() => {
-        getContacts();
-    }, [])
 
-
-
-    const getContacts = () => {
+    const getContacts = (filters) => {
         handleRequest(
-            ContractsService.index()
+            ContactsService.index(filters)
         ).then(res => {
             setContacts(res.body.data)
         })
@@ -50,6 +47,7 @@ const Contacts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 actions={{edit: true, delete: true}}
                 headerTitle="Əlaqələrin siyahısı"
                 enqueueSnackbar={enqueueSnackbar}
+                getData={getContacts}
             />
 
 

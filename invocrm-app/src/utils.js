@@ -1,5 +1,5 @@
 import { BACKEND_URL } from './constants';
-
+import { format, parseISO } from 'date-fns'
 
 function processResponse(response) {
   const statusCode = response.status;
@@ -45,4 +45,14 @@ export const validateRequired = value => {
   let err;
   if (!value) return err = "Bu sahə mütləqdir";
   return err;
+}
+
+export const createFilterUrl = (url, filters) => {
+  let filterUrl = `${url}?`
+  if (filters)
+      Object.keys(filters).map(field => {
+          if (filters[field] || filters[field] === "")
+            filterUrl +=`${field}=${filters[field]}&`
+      })
+  return filterUrl;
 }

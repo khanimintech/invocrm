@@ -4,7 +4,7 @@ import PriorityHighIcon from '@material-ui/icons/PriorityHigh';
 import AccessAlarmIcon from '@material-ui/icons/AccessAlarm';
 import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
-import { ContractsService } from '../../services/ContractsService';
+import { AnnexesService } from '../../services/AnnexesService';
 import ExtendedTable from '../../components/ExtendedTable';
 
 
@@ -15,18 +15,18 @@ const initialOverviews = [
 ]
 
 const columns = [
-    { field: 'company_name', header: 'Şirkət' },
-    { field: '6', header: 'Sorğu №' },
-    { field: '5', header: 'Müqavilə Nömrəsi' },
-    { field: 'type', header: 'Müqavilə Növü' },
-    { field: 'contract_id', header: 'Əlavə №' },
-    { field: 'sales_name', header: "Satış Meneceri" },
-    { field: '1', header: "Məhsul" },
-    { field: '2', header: "Ödəniş şərti" },
-    { field: '3', header: "Məbləğ (ƏDV-siz)" },
-    { field: '4', header: "Məbləğ (ƏDV-li)" },
-    { field: 'created', header: 'Yaradılma Tarixi' },
-    { field: 'end_date', header: "Qarşı tərəfin imza tarixi" },
+    { field: 'company_name', header: 'Şirkət', filter: true },
+    { field: '6', header: 'Sorğu №', filter: true  },
+    { field: '5', header: 'Müqavilə Nömrəsi' , filter: true },
+    { field: 'type', header: 'Müqavilə Növü' , filter: true },
+    { field: 'contract_id', header: 'Əlavə №' , filter: true },
+    { field: 'sales_name', header: "Satış Meneceri" , filter: true },
+    { field: '1', header: "Məhsul", filter: true  },
+    { field: '2', header: "Ödəniş şərti" , filter: true },
+    { field: '3', header: "Məbləğ (ƏDV-siz)" , filter: true },
+    { field: '4', header: "Məbləğ (ƏDV-li)" , filter: true },
+    { field: 'created', header: 'Yaradılma Tarixi', filter: true  },
+    { field: 'end_date', header: "Qarşı tərəfin imza tarixi" , filter: true },
 ];
 
 
@@ -37,15 +37,12 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     const [annexes, setAnnexes] = useState(null);
 
 
-    useEffect(() => {
-        getAnnexes();
-    }, [])
 
 
 
-    const getAnnexes = () => {
+    const getAnnexes = (filters) => {
         handleRequest(
-            ContractsService.index()
+            AnnexesService.index(filters)
         ).then(res => {
             setAnnexes(res.body.data)
         })
@@ -68,6 +65,7 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 elRef={dt}
                 actions={{edit: true, delete: true}}
                 enqueueSnackbar={enqueueSnackbar}
+                getData={getAnnexes}
             />
 
 

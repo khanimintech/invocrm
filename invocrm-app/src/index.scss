@@ -1,4 +1,4 @@
-@import 'src/styleVariables.scss';
+@import './styleVariables.scss';
 
 .MuiDrawer-root a {
     text-decoration: none;
@@ -184,3 +184,27 @@ body {
           color: $color-purple;
       }
   }
+
+
+  .status-0{
+      background-color: $color-yellow !important;
+      color: #fff !important;
+  }
+
+  .status-1{
+    background-color: $color-green !important;
+    color: #fff !important;
+}
+.status-2{
+    background-color: $color-blue !important;
+    color: #fff !important;
+}
+.status-3{
+    background-color: $color-purple !important;
+    color: #fff !important;
+}
+
+.align-right{
+    display: flex;
+    justify-content: flex-end;
+}

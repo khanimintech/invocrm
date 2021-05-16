@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import Grid from '@material-ui/core/Grid';
 import Input from '../../components/Input';
 import { ContractsService } from '../../services/ContractsService';

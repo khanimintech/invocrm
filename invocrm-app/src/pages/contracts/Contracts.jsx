@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import PageContent from '../../components/PageContainer';
 import DescriptionIcon from '@material-ui/icons/Description';
 import PriorityHighIcon from '@material-ui/icons/PriorityHigh';
@@ -12,11 +12,13 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import ExtendedTable from '../../components/ExtendedTable';
-import { ITEM_HEIGHT } from '../../constants';
+import { contractTypes, ITEM_HEIGHT } from '../../constants';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import CreateContractModal from './CreateContractForm';
+import { contractStatuses } from '../../constants';
+
 import './styles.scss';
-import CreateContractModal from '../contacts/CreateContractForm';
 
 
 const initialOverviews = [
@@ -27,16 +29,17 @@ const initialOverviews = [
 ]
 
 const columns = [
-    { field: 'company_name', header: 'Şirkət' },
-    { field: 'contract_id', header: 'Müqavilə Nömrəsi' },
-    { field: 'type', header: 'Müqavilə Növü' },
-    { field: 'created', header: 'Yaradılma Tarixi' },
-    { field: 'end_date', header: "Bitmə Tarixi" },
-    { field: 'sales_name', header: "Satış Meneceri" },
-    { field: 'status', header: 'Status' },
-    { field: 'executor', header: "İcraçı" },
-    { field: 'annex_count', header: "Elave sayi" },
+    { field: 'company_name', header: 'Şirkət', filter: true },
+    { field: 'contract_no', header: 'Müqavilə Nömrəsi', filter: true },
+    { field: 'type', header: 'Müqavilə Növü',  filter: true },
+    { field: 'created', header: 'Yaradılma Tarixi', filter: true },
+    { field: 'due_date', header: "Bitmə Tarixi", filter: true },
+    { field: 'sales_manager', header: "Satış Meneceri", filter: true },
+    { field: 'status', header: 'Status', filter: true },
+    { field: 'annex_count', header: "Elave sayi", filter: false },
 ];
+
+
 
 
 const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
@@ -45,26 +48,18 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     
     const [overviews, setOverviews] = useState(initialOverviews);
     const [contracts, setContracts] = useState(null);
-    const [statuses, setStatuses] = useState([]);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [showCreateModal, toggleShowCreateModal] = useState(false);
     const [contractType, setContractType] = useState();
     const openCreateMenu = Boolean(anchorEl);
 
 
-
-    useEffect(() => {
-        getContracts();
-    }, [])
-
-
-    const getContracts = () => {
+    const getContracts = (filters) => {
         handleRequest(
-            ContractsService.index()
+            ContractsService.index(filters)
         ).then(res => {
             if (res.body){
-                setContracts(res.body)
-                setStatuses(res.body.map(contract => contract.status))
+                setContracts(res.body);
             }
         })
     }
@@ -123,19 +118,13 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                     },
                 }}
             >
-
-                <MenuItem onClick={() => handleOpenContractModal("sales")}>
-                    Alqı-satqı
-                </MenuItem>
-                <MenuItem onClick={() => handleOpenContractModal("sales")}>
-                    Xidmət
-                </MenuItem>
-                <MenuItem onClick={() => handleOpenContractModal("sales")}>
-                    Agent
-                </MenuItem>
-                <MenuItem onClick={() => handleOpenContractModal("sales")}>
-                    Distribyutor
-                </MenuItem>
+                {
+                    Object.keys(contractTypes).map(contractTypeId => (
+                        <MenuItem onClick={() => handleOpenContractModal(contractTypeId)} key={contractTypeId}>
+                            {contractTypes[contractTypeId]}
+                        </MenuItem>
+                    ))
+                }
             </Menu>
         </>
     )
@@ -157,7 +146,7 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 data={contracts}
                 loading={loading}
                 columns={columns}
-                statuses={statuses}
+                statuses={contractStatuses}
                 elRef={dt}
                 actions={{ edit: true, delete: true, attach: true, plus: true}}
                 enqueueSnackbar={enqueueSnackbar}

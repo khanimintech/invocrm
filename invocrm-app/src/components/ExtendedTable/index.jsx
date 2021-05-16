@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Dropdown } from 'primereact/dropdown';
 import { Calendar } from 'primereact/calendar';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
@@ -17,21 +17,41 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
+import Chip from '@material-ui/core/Chip';
+import { contractTypes, contractStatuses } from '../../constants';
+import { format, parseISO } from 'date-fns'
+import { InputText } from 'primereact/inputtext';
 
 const ExtendedTable = ({ 
     entityName, data, columns, loading, 
     statuses, elRef, actions , headerTitle, onDelete, 
     enqueueSnackbar, getData
  }) => {
-    let dt = useRef(null);
 
-    const [selectedDate, setSelectedDate] = useState();
-    const [selectedStatus, setSelectedStatus] = useState();
     const [globalFilter, setGlobalFilter] = useState();
     const [selectedColumns, setSelectedColumns] = useState(columns); 
     const [showDeleteModal, toggleShowDeleteModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState();
+    const [filters, setFilters] = useState({});
+
+
+    useEffect(() => {
+        let initialFilters = {};
+        if (columns) {
+            columns.forEach(column => {
+                initialFilters[column.field] = null;
+            });
+        }
+        setFilters(initialFilters)
+    }, [columns])
+
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(() => {
+          getData(filters)
+        }, 1000)
+    
+        return () => clearTimeout(delayDebounceFn)
+      }, [filters])
 
     const handleDelete = () => {
         onDelete(selectedRow)
@@ -42,15 +62,7 @@ const ExtendedTable = ({
             enqueueSnackbar("Uğurla silinmişdir .", { variant: "success" }) // this row will be moved to handleRequest
         })
     }
-    const onDateChange = (e) => {
-        dt.filter(e.value, 'date', 'custom');
-        setSelectedDate(e.value)
-    }
-
-    const onStatusChange = (e) => {
-        dt.filter(e.value, 'status', 'equals');
-        setSelectedStatus(e.value)
-    }
+  
 
     const onColumnToggle = (event) => {
         let selectedColumns = event.value;
@@ -58,34 +70,10 @@ const ExtendedTable = ({
         setSelectedColumns(orderedSelectedColumns);
     }
 
-    const formatDate = (date) => {
-        let month = date.getMonth() + 1;
-        let day = date.getDate();
-
-        if (month < 10) {
-            month = '0' + month;
-        }
-
-        if (day < 10) {
-            day = '0' + day;
-        }
-
-        return date.getFullYear() + '-' + month + '-' + day;
-    }
-
-    const filterDate = (value, filter) => {
-        if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {
-            return true;
-        }
-
-        if (value === undefined || value === null) {
-            return false;
-        }
-
-        return value === formatDate(filter);
-    }
+ 
 
     const closeDeleteModal = () => toggleShowDeleteModal(false)
+
 
     const handleDeleteClick = (rowData) => {
         setSelectedRow(rowData)
@@ -149,21 +137,29 @@ const ExtendedTable = ({
     }
 
     const statusItemTemplate = (option) => {
-        return <span className={`customer-badge status-${option}`}>{option}</span>;
+        return <Chip label={option.label} className={`status-${option.value}`} />
     }
         
 
-    const statusBodyTemplate = (rowData) => {
+    const statusBodyTemplate = (value) => {
+        const status = contractStatuses.find(contractStatus => contractStatus.value === value);
         return (
             <React.Fragment>
                 <span className="p-column-title">Status</span>
-                <span className={`customer-badge status-${rowData.status}`}>{rowData.status}</span>
+                <Chip label={status.label} className={`status-${status.value}`} />
             </React.Fragment>
         );
     }
 
 
-    const cellTemplate = (value, columnName) => {
+    const cellTemplate = (value, columnName, col ) => {
+        if (col === "created" || col === "due_date")
+            return  (
+                <React.Fragment>
+                    <span className="p-column-title">{columnName}</span>
+                    {format(parseISO(value), "MM.dd.yyyy")}
+                </React.Fragment>
+            )
         return (
             <React.Fragment>
                 <span className="p-column-title">{columnName}</span>
@@ -172,31 +168,45 @@ const ExtendedTable = ({
         )
     }
 
+    const typeTemplate = (value, columnName) => {
+        return (
+            <React.Fragment>
+                <span className="p-column-title">{columnName}</span>
+                {contractTypes[value]}
+            </React.Fragment>
+        )
+    }
 
+
+    const handleFilterInputChange = (filterName, filterValue) => {
+        setFilters({ ... filters, [filterName]: filterValue || "" })
+    }
 
     const columnComponents = selectedColumns.map(col => {
-        
-        const isDateField = col.field === "created" || col.field === "end_date";
+        const isDateField = col.field === "created" || col.field === "due_date";
         const isStatusField = col.field === "status";
 
-        const dateFilter = <Calendar value={selectedDate} onChange={onDateChange} dateFormat="yy-mm-dd" className="p-column-filter" placeholder="Registration Date" />;
-        const statusFilter = <Dropdown value={selectedStatus} options={statuses} onChange={onStatusChange} itemTemplate={statusItemTemplate} placeholder="Select a Status" className="p-column-filter" showClear />;
-
+        const dateFilter = field => <Calendar value={filters[field]}  onChange={(e) => handleFilterInputChange(field,  /*"2021-05-16T11:44:05.956Z"*/ e.target.value ?  format(e.target.value, "yyyy-MM-dd'T'HH:mm:ss.SSS") : "")}   className="p-co.lumn-filter"  />;
+        const statusFilter = field => <Dropdown value={filters[field]} options={statuses}  onChange={(e) => handleFilterInputChange(field, e.target.value)}  itemTemplate={statusItemTemplate}  className="p-column-filter" showClear />;
+        const textFilter = field => <InputText onChange={(e) => handleFilterInputChange(field, e.target.value)}   value={filters[field]} />
         return (
             <Column
                 key={col.field}
                 field={col.field}
                 body={(rowData) => {
-                    return col.field === "status" ? statusBodyTemplate(rowData) : cellTemplate(rowData[col.field], col.header)
+                    if ( col.field === "status" )
+                        return statusBodyTemplate(rowData.status);
+                    if (col.field === "type")
+                        return typeTemplate(rowData[col.field], col.header)
+                    return cellTemplate(rowData[col.field], col.header, col.field)
                 }}
                 filterField={col.field}
                 header={col.header}
-                filter
-                filterFunction={isDateField ? filterDate : null}
-                filterElement={isDateField ? dateFilter : (isStatusField ? statusFilter : null)}
+                filter={col.filter}
+                filterElement={isDateField ? dateFilter(col.field) : (isStatusField ? statusFilter(col.field) : textFilter(col.field))}
                 filterPlaceholder=""
-                filterMatchMode={isDateField ? "gte" : "contains"}
                 sortable
+                filterMatchMode="custom"
 
             />
         )
