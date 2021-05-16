@@ -23,8 +23,15 @@ const save = values =>
         body: JSON.stringify(values)
     });
 
+const getUnits = () =>
+    makeAsyncCall({
+        url: `${BACKEND_URL}units/`,
+        method: 'GET',
+    });
+
 export const AnnexesService = {
     index: (filters) => index(filters),
     remove: id => remove(id),
-    save: values => save(values)
+    save: values => save(values),
+    getUnits: () => getUnits()
 }

@@ -208,3 +208,14 @@ body {
     display: flex;
     justify-content: flex-end;
 }
+
+.align-center{
+    display: flex;
+    justify-content: center;
+}
+
+
+.icon-wrapper {
+    display: flex;
+    align-items: center;
+}

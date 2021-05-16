@@ -8,7 +8,7 @@ import {
 import DateFnsUtils from '@date-io/date-fns';
 import MenuItem from '@material-ui/core/MenuItem';
 
-const Input = ({field, form, meta, label, placeholder, required, defaultValue, select, options, readOnly, type, date }) => {
+const Input = ({field, form, meta, label, placeholder, required, defaultValue, select, options, readOnly, type, date, size }) => {
     const { name, value } = field;
     const { setFieldValue, submitCount } = form;
     const { error } = meta;
@@ -54,17 +54,20 @@ const Input = ({field, form, meta, label, placeholder, required, defaultValue, s
         )
     return (
         <TextField 
-         label={label}
-         required={required}
-         type={type}
-         value={value || ''}
-         defaultValue={defaultValue}
-         placeholder={placeholder}
-         onChange={e => setFieldValue(name, e.target.value)}
-         readOnly={readOnly}
-         error={submitCount && error }
-         fullWidth
-         variant="outlined"
+            label={label}
+            required={required}
+            type={type}
+            value={value || ''}
+            defaultValue={defaultValue}
+            placeholder={placeholder}
+            onChange={e => setFieldValue(name, e.target.value)}
+            InputProps={{
+                readOnly,
+              }}
+            error={submitCount && error }
+            fullWidth
+            variant="outlined"
+            size={size}
         />
     )
 }

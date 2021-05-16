@@ -4,8 +4,8 @@ import Button from '@material-ui/core/Button';
 
 const CreateFormActions = ({ handleClose, handleSave }) => {
     return (<DialogActions>
-        <Button onClick={handleClose} color="primary">
-        Ləğv et
+        <Button onClick={handleClose} color="secondary">
+            Ləğv et
         </Button>
         <Button onClick={handleSave} color="primary">
             Yadda saxla

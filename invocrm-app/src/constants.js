@@ -21,3 +21,9 @@ export const contractTypes = {
     8: "Beynəlxalq müqavilə",
     9: "Müştəri şablon"
 }
+
+export const companyTypes = [
+  { label: "MMC", value: 1 },
+  { label: "ASC", value: 2 },
+  { label: "QSC", value: 3 },
+]

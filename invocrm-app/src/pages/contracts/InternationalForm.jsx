@@ -13,7 +13,7 @@ import { companyTypes } from './../../constants';
 import BankRequisits from './BankRequisits';
 import CustomerContacts from './CustomerContacts';
 
-const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType }) => {
+const InternationalForm = ({ handleSubmit, handleRequest, handleClose, formType }) => {
     let formikRef = useRef();
 
     const [salesManagers, setSalesManagers] = useState([]);
@@ -71,34 +71,6 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType }) => {
                                                 )}
                                             </Field>
                                         </Grid>
-                                        {
-                                            formType === 9? (
-                                                <Grid item md={12} className="input-wrapper">
-                                            <Field
-                                                validate={validateRequired}
-                                                name="custom_contract_type"
-                                            >
-                                                {({ field, form, meta }) => (
-                                                    <Input
-                                                        label="Müqavilə növü"
-                                                        field={field}
-                                                        form={form}
-                                                        meta={meta}
-                                                        select
-                                                        options={[
-                                                            {label: "Alqı-satqı", value: 1},
-                                                            {label: "Xidmət", value: 2},
-                                                            {label: "Distribyutor", value: 3},
-                                                            {label: "Agent", value: 4},
-                                                        ]}
-                                                    />
-                                                )}
-                                            </Field>
-                                        </Grid>
-                                            ): null
-                                        }
-                                        
-
                                         <Grid item md={12} >
                                             <Grid container spacing={0} justify="space-between">
                                                 <Grid item md={7} className="input-wrapper">
@@ -135,61 +107,54 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType }) => {
                                                     </Field>
                                                 </Grid>
                                             </Grid>
-                                            {
-                                                formType === 3 ? (
-                                                    <>
-                                                        <Grid item md={12} className="input-wrapper">
-                                                            <Field
-                                                                name="subject_of_distribution"
-                                                                validate={validateRequired}
-                                                            >
-                                                                {({ field, form, meta }) => (
-                                                                    <Input
-                                                                        label="Müqavilenin predmeti"
-                                                                        field={field}
-                                                                        form={form}
-                                                                        meta={meta}
-                                                                    />
-                                                                )}
-                                                            </Field>
-                                                        </Grid>
-                                                        <Grid item md={12} className="input-wrapper">
-                                                            <Field
-                                                                name="territory"
-                                                                validate={validateRequired}
-                                                            >
-                                                                {({ field, form, meta }) => (
-                                                                    <Input
-                                                                        label="Ərazi"
-                                                                        field={field}
-                                                                        form={form}
-                                                                        meta={meta}
-                                                                    />
-                                                                )}
-                                                            </Field>
-                                                        </Grid>
-                                                    </>
-                                                ) : null
-                                            }
-                                            {/* {
-                                                formType === 9 ? null : ( */}
-                                                    <Grid item md={12} className="input-wrapper">
-                                                        <Field
-                                                            name="company.address"
-                                                            validate={validateRequired}
-                                                        >
-                                                            {({ field, form, meta }) => (
-                                                                <Input
-                                                                    label="Hüquqi ünvan"
-                                                                    field={field}
-                                                                    form={form}
-                                                                    meta={meta}
-                                                                />
-                                                            )}
-                                                        </Field>
-                                                    </Grid>
-                                                {/* )
-                                            } */}
+                                            <Grid item md={12} className="input-wrapper">
+                                                <Field
+                                                    name="company.address"
+                                                    validate={validateRequired}
+                                                >
+                                                    {({ field, form, meta }) => (
+                                                        <Input
+                                                            label="Hüquqi ünvan"
+                                                            field={field}
+                                                            form={form}
+                                                            meta={meta}
+                                                        />
+                                                    )}
+                                                </Field>
+                                            </Grid>
+
+                                            <Grid item md={12} className="input-wrapper">
+                                                <Field
+                                                    name="country"
+                                                    validate={validateRequired}
+                                                >
+                                                    {({ field, form, meta }) => (
+                                                        <Input
+                                                            label="Ölkə"
+                                                            field={field}
+                                                            form={form}
+                                                            meta={meta}
+                                                        />
+                                                    )}
+                                                </Field>
+                                            </Grid>
+                                            <Grid item md={12} className="input-wrapper">
+                                                <Field
+                                                    name="company.email"
+                                                    validate={validateRequired}
+                                                >
+                                                    {({ field, form, meta }) => (
+                                                        <Input
+                                                            label="Email"
+                                                            field={field}
+                                                            form={form}
+                                                            meta={meta}
+                                                        />
+                                                    )}
+                                                </Field>
+                                            </Grid>
+
+
                                             <Grid item md={12} >
                                                 <Grid container spacing={0} justify="space-between">
                                                     <Grid item md={3} className="input-wrapper" >
@@ -242,6 +207,38 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType }) => {
                                         </Grid>
                                         <Grid item md={12} className="input-wrapper">
                                             <Field
+                                                name="executor.position"
+                                                validate={validateRequired}
+                                            >
+                                                {({ field, form, meta }) => (
+                                                    <Input
+                                                        label="Vəzifə"
+                                                        field={field}
+                                                        form={form}
+                                                        meta={meta}
+                                                    />
+                                                )}
+                                            </Field>
+                                        </Grid>
+                                        <Grid item md={12} className="input-wrapper">
+                                            <Field
+                                                name="payment_condition"
+                                                validate={validateRequired}
+                                            >
+                                                {({ field, form, meta }) => (
+                                                    <Input
+                                                        label="Ödəniş şərti"
+                                                        field={field}
+                                                        form={form}
+                                                        meta={meta}
+                                                    />
+                                                )}
+                                            </Field>
+                                        </Grid>
+
+
+                                        <Grid item md={12} className="input-wrapper">
+                                            <Field
                                                 name="sales_manager"
                                                 validate={validateRequired}
                                             >
@@ -289,8 +286,6 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType }) => {
                                                 )}
                                             </Field>
                                         </Grid>
-                               
-                         
                                         <CustomerContacts />
                                     </Grid>
                                     <BankRequisits />
@@ -306,4 +301,4 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType }) => {
 }
 
 
-export default SalesForm;
+export default InternationalForm;

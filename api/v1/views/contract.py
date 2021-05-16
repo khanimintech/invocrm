@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from api.filters.contact import ContractFilterSet, BankFilterSet, ContactFilterSet
+from api.filters.contract import ContractFilterSet, BankFilterSet, ContactFilterSet
 from api.main_models.contract import BaseContract, BankAccount, Contact
 from api.models import Person
 from api.v1.serializers.contract import ContractListSerializer, TradeCreateSerializer, ServiceCreateSerializer, \

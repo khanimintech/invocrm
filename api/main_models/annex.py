@@ -21,19 +21,19 @@ class BaseAnnex(models.Model):
 
     contract = models.ForeignKey(BaseContract, on_delete=models.CASCADE, related_name='annex_list')
 
-    annex_no = models.IntegerField()
+    annex_no = models.IntegerField(default=1)
     request_no = models.CharField(max_length=256, unique=True)
 
-    annex_date = models.DateTimeField()
-    note = models.TextField()
+    annex_date = models.DateTimeField(null=True, blank=True)
+    note = models.TextField(null=True, blank=True)
     # extra_note =  TODO check Gunay if we can use note field above for all added notes.
-    payment_terms = models.TextField()
-    delivery_terms = models.TextField()
-    acquisition_terms = models.TextField()
+    payment_terms = models.TextField(null=True, blank=True)
+    delivery_terms = models.TextField(null=True, blank=True)
+    acquisition_terms = models.TextField(null=True, blank=True)
     created = models.DateTimeField(default=timezone.now)
 
-    seller = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='seller_annex_list')
-    sales_manager = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='sales_manager_annex_list')
+    seller = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='seller_annex_list', null=True, blank=True)
+    sales_manager = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='sales_manager_annex_list', null=True, blank=True)
 
     def save(self, **kwargs):
 

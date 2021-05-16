@@ -218,7 +218,6 @@ const ExtendedTable = ({
             <DataTable
                 ref={elRef} 
                 value={data} 
-                rows={10}
                 header={header} 
                 className="p-datatable p-datatable-responsive p-datatable-gridlines"
                 loading={loading} 

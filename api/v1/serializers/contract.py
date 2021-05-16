@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate
 from django.db.transaction import atomic
 from rest_framework import serializers
 
-from api.main_models.annex import TradeAgreementAnnex, BaseAnnex, POAgreementSupplements
+from api.main_models.annex import TradeAgreementAnnex, BaseAnnex, POAgreementSupplements, ProductInvoiceItem
 from api.main_models.contract import BaseContract, TradeAgreement, Contact, Company, Bank, BankAccount, \
     ServiceAgreement, DistributionAgreement, AgentAgreement, POAgreement, RentAgreement, OneTimeAgreement, \
     InternationalAgreement, CustomerTemplateAgreement
@@ -118,13 +118,18 @@ class ContractCreateBaseSerializer(serializers.ModelSerializer):
         user = self.context.get('user')
 
         annex_data = validated_data.pop('annex', None)
+        products_data = validated_data.pop('products', None)
+        seller_data = validated_data.pop('seller', None)
+
         supplements_data = validated_data.pop('supplements', None)
 
         contact = create_pop_or_none(Contact, 'contact')
 
+        executor_contact = create_pop_or_none(Contact, 'executor_contact')
+
         responsible_person = create_pop_or_none(Person, 'responsible_person', **{'type': Person.TYPE.CONTACT, 'contact': contact})
 
-        executor = create_pop_or_none(Person, 'executor', **{'type': Person.TYPE.BUYER})
+        executor = create_pop_or_none(Person, 'executor', **{'type': Person.TYPE.BUYER, 'contact': executor_contact})
 
         company = create_pop_or_none(Company, 'company')
 
@@ -138,7 +143,13 @@ class ContractCreateBaseSerializer(serializers.ModelSerializer):
 
         if contract.type == BaseContract.Type.ONE_TIME and annex_data:
 
-            BaseAnnex.objects.create(contract=contract, **annex_data)
+            seller = Person.objects.create(type=Person.TYPE.SELLER, **seller_data)
+
+            annex = BaseAnnex.objects.create(contract=contract, seller=seller, **annex_data)
+
+            if products_data:
+                for p in products_data:
+                    ProductInvoiceItem.objects.create(annex=annex, **p)
 
         if contract.type == BaseContract.Type.PO and supplements_data:
 
@@ -209,22 +220,37 @@ class RentCreateSerializer(ContractCreateBaseSerializer):
 
 
 class OneTimeAnnexSerializer(serializers.ModelSerializer):
-    pass
+
+    class Meta:
+
+        model = BaseAnnex
+
+        fields = ['request_no', 'payment_terms', 'delivery_terms', 'acquisition_terms']
+
+
+class OneTimeProductSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = ProductInvoiceItem
+        fields = ['name', 'unit', 'quantity', 'price', 'total']
 
 
 class OneTimeCreateSerializer(ContractCreateBaseSerializer):
 
-    executor_contact = ContactSerializer()
-    annex = OneTimeAnnexSerializer()
+    executor_contact = ContactSerializer(required=False)
+    annex = OneTimeAnnexSerializer(required=False)
+    products = OneTimeProductSerializer(required=False, many=True)
+    seller = PersonSerializer(required=False)
 
     class Meta:
         model = OneTimeAgreement
 
         fields = [
-            'sales_manager', 'created', 'due_date', 'company', 'executor',
-            'executor_contact', 'type', 'subtype', 'final_amount_with_writing',
-            'price_offer', 'price_offer_validity', 'warranty_period', 'unpaid_period',
-            'unpaid_value', 'part_payment', 'part_acquisition', 'standard', 'annex'
+            'sales_manager', 'created', 'company', 'executor', 'executor_contact', 'type',
+            'final_amount_with_writing', 'price_offer', 'price_offer_validity', 'warranty_period',
+            'unpaid_period', 'unpaid_value', 'part_payment', 'part_acquisition', 'standard', 'annex',
+            'products', 'responsible_person', 'contact', 'seller'
         ]
 
 
