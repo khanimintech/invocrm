@@ -10,7 +10,7 @@ from api.v1.views.contract import StubAPI
 router = SimpleRouter()
 
 router.register('contracts', ContractViewSet, basename='contracts')
-router.register('annexs', AnnexViewSet, basename='annexs')
+router.register('annexes', AnnexViewSet, basename='annexes')
 router.register('contacts', ContactViewSet, basename='contacts')
 router.register('banks', BankViewSet, basename='banks')
 

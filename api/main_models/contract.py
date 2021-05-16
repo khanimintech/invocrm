@@ -39,7 +39,7 @@ class BaseContract(models.Model):
     company = models.ForeignKey('api.Company', on_delete=models.CASCADE, null=True, blank=True)
     type = models.SmallIntegerField(choices=Type.CHOICES)
     created = models.DateTimeField(default=timezone.now)
-    due_date = models.DateTimeField()
+    due_date = models.DateTimeField(null=True, blank=True)
     status = models.SmallIntegerField(choices=Status.CHOICES, default=Status.IN_PROCESS)
     sales_manager = models.ForeignKey('Person', on_delete=models.CASCADE, related_name='contracts',
                                       null=True, blank=True)

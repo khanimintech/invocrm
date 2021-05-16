@@ -3,6 +3,8 @@ from datetime import timedelta
 from django.utils import timezone
 
 from rest_framework.reverse import reverse
+
+from api.main_models.annex import UnitOfMeasure
 from api.main_models.contract import BaseContract, TradeAgreement, Company, Bank, BankAccount, ServiceAgreement, Contact
 from api.models import Person
 
@@ -29,7 +31,7 @@ class TestContractViewSet:
         admin_user.plant_name = 'plant'
         admin_user.save()
         apiclient.force_login(admin_user)
-        response = apiclient.get(reverse('api:v1:contracts-list') + '?contract_no=123')
+        response = apiclient.get(reverse('api:v1:contracts-list'))
 
         assert response.status_code == 200
 
@@ -106,7 +108,7 @@ class TestContractViewSet:
                                   format='json'
                                   )
 
-        assert response.status_code == 201
+        assert response.status_code == 201, response.json()
 
         assert TradeAgreement.objects.all().count() == 1
 
@@ -155,6 +157,90 @@ class TestContractViewSet:
         assert bank.name == 'My_bank'
         assert bank.code == '1234567890'
         assert bank.tin == '1234567890'
+
+    def test_bm_create(self, apiclient, admin_user, sales_manager):
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+
+        unit = UnitOfMeasure.objects.create(name='asdf')
+
+        response = apiclient.post(reverse('api:v1:contracts-list'),
+                                  data={
+                                      'type': BaseContract.Type.ONE_TIME,
+                                      'sales_manager': sales_manager.id,
+
+                                      'company': {
+                                          'name': 'My_company',
+                                          'type': Company.MMC,
+                                          'tin': '1234567890',
+                                          'address': 'My_address'
+                                      },
+                                      'executor': {
+                                          'first_name': 'First',
+                                          'last_name': 'Last',
+                                          'fathers_name': 'Father',
+                                          'position': 'asdf'
+                                      },
+                                      'executor_contact': {
+                                          'mobile': '1234567890',
+                                          'personal_email': 'My_personal_email@email.fake'
+                                      },
+                                      'seller': {
+                                          'first_name': 'First',
+                                          'last_name': 'Last',
+                                          'fathers_name': 'Father',
+                                          'position': 'asdf'
+                                      },
+                                      'responsible_person': {
+                                          'first_name': 'First',
+                                          'last_name': 'Last',
+                                          'fathers_name': 'Father',
+                                      },
+                                      'contact': {
+                                          'mobile': '1234567890',
+                                          'address': 'My_address',
+                                          'work_email': 'My_work_email@email.fake',
+                                          'personal_email': 'My_personal_email@email.fake'
+
+                                      },
+                                      'annex': {
+                                          'request_no': 'asdf',
+                                          'payment_terms':'asdf',
+                                          'delivery_terms': 'asdf',
+                                          'acquisition_terms': 'asdf',
+                                      },
+                                      'products': [
+                                          {
+                                              'name': 'asdf',
+                                              'unit': unit.id,
+                                              'quantity': 1,
+                                              'price': 1,
+                                              'total': 2
+                                          },
+                                          {
+                                              'name': 'asdf',
+                                              'unit': unit.id,
+                                              'quantity': 1,
+                                              'price': 1,
+                                              'total': 2
+                                          }
+                                      ],
+                                      'price_offer': 'asdf',
+                                      'price_offer_validity': 'asdf',
+                                      'warranty_period': 'asdf',
+                                      'unpaid_period': 'asdf',
+                                      'unpaid_value': 'asdf',
+                                      'part_payment': 'asdf',
+                                      'part_acquisition': 'asdf',
+                                      'standard': 'asdf',
+                                      'final_amount_with_writing': 'asdf'
+                                  },
+                                  format='json'
+                                  )
+
+        assert response.status_code == 201, response.json()
 
 
 class TestContactViewSet:
@@ -281,7 +367,7 @@ class TestBankViewSet:
 
         assert response.status_code == 200
         assert len(response.json()) == 1
-        assert response.json()[0]['status'] == 'Approved'
+        assert response.json()[0]['status'] == BaseContract.Status.APPROVED
 
     def test_contract_list_filter_by_type(self, apiclient, admin_user, sales_manager):
 
@@ -382,3 +468,4 @@ class TestSalesMangerApiView:
 
         assert payload[1]['id'] == sales_manager1.id
         assert payload[1]['fullname'] == sales_manager1.fullname
+

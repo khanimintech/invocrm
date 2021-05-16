@@ -26,7 +26,7 @@ class TestAnnexViewSet:
         admin_user.plant_name = 'plant'
         admin_user.save()
         apiclient.force_login(admin_user)
-        response = apiclient.get(reverse('api:v1:annexs-list'))
+        response = apiclient.get(reverse('api:v1:annexes-list'))
 
         assert response.status_code == 200
         payload = response.json()
@@ -57,7 +57,7 @@ class TestAnnexViewSet:
         admin_user.plant_name = 'plant'
         admin_user.save()
         apiclient.force_login(admin_user)
-        response = apiclient.post(reverse('api:v1:annexs-list'),
+        response = apiclient.post(reverse('api:v1:annexes-list'),
                                   data={
                                       'contract': contract.id,
                                       'request_no': '123',

@@ -1,4 +1,7 @@
 import django_filters
+from django.utils import timezone
+from datetime import timedelta
+
 from api.main_models.contract import BaseContract, Company, BankAccount, Contact
 from api.models import Person
 
@@ -8,6 +11,8 @@ class ContractFilterSet(django_filters.rest_framework.FilterSet):
     sales_manager = django_filters.ModelMultipleChoiceFilter(queryset=Person.objects.filter(type=Person.TYPE.SALES_MANAGER))
 
     company_name = django_filters.CharFilter(method='filter_company_name')
+    contract_no = django_filters.CharFilter(method='filter_contract_no')
+    status = django_filters.NumberFilter(method='filter_status')
 
     created = django_filters.DateTimeFilter(field_name='created', lookup_expr='lte')
     due_date = django_filters.DateTimeFilter(field_name='due_date', lookup_expr='lte')
@@ -15,7 +20,27 @@ class ContractFilterSet(django_filters.rest_framework.FilterSet):
     def filter_company_name(self, queryset, name, value):
 
         if value:
-            queryset = queryset.filter(company__name=value)
+            queryset = queryset.filter(company__name__icontains=value)
+        return queryset
+
+    def filter_contract_no(self, queryset, name, value):
+
+        if value:
+            queryset = queryset.filter(contract_no__icontains=value)
+        return queryset
+
+    def filter_status(self, queryset, name, value):
+
+        IN_PROCESS, APPROVED, EXPIRED, EXPIRED= range(0, 4)
+
+        if value:
+            two_week_for_expire = timezone.now() + timedelta(weeks=2)
+
+            if value == EXPIRED:
+                queryset = queryset.filter(due_date__lt=two_week_for_expire)
+            else:
+                queryset = queryset.filter(status=value)
+
         return queryset
 
     class Meta:
