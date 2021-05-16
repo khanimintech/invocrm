@@ -33,6 +33,29 @@ class TestContractViewSet:
 
         assert response.status_code == 200
 
+    def test_po_create(self, apiclient, admin_user, sales_manager):
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+        response = apiclient.post(reverse('api:v1:contracts-list'),
+                                  data={
+                                      "due_date":"2021-05-16T13:14:03.488Z",
+                                        "created":"2021-05-16T13:14:03.488Z",
+
+                                        "supplements":[{"supplement_no":"dsf"},
+                                                       {"supplement_no":"qqdsf"}],
+
+                                        "po_number":"sdf",
+                                        "sales_manager":sales_manager.id,
+                                        "company":{"name":"dsf"},
+
+                                      "type":BaseContract.Type.PO},
+                                  format='json'
+                                  )
+
+        assert response.status_code == 201, response.json()
+
     def test_trade_create(self, apiclient, admin_user, sales_manager):
 
         admin_user.plant_name = 'plant'
