@@ -14,8 +14,8 @@ class ContractFilterSet(django_filters.rest_framework.FilterSet):
     contract_no = django_filters.CharFilter(method='filter_contract_no')
     status = django_filters.NumberFilter(method='filter_status')
 
-    created = django_filters.DateTimeFilter(field_name='created', lookup_expr='lte')
-    due_date = django_filters.DateTimeFilter(field_name='due_date', lookup_expr='lte')
+    created = django_filters.DateFilter(field_name='created', lookup_expr='lte')
+    due_date = django_filters.DateFilter(field_name='due_date', lookup_expr='lte')
 
     def filter_company_name(self, queryset, name, value):
 
