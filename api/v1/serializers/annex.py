@@ -11,12 +11,14 @@ class AnnexSerializer(serializers.ModelSerializer):
     company_name = serializers.SerializerMethodField()
     contract_no = serializers.CharField(source='contract.contract_no')
     signature_date = serializers.SerializerMethodField()
+    contract_type = serializers.SerializerMethodField()
 
     class Meta:
 
         model = BaseAnnex
         fields = ['id', 'company_name', 'request_no', 'contract_no', 'annex_no', 'sales_manager',
-                  'payment_terms', 'sum_no_invoice', 'sum_with_invoice', 'annex_date', 'signature_date']
+                  'payment_terms', 'sum_no_invoice', 'sum_with_invoice', 'annex_date', 'signature_date',
+                  'created', 'contract_type']
 
     def get_company_name(self, obj):
 
@@ -37,6 +39,10 @@ class AnnexSerializer(serializers.ModelSerializer):
     def get_signature_date(self, obj):
 
         return timezone.now()
+
+    def get_contract_type(self, obj):
+
+        return obj.contract.type
 
 
 class ProductsCreateSerializer(serializers.ModelSerializer):
