@@ -54,11 +54,12 @@ const OneTimeForm = ({handleRequest, handleSubmit, handleClose }) => {
                             due_date: new Date(),
                             created: new Date(),
                             products: [{
-                                name: "sfdssf",
+                                name: "",
                                 quantity: 0,
                                 unit: 0,
                                 price: "",
                                 total: 0,
+                                id: 0,
                             }]
                         }}
                         onSubmit={vals => handleSubmit({ ...vals })}
