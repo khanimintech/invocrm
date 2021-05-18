@@ -220,7 +220,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
             </Grid>
             <Grid item md={12} className="input-wrapper">
                 <Field
-                    name="sales_manager"
+                    name="delivery_terms"
                     validate={validateRequired}
                 >
                     {({ field, form, meta }) => (
