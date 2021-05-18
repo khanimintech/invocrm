@@ -31,13 +31,13 @@ class ContractFilterSet(django_filters.rest_framework.FilterSet):
 
     def filter_status(self, queryset, name, value):
 
-        IN_PROCESS, APPROVED, EXPIRED, EXPIRED= range(0, 4)
+        IN_PROCESS, APPROVED, EXPIRED, EXPIRES= range(0, 4)
 
         if value:
             two_week_for_expire = timezone.now() + timedelta(weeks=2)
 
-            if value == EXPIRED:
-                queryset = queryset.filter(due_date__lt=two_week_for_expire)
+            if value == EXPIRES:
+                queryset = queryset.filter(due_date__lt=two_week_for_expire).exclude(status=EXPIRED)
             else:
                 queryset = queryset.filter(status=value)
 

@@ -1,7 +1,9 @@
 from copy import copy
+from datetime import timedelta
 
 from django.contrib.auth import authenticate
 from django.db.transaction import atomic
+from django.utils import timezone
 from rest_framework import serializers
 
 from api.main_models.annex import TradeAgreementAnnex, BaseAnnex, POAgreementSupplements, ProductInvoiceItem
@@ -32,12 +34,14 @@ class ContractListSerializer(serializers.ModelSerializer):
     company_name = serializers.SerializerMethodField()
     sales_manager = serializers.CharField(source='sales_manager.fullname')
     annex_count = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField()
 
     class Meta:
 
         model = BaseContract
 
-        fields = ['company_name', 'contract_no', 'type', 'created', 'due_date', 'sales_manager', 'annex_count', 'status']
+        fields = ['id','company_name', 'contract_no', 'type', 'created', 'due_date', 'sales_manager',
+                  'annex_count', 'status']
 
     def get_company_name(self, obj):
 
@@ -50,6 +54,19 @@ class ContractListSerializer(serializers.ModelSerializer):
     def get_annex_count(self, obj):
 
         return 0
+
+    def get_status(self, obj):
+
+        EXPIRED = 2
+        EXPIRES = 3
+
+        two_week_for_expire = timezone.now() + timedelta(weeks=2)
+
+        if obj.status != EXPIRED and obj.due_date and obj.due_date < two_week_for_expire:
+
+            return EXPIRES
+
+        return obj.status
 
 
 class EntitySerializer(serializers.ModelSerializer):

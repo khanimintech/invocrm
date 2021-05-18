@@ -16,7 +16,7 @@ router.register('banks', BankViewSet, basename='banks')
 
 urlpatterns = [
     path('login', LoginAPIView.as_view(), name='login'),
-    path('status-count/', ContractStatusStatAPIView.as_view(), name='status-count'),
+    path(r'status-count/', ContractStatusStatAPIView.as_view(), name='status-count'),
     path(r'stub-api/', StubAPI.as_view(), name='stub-api'),
     path(r'sales-managers/', SalesMangerApiView.as_view(), name='sales-managers'),
     path(r'units/', UnitOfMeasureAPIView.as_view(), name='units')

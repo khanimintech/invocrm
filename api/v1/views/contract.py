@@ -1,4 +1,7 @@
+from datetime import timedelta
+
 from django.http import JsonResponse
+from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import ListAPIView
@@ -65,7 +68,15 @@ class StubAPI(APIView):
 
 def filter_status_count(qs, status):
 
-    return qs.filter(status=status).count()
+    EXPIRED = 2
+    EXPIRES = 3
+
+    two_week_for_expire = timezone.now() + timedelta(weeks=2)
+
+    if status == EXPIRES and status != EXPIRED:
+        return qs.filter(due_date__lt=two_week_for_expire).count()
+
+    return qs.filter(status=status).exclude(due_date__lt=two_week_for_expire).count()
 
 
 class ContractViewSet(ModelViewSet):
@@ -100,10 +111,19 @@ class ContractViewSet(ModelViewSet):
             raise ValidationError('Please provide contract type')
         return super().create(request, *args, **kwargs)
 
+    def destroy(self, request, *args, **kwargs):
+
+        instance = self.get_object()
+        instance.status = BaseContract.Status.EXPIRED
+
+        return Response(ContractListSerializer(instance).data)
+
 
 class ContractStatusStatAPIView(APIView):
 
     def get(self, request):
+
+        EXPIRES = 3
 
         qs = BaseContract.objects.filter(plant_name=request.user.plant_name)
 
@@ -112,7 +132,7 @@ class ContractStatusStatAPIView(APIView):
                 'in_process_count': filter_status_count(qs, BaseContract.Status.IN_PROCESS),
                 'approved_count': filter_status_count(qs, BaseContract.Status.APPROVED),
                 'expired_count': filter_status_count(qs, BaseContract.Status.EXPIRED),
-                'expires_after_2_weeks': 0
+                'expires_in_2_weeks': filter_status_count(qs, EXPIRES)
             }
         return Response(response)
 
