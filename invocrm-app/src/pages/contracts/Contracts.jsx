@@ -75,6 +75,12 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
         })
     }
 
+    const getContract = contract => {
+        handleRequest(ContractsService.getItem(contract.id))
+        .then(res => console.log(res.body))
+    }
+
+
     const deleteContract = (contract) =>  handleRequest(ContractsService.remove(contract.id));
 
     const exportPDF = () => {
@@ -163,6 +169,7 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 enqueueSnackbar={enqueueSnackbar}
                 onDelete={deleteContract}
                 getData={getContracts}
+                getItem={getContract}
             />
             <CreateContractModal
                 open={showCreateModal}

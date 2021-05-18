@@ -22,14 +22,22 @@ const remove = (id) =>
         });
 
     const save = values => 
-    makeAsyncCall({
-        url: `${BACKEND_URL}contracts/`,
-        method: 'POST',
-        body: JSON.stringify(values)
-    });
+        makeAsyncCall({
+            url: `${BACKEND_URL}contracts/`,
+            method: 'POST',
+            body: JSON.stringify(values)
+        });
+    
+
+    const getItem = id =>
+        makeAsyncCall({
+            url: `${BACKEND_URL}contracts/${id}`,
+            method: 'GET',
+        });
 
 export const ContractsService = {
     index: (filters) => index(filters),
+    getItem: id => getItem(id),
     remove: id => remove(id),
     getSalesManagers: () => getSalesManagers(),
     save: values => save(values)

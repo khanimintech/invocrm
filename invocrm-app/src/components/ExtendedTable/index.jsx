@@ -25,7 +25,8 @@ import { InputText } from 'primereact/inputtext';
 const ExtendedTable = ({ 
     entityName, data, columns, loading, 
     statuses, elRef, actions , headerTitle, onDelete, 
-    enqueueSnackbar, getData
+    enqueueSnackbar, getData,
+    getItem
  }) => {
 
     const [globalFilter, setGlobalFilter] = useState();
@@ -116,7 +117,7 @@ const ExtendedTable = ({
                 {
                     actions.edit ? (
                         <Tooltip title="Redaktə et" placement="top">
-                            <IconButton size="small" className="edit-icon">
+                            <IconButton size="small" className="edit-icon" onClick={() => getItem(rowData)}>
                                 <EditIcon />
                             </IconButton>
                         </Tooltip>
