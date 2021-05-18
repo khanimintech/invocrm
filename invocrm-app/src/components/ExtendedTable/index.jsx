@@ -247,7 +247,7 @@ const ExtendedTable = ({
                     <DialogTitle id="alert-dialog-title">{selectedRow && selectedRow.name}</DialogTitle>
                     <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Bu sənədi silmək istədiyinizə əminsiniz ?
+                        Əminsiniz ?
                     </DialogContentText>
                     </DialogContent>
                     <DialogActions>

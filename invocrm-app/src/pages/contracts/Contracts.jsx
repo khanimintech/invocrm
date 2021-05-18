@@ -75,7 +75,7 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
         })
     }
 
-    const deleteContract = (contract) => handleRequest(ContractsService.remove(contract.id));
+    const deleteContract = (contract) =>  handleRequest(ContractsService.remove(contract.id));
 
     const exportPDF = () => {
         const el = document.getElementsByClassName("p-datatable-wrapper")[0].cloneNode(true);
