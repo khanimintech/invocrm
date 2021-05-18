@@ -6,15 +6,15 @@ import ContactPhoneIcon from '@material-ui/icons/ContactPhone';
 
 
 const columns = [
-    { field: 'company_name', header: 'VÖEN' , filter: true },
-    { field: 'contract_id', header: 'Hesab №' , filter: true },
-    { field: 'contract_id', header: 'Bank adı', filter: true  },
-    { field: 'type', header: 'Yerləşdiyi yer', filter: true  },
-    { field: 'contract_id', header: 'Şəhər', filter: true  },
-    { field: 'sales_name', header: "SWIFT" , filter: true },
-    { field: 'sales_name', header: "Bank kodu" , filter: true },
-    { field: 'sales_name', header: "Bank VÖEN", filter: true  },
-    { field: 'sales_name', header: "Müxbir hesab" , filter: true },
+    { field: 'company_tin', header: 'VÖEN' , filter: true },
+    { field: 'account', header: 'Hesab №' , filter: true },
+    { field: 'name', header: 'Bank adı', filter: true  },
+    { field: 'address', header: 'Yerləşdiyi yer', filter: true  },
+    { field: 'city', header: 'Şəhər', filter: true  },
+    { field: 'swift_no', header: "SWIFT" , filter: true },
+    { field: 'code', header: "Bank kodu" , filter: true },
+    { field: 'tin', header: "Bank VÖEN", filter: true  },
+    { field: 'correspondent_account', header: "Müxbir hesab" , filter: true },
 ];
 
 
@@ -24,11 +24,12 @@ const Banks = ({ handleRequest, user, loading, enqueueSnackbar }) => {
 
 
 
+
     const getBanks = (filters) => {
         handleRequest(
             BanksService.index(filters)
         ).then(res => {
-            setBanks(res.body.data)
+            setBanks(res.body)
         })
     }
 

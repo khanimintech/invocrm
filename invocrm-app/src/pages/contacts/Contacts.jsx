@@ -8,13 +8,13 @@ import "./styles.scss";
 
 
 const columns = [
-    { field: 'company_name', header: 'Müştəri', filter: true},
-    { field: 'contract_id', header: 'Ünvan' , filter: true},
-    { field: 'contract_id', header: 'Əlaqədar şəxs' , filter: true},
+    { field: 'customer', header: 'Müştəri', filter: true},
+    { field: 'address', header: 'Ünvan' , filter: true},
+    { field: 'responsible_person', header: 'Əlaqədar şəxs' , filter: true},
     { field: 'type', header: 'Əlaqə nömrəsi' , filter: true},
-    { field: 'contract_id', header: 'Əlavə №', filter: true },
-    { field: 'sales_name', header: "Şəxsi e-ünvan" , filter: true},
-    { field: 'sales_name', header: "WEB sayt" , filter: true},
+    // { field: 'contract_id', header: 'Əlavə №', filter: true },
+    { field: 'web_site', header: "Şəxsi e-ünvan" , filter: true},
+    { field: 'web_site', header: "WEB sayt" , filter: true},
 ];
 
 
@@ -28,7 +28,7 @@ const Contacts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
         handleRequest(
             ContactsService.index(filters)
         ).then(res => {
-            setContacts(res.body.data)
+            setContacts(res.body)
         })
     }
 

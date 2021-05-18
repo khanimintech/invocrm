@@ -16,17 +16,17 @@ const initialOverviews = [
 
 const columns = [
     { field: 'company_name', header: 'Şirkət', filter: true },
-    { field: '6', header: 'Sorğu №', filter: true  },
-    { field: '5', header: 'Müqavilə Nömrəsi' , filter: true },
-    { field: 'type', header: 'Müqavilə Növü' , filter: true },
-    { field: 'contract_id', header: 'Əlavə №' , filter: true },
-    { field: 'sales_name', header: "Satış Meneceri" , filter: true },
-    { field: '1', header: "Məhsul", filter: true  },
-    { field: '2', header: "Ödəniş şərti" , filter: true },
-    { field: '3', header: "Məbləğ (ƏDV-siz)" , filter: true },
-    { field: '4', header: "Məbləğ (ƏDV-li)" , filter: true },
-    { field: 'created', header: 'Yaradılma Tarixi', filter: true  },
-    { field: 'end_date', header: "Qarşı tərəfin imza tarixi" , filter: true },
+    { field: 'request_no', header: 'Sorğu №', filter: true  },
+    { field: 'contract_no', header: 'Müqavilə Nömrəsi' , filter: true },
+    { field: 'company_type', header: 'Müqavilə Növü' , filter: true },
+    { field: 'annex_no', header: 'Əlavə №' , filter: true },
+    { field: 'sales_manager', header: "Satış Meneceri" , filter: true },
+    // { field: '1', header: "Məhsul", filter: true  },
+    { field: 'payment_terms', header: "Ödəniş şərti" , filter: true },
+    { field: 'sum_no_invoice', header: "Məbləğ (ƏDV-siz)" , filter: true },
+    { field: 'sum_with_invoice', header: "Məbləğ (ƏDV-li)" , filter: true },
+     { field: 'created', header: 'Yaradılma Tarixi', filter: true  },
+    { field: 'signature_date', header: "Qarşı tərəfin imza tarixi" , filter: true },
 ];
 
 
@@ -44,7 +44,7 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
         handleRequest(
             AnnexesService.index(filters)
         ).then(res => {
-            setAnnexes(res.body.data)
+            setAnnexes(res.body)
         })
     }
 

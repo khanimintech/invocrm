@@ -22,10 +22,10 @@ import './styles.scss';
 
 
 const initialOverviews = [
-    { id: 1, status: "Vaxtı bitən", count: 0, icon: <PriorityHighIcon />, color: "#42A5F5" },
-    { id: 2, status: "Vaxtı bitməyinə 2 həftə qalan", count: 0, icon: <AccessAlarmIcon />, color: "#7E57C2" },
-    { id: 3, status: "Prosesdə", count: 0, icon: <HourglassEmptyIcon />, color: "#FFB300" },
-    { id: 4, status: "Təsdiqlənib", count: 0, icon: <CheckCircleIcon />, color: "#66BB6A" },
+    { id: 2, status: "Vaxtı bitən", count: 0, icon: <PriorityHighIcon />, color: "#42A5F5" },
+    { id: 3, status: "Vaxtı bitməyinə 2 həftə qalan", count: 0, icon: <AccessAlarmIcon />, color: "#7E57C2" },
+    { id: 0, status: "Prosesdə", count: 0, icon: <HourglassEmptyIcon />, color: "#FFB300" },
+    { id: 1, status: "Təsdiqlənib", count: 0, icon: <CheckCircleIcon />, color: "#66BB6A" },
 ]
 
 const columns = [
@@ -60,6 +60,17 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
         ).then(res => {
             if (res.body){
                 setContracts(res.body);
+                const ended = res.body.filter(c => c.status === 2)
+                const inProcess = res.body.filter(c => c.status === 0)
+                const approved = res.body.filter(c => c.status === 1)
+                const twoWeeks = res.body.filter(c => c.status === 3)
+                const updatedOverviews = overviews.map( o => {
+                    if (o.id === 0) return { ...o, count: inProcess? inProcess.length : 0}
+                    if (o.id === 1) return { ...o, count: approved? approved.length : 0}
+                    if (o.id === 2) return { ...o, count: ended? ended.length : 0}
+                    if (o.id === 3) return { ...o, count: twoWeeks? twoWeeks.length : 0}
+                })
+                setOverviews(updatedOverviews)
             }
         })
     }
