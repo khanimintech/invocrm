@@ -157,7 +157,7 @@ const ExtendedTable = ({
             return  (
                 <React.Fragment>
                     <span className="p-column-title">{columnName}</span>
-                    {format(parseISO(value), "MM.dd.yyyy")}
+                    {value ? format(parseISO(value), "MM.dd.yyyy") : "-"}
                 </React.Fragment>
             )
         return (

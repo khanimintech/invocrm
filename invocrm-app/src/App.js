@@ -7,15 +7,16 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
+  Redirect,
 } from "react-router-dom";
 import Contacts from './pages/contacts/Contacts';
 import Banks from './pages/banks';
 import Login from './pages/login';
+import { LoginService } from './services/LoginService';
 
 import 'primereact/resources/themes/saga-blue/theme.css';
 import "primereact/resources/primereact.min.css"
 import "primeicons/primeicons.css";
-import { LoginService } from './services/LoginService';
 
 
 const App = ({ history }) => {
@@ -101,7 +102,8 @@ const App = ({ history }) => {
         {
           isUserLoaded ? (
             !user ? (
-              routes.filter(route => route.unauthorized)
+              <>
+              {routes.filter(route => route.unauthorized)
                 .map(route => (
                       <Route  exact key={route.url} path={route.url}>
                         {React.cloneElement(
@@ -109,7 +111,9 @@ const App = ({ history }) => {
                           { ...unauthorizedProps }
                         )}
                       </Route>
-                    ))
+                    ))}
+                    <Redirect exact  to="/login" />
+                  </>
           ): (
             <Layout user={user} removeUser={handleLogout}>
             {routes
@@ -122,6 +126,7 @@ const App = ({ history }) => {
                 )}
               </Route>
             ))}
+             <Redirect exact  to="/contracts" />
             </Layout>
           )
           ) : null

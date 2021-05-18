@@ -15,12 +15,16 @@ import BankRequisits from './BankRequisits';
 import CustomerContacts from './CustomerContacts';
 import CompnayOneTimeForm from './CompanyOneTimeForm';
 import CreateAnnex from './CreateAnnex';
+import TextField from '@material-ui/core/TextField';
+import PhysicalOneTimeForm from './PhysicalOneTimeForm';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const OneTimeForm = ({handleRequest, handleSubmit, handleClose }) => {
     let formikRef = useRef();
 
     const [salesManagers, setSalesManagers] = useState([]);
     const [units, setUnits] = useState([]);
+    const [type, setType] = useState(1);
 
     useEffect(() => {
         getSalesManagers();
@@ -59,7 +63,7 @@ const OneTimeForm = ({handleRequest, handleSubmit, handleClose }) => {
                                 unit: 0,
                                 price: "",
                                 total: 0,
-                                id: 0,
+                                id: 1,
                             }]
                         }}
                         onSubmit={vals => handleSubmit({ ...vals })}
@@ -73,11 +77,30 @@ const OneTimeForm = ({handleRequest, handleSubmit, handleClose }) => {
                                         <Grid item md={12}>
                                             <Typography variant="h6" gutterBottom>
                                                 Ümumi məlumatlar
-                                    </Typography>
+                                            </Typography>
+                                            <TextField
+                                                select
+                                                fullWidth
+                                                label="Növü"
+                                                value={type}
+                                                onChange={e => setType(e.target.value)}
+                                                variant="outlined"
+                                                >
+                  
+                                                <MenuItem  value={1}>
+                                                    Hüquqi
+                                                </MenuItem>
+                                                <MenuItem value={2}>
+                                                    Fiziki
+                                                </MenuItem>
+               
+                                                </TextField>
                                         </Grid>
                                         <Divider />
-                                        
-                                            <CompnayOneTimeForm salesManagers={salesManagers}/>
+                                            {
+                                                type === 1 ? <CompnayOneTimeForm salesManagers={salesManagers}/> : <PhysicalOneTimeForm   salesManagers={salesManagers} />
+                                            }
+                                            
 
                                         <CustomerContacts  />
                                     </Grid>
