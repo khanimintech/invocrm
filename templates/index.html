@@ -1,308 +1,52 @@
 {% verbatim %}
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://unpkg.com/vue@2.6.11/dist/vue.js"></script>
+        <script src="https://unpkg.com/vue-router"></script>
+        <script src="https://unpkg.com/http-vue-loader"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+        <!--PRIMEVUE -->
+        <link href="https://unpkg.com/primevue/resources/themes/saga-blue/theme.css" rel="stylesheet">
+        <link href="https://unpkg.com/primeicons/primeicons.css" rel="stylesheet">
+        <link href="https://unpkg.com/primevue/resources/primevue.min.css" rel="stylesheet"> 
+        <script src="https://unpkg.com/primevue@2.3.0/button/button.umd.min.js"></script>
+        <script src="https://unpkg.com/primevue@2.3.0/avatar/avatar.umd.min.js"></script>
+        <script src="https://unpkg.com/primevue@2.3.0/menu/menu.umd.min.js"></script>
+        <script src="https://unpkg.com/primevue@2.3.0/inputtext/inputtext.umd.min.js"></script>
+        
+        <script src="https://unpkg.com/primevue@2.3.0/datatable/datatable.umd.min.js"></script>
+        <script src="https://unpkg.com/primevue@2.3.0/column/column.umd.min.js"></script>
+        <script src="https://unpkg.com/primevue@2.3.0/multiselect/multiselect.umd.min.js"></script>
+        <script src="https://unpkg.com/primevue@2.3.0/calendar/calendar.umd.min.js"></script>
+        <script src="https://unpkg.com/primevue@2.3.0/dropdown/dropdown.umd.min.js"></script>
 
-        <!-- ===== BOX ICONS ===== -->
-        <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+        <!--BUEFY-->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@5.8.55/css/materialdesignicons.min.css">
+        <link rel="stylesheet" href="https://unpkg.com/buefy/dist/buefy.min.css">
+        <script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
 
-        <!-- ===== FONTAWESOME ===== -->
-        <script src="https://kit.fontawesome.com/2b29824dc2.js" crossorigin="anonymous"></script>
 
-        <!-- ===== ICOFONT ===== -->
-        <link rel="stylesheet" href={% static 'invocrm/vendors/icofont/icofont.min.css' %}>
-
-        <!-- ===== CSS ===== -->
-        <link rel="stylesheet" href={% static  'invocrm/css/style.css' %}>
-        <link rel="stylesheet" href={% static  'invocrm/css/style.css' %}>
-        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script>
-            axios.defaults.xsrfCookieName = 'csrftoken';
-            axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
-        </script>
-        <title>Müqavilə</title>
+        <!--CUSTOM STYLES-->
+        <link href="/static/invocrm/base.css" rel="stylesheet">
+        <!--FONTS-->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400&family=Poppins:wght@100;200;300;400&display=swap" rel="stylesheet">
+      <title>InvoCRM</title>
     </head>
-    <body id="body-pd">
-    <div id="app">
-        <!--START: Container-->
-        <div class="container">
-            <!--START: Header-->
-            <div class="row">
-                <div class="col-12">
-                    <header class="header" id="header">
-                        <div class="col-12 search-wrapper">
-                            <i class="fas fa-search"></i>
-                            <input type="search" placeholder="Axtarin...">
-                        </div>
-                        <div class="header-img">
-                            <img src="img/user.png" alt="">
-                        </div>
-                    </header>
-                </div>
-            </div>
-            <!--END: Header-->
-
-            <!--START: Navbar-->
-            <div class="row">
-                <div class="col-2">
-                    <div class="l-navbar" id="nav-bar">
-                        <nav class="nav">
-                            <div class="logo">
-                                <div class="menu-logo">
-                                    <i class='bx bx-menu' id="menu-toggle"></i>
-                                    <a href="index.html" class="logo-color">Sales</a>
-                                </div>
-                            </div>
-                            <div class="nav-list">
-                                <a href="index.html" class="nav-link active">
-                                    <i class='bx bx-grid-alt nav-icon' ></i>
-                                    <span class="nav-name">Müqavilə</span>
-                                </a>
-                                <a href="page-request.html" class="nav-link">
-                                    <i class='bx bxs-file-blank nav-icon'></i>
-                                    <span>Sorğu</span>
-                                </a>
-                            </div>
-                        </nav>
-                    </div>
-                </div>
-            </div>
-            <!--END: Navbar-->
-
-            <!--START: Main Header-->
-            <div class="row">
-                <div class="col-12">
-                    <div id="main-header">
-                        <div class="page-title-icon">
-                            <i class="icofont-law-document"></i>
-                        </div>
-                        <div class="page-title">
-                            <h3>Müqavilələr</h3>
-                        </div>
-                        <div class="breadcrumb">
-                            <ul>
-                                <li><a href="index.html" class="active">Müqavilə</a></li>
-                                <li><a href="page-annex.html">Əlavə</a></li>
-                                <li><a href="page-contact.html">Kontakt</a></li>
-                                <li><a href="page-bank.html">Bank</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--END: Main Header-->
-
-            <!--START: Cards-->
-            <div class="row">
-                <div class="col-12">
-                    <div id="contract-card">
-                        <div class="col-4 red-card">
-                            <p>25</p>
-                            <p class="card-title">Vaxti bitən</p>
-                            <i class="icofont-exclamation-circle"></i>
-                        </div>
-                        <div class="col-4 yellow-card">
-                            <p>25</p>
-                            <p class="card-title">Vaxti bitmeyine 2 hefte qalan</p>
-                            <i class='bx bxs-alarm-exclamation'></i>
-                        </div>
-                        <div class="col-4 blue-card">
-                            <p>25</p>
-                            <p class="card-title">Prosesdə</p>
-                            <i class="icofont-sand-clock"></i>
-                        </div>
-                        <div class="col-4 green-card">
-                            <p>25</p>
-                            <p class="card-title">Təsdiqlənib</p>
-                            <i class='bx bxs-check-circle'></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="total-number">
-                        Ümumi say: 50
-                    </div>
-                </div>
-            </div>
-            <!--END: Cards-->
-
-            <!--START: Button Group-->
-            <div class="row">
-                <div class="col-12">
-                    <div id="button-group">
-                        <div class="btn-left">
-                            <button onclick="myFunction()" class="dropbtn">+ Sənəd yarat</button>
-                            <div id="myDropdown" class="dropdown-content">
-                                <a href="form-contracts.html">Alqı-satqı</a>
-                                <a href="#about">Xidmət</a>
-                                <a href="#contact">Agent</a>
-                                <a href="#contact">Distribyutor</a>
-                            </div>
-                        </div>
-                        <div class="btn-right">
-                            <button class="print-btn print-btn-color"><i class="fas fa-print "></i></button>
-                            <button class="pdf-btn pdf-btn-color "><i class="far fa-file-pdf"></i></button>
-                            <button class="excel-btn excel-btn-color "><i class="far fa-file-excel"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--END: Button Group-->
-
-            <!--START: Table-->
-            <div class="row">
-                <div class="col-12">
-                    <div id="table">
-                        <contract-table
-                                v-bind:contracts="contracts" v-bind:val="55"
-                        />
-                    </div>
-                </div>
-            </div>
-            <!--END: Table-->
+    <body>
+        <div id="vue-app">
+            <layout>
+              <router-view>
+                <contracts></contracts>  
+                <annexes></annexes>
+            </router-view>
+            </layout>
         </div>
-        <!--END: Container-->
-
-        <!-- START: Modal -->
-        <div class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <p>Azersu ASC</p>
-                    <p>Xidmət</p>
-                    <p>№ 20012-02-524</p>
-                    <span class="close-button">&times;</span>
-                </div>
-                <div class="modal-headbar">
-                    <button class="tablink modal-button modal-active" onclick="openCity(event, 'Contract')">Müqavilə</button>
-                    <button class="tablink modal-button modal-active" onclick="openCity(event, 'Annex')">Əlavə</button>
-                </div>
-                <div id="Contract" class="tbl-menu">
-                    <table>
-                        <thead>
-                            <th><input type="checkbox"></th>
-                            <th>Qoşma</th>
-                            <th>Sənədin adı</th>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td><i class="far fa-file-pdf"></i></td>
-                                <td>3</td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td>2</td>
-                                <td>3</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div id="Annex" class="tbl-menu">
-                    <table class="table">
-                        <thead>
-                            <th><input type="checkbox"></th>
-                            <th>Əlavə №</th>
-                            <th>Qoşma</th>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td>01</td>
-                                <td><i class="far fa-file-pdf"></i></td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td>02</td>
-                                <td><i class="far fa-file-pdf"></i></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="file-attach">
-                    <input type="text" value="Yukleyin">
-                </div>
-            </div>
-
-        </div>
-        <!-- END: Modal -->
-
-
-    <!--===== MAIN JS =====-->
-
-    </div>
-    <script src="main.js"></script>
-    <script src="src/utils/utils.js"></script>
-
-    template = `sdasd
-
-    <script>
-        Vue.component('contract-table', {
-          delimiters: ["[[", "]]"],
-          props: ['contracts', 'val'],
-          template: `
-            <table class="activity-table">
-                <thead>
-                    <tr>
-                        <th><button class="trigger thead-btn" onclick="toggleModal()"><i class="fas fa-paperclip"></i></button></th>
-                        <th colspan="2">Düzəliş</th>
-                        <th>Şirkət</th>
-                        <th>Müqavilə Nömrəsi</th>
-                        <th>Müqavilə Növü</th>
-                        <th>Yaradılma Tarixi</th>
-                        <th>Bitmə Tarixi</th>
-                        <th>Satış Mneceri</th>
-                        <th>Status</th>
-                        <th>İcraçı</th>
-                        <th>Əlavə</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="contract in contracts">
-                        <td><button class="trigger" onclick="toggleModal()"><i class="fas fa-paperclip"></i></button></td>
-                        <td><i class="far fa-trash-alt trash-icon"></i></td>
-                        <td><i class="far fa-edit edit-icon"></i></td>
-                        <td>Ekol</td>
-                        <td>N/A</td>
-                        <td>Birdəfəlik müqavilə</td>
-                        <td>01.12.2020</td>
-                        <td>01.12.2020</td>
-                        <td>Bextiyar Babayev</td>
-                        <td><span class="badge progress">Prosesdə</span></td>
-                        <td>[[ contract.sales_name ]]</td>
-                        <td><a href="form-annex.html"><input type="button" class="annex-number" value="0"></a></td>
-                    </tr>
-                </tbody>
-             </table>
-
-            `
-        })
-        var app = new Vue({
-
-          delimiters: ["[[", "]]"],
-          el: '#app',
-          data: {
-            message: 'Hello Vue!',
-            contracts: null,
-          },
-          created: function (){
-              thiz = this
-              axios.get('/api/v1.0/stub-api/')
-                  .then(function (response){
-                      console.log(response['data']['data'])
-                      console.log(response)
-                      thiz.contracts = response['data']['data']
-                  })
-          }
-        })
-    </script>
-    </body>
-
-</html>
-{% endverbatim %}
+       <script src="/static/invocrm/main.js"></script>
+       <script src="/static/invocrm/services/ContractsService.js"></script>
+       <script src="/static/invocrm/utils.js"></script>
+       <script>
+       </script>
+      </body>
+  </html>
+  {% endverbatim %}

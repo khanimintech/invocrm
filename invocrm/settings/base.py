@@ -52,6 +52,7 @@ MIDDLEWARE = [
     'invocrm.middleware.force_login_middleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'invocrm.urls'
@@ -125,13 +126,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 if DEBUG:
     STATIC_ROOT = ''
     STATICFILES_DIRS = (
         BASE_DIR / 'static/',
     )
+
 
 
 MEDIA_URL = '/media/'
@@ -149,4 +151,7 @@ REST_FRAMEWORK = {
 }
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/index/'
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
 AUTH_USER_MODEL = 'api.CustomUser'
+

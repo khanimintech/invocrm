@@ -1,7 +1,7 @@
 from django.contrib.auth import login
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from invocrm.auth import CsrfExemptSessionAuthentication
 
 from api.serializers import LoginSerializer
 from invocrm.auth import CsrfExemptSessionAuthentication

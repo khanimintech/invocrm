@@ -13,3 +13,4 @@ psycopg2-binary
 dj-static==0.0.6
 django-countries==7.1
 pyuca==1.2
+django-cors-headers
