@@ -21,6 +21,7 @@ from django.views.static import serve
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(('api.urls', 'api'), namespace='api')),
+    path('/', include(('siteapp.urls', 'siteapp'), namespace='siteapp')),
     # this should be at the end because every other url will be one SPA  
     
 ]
