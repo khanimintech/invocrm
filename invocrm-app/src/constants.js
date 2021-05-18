@@ -7,7 +7,7 @@ export const contractStatuses = [
     { value: 0, label: "Prosesdə"},
     {value: 1, label: "Təsdiqlənib"},
     {value: 2, label: "Vaxtı bitən"},
-    {value: 3, label: "2 həftə qalan"}
+    {value: 3, label: "Vaxtı bitir"}
   ]
 
 export const contractTypes = {

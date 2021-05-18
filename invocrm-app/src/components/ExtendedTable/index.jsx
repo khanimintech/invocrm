@@ -140,6 +140,7 @@ const ExtendedTable = ({
         return <Chip label={option.label} className={`status-${option.value}`} />
     }
         
+    const typeItemTemplate = (option) => <span value={option.value} >{option.label}</span>
 
     const statusBodyTemplate = (value) => {
         const status = contractStatuses.find(contractStatus => contractStatus.value === value);
@@ -153,7 +154,7 @@ const ExtendedTable = ({
 
 
     const cellTemplate = (value, columnName, col ) => {
-        if (col === "created" || col === "due_date")
+        if (col === "created" || col === "due_date" || col === "signature_date")
             return  (
                 <React.Fragment>
                     <span className="p-column-title">{columnName}</span>
@@ -183,12 +184,21 @@ const ExtendedTable = ({
     }
 
     const columnComponents = selectedColumns.map(col => {
-        const isDateField = col.field === "created" || col.field === "due_date";
+        
+        const isDateField = col.field === "created" || col.field === "due_date" ||  col.field === "signature_date";
         const isStatusField = col.field === "status";
-
-        const dateFilter = field => <Calendar value={filters[field]}  onChange={(e) => handleFilterInputChange(field,  /*"2021-05-16T11:44:05.956Z"*/ e.target.value ?  format(e.target.value, "yyyy-MM-dd'T'HH:mm:ss.SSS") : "")}   className="p-co.lumn-filter"  />;
+        const isTypeField = col.field === "contract_type" || col.field === "type";
+        const dateFilter = field => <Calendar value={filters[field]}  onChange={(e) => handleFilterInputChange(field,  e.target.value ?  format(e.target.value, "yyyy-MM-dd'T'HH:mm:ss.SSS") : "")}   className="p-co.lumn-filter"  />;
         const statusFilter = field => <Dropdown value={filters[field]} options={statuses}  onChange={(e) => handleFilterInputChange(field, e.target.value)}  itemTemplate={statusItemTemplate}  className="p-column-filter" showClear />;
         const textFilter = field => <InputText onChange={(e) => handleFilterInputChange(field, e.target.value)}   value={filters[field]} />
+        const typeFilter = field =>  <Dropdown value={filters[field]} options={Object.keys(contractTypes).map(type => ({ value: type, label: contractTypes[type]}))}  onChange={(e) => handleFilterInputChange(field, e.target.value)}  itemTemplate={typeItemTemplate}  className="p-column-filter" showClear />;
+        const renderFilter = () => {
+            if (isDateField)
+                return dateFilter(col.field)
+            if (isStatusField) return  statusFilter(col.field)
+            if (isTypeField)  return typeFilter(col.field)
+            return textFilter(col.field)
+        }
         return (
             <Column
                 key={col.field}
@@ -196,14 +206,14 @@ const ExtendedTable = ({
                 body={(rowData) => {
                     if ( col.field === "status" )
                         return statusBodyTemplate(rowData.status);
-                    if (col.field === "type")
+                    if (col.field === "type" || col.field === "contract_type")
                         return typeTemplate(rowData[col.field], col.header)
                     return cellTemplate(rowData[col.field], col.header, col.field)
                 }}
                 filterField={col.field}
                 header={col.header}
                 filter={col.filter}
-                filterElement={isDateField ? dateFilter(col.field) : (isStatusField ? statusFilter(col.field) : textFilter(col.field))}
+                filterElement={renderFilter()}
                 filterPlaceholder=""
                 sortable
                 filterMatchMode="custom"

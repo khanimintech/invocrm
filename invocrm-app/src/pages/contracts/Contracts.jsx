@@ -23,7 +23,7 @@ import './styles.scss';
 
 const initialOverviews = [
     { id: 2, status: "Vaxtı bitən", count: 0, icon: <PriorityHighIcon />, color: "#42A5F5" },
-    { id: 3, status: "Vaxtı bitməyinə 2 həftə qalan", count: 0, icon: <AccessAlarmIcon />, color: "#7E57C2" },
+    { id: 3, status: "Vaxtı bitir", count: 0, icon: <AccessAlarmIcon />, color: "#7E57C2" },
     { id: 0, status: "Prosesdə", count: 0, icon: <HourglassEmptyIcon />, color: "#FFB300" },
     { id: 1, status: "Təsdiqlənib", count: 0, icon: <CheckCircleIcon />, color: "#66BB6A" },
 ]

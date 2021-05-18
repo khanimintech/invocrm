@@ -18,7 +18,7 @@ const columns = [
     { field: 'company_name', header: 'Şirkət', filter: true },
     { field: 'request_no', header: 'Sorğu №', filter: true  },
     { field: 'contract_no', header: 'Müqavilə Nömrəsi' , filter: true },
-    { field: 'company_type', header: 'Müqavilə Növü' , filter: true },
+    { field: 'contract_type', header: 'Müqavilə Növü' , filter: true },
     { field: 'annex_no', header: 'Əlavə №' , filter: true },
     { field: 'sales_manager', header: "Satış Meneceri" , filter: true },
     // { field: '1', header: "Məhsul", filter: true  },
