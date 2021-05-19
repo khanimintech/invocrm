@@ -10,7 +10,7 @@ import ExtendedTable from '../../components/ExtendedTable';
 
 const initialOverviews = [
     { id: 1, status: "ƏDV-siz", count: 0, icon: <PriorityHighIcon />, color: "#42A5F5" },
-    { id: 2, status: "ƏDV-li", count: 0, icon: <AccessAlarmIcon />, color: "#7E57C2" },
+    { id: 2, status: "ƏDV-li", count: 0, icon: <AccessAlarmIcon />, color: "rgb(90 89 204)" },
     { id: 3, status: "Cəmi əlavə", count: 0, icon: <HourglassEmptyIcon />, color: "#FFB300" },
 ]
 
@@ -41,7 +41,7 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
 
 
     const getAnnexes = (filters) => {
-        handleRequest(
+        return handleRequest(
             AnnexesService.index(filters)
         ).then(res => {
             setAnnexes(res.body)

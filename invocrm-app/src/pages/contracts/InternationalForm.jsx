@@ -13,9 +13,12 @@ import { companyTypes } from './../../constants';
 import BankRequisits from './BankRequisits';
 import CustomerContacts from './CustomerContacts';
 
-const InternationalForm = ({ handleSubmit, handleRequest, handleClose, formType }) => {
+const InternationalForm = ({ handleSubmit, handleRequest, handleClose, formType, selectedContract }) => {
     let formikRef = useRef();
-
+    const {contract_no, annex_count, company_name, 
+        created, due_date, id, sales_manager_id, type ,
+    } = selectedContract || {};
+    
     const [salesManagers, setSalesManagers] = useState([]);
 
 
@@ -39,8 +42,15 @@ const InternationalForm = ({ handleSubmit, handleRequest, handleClose, formType 
                 <DialogContentText>
                     <Formik
                         initialValues={{
-                            due_date: new Date(),
-                            created: new Date(),
+                            id,
+                            due_date: due_date || new Date(),
+                            created: created || new Date(),
+                            contract_no,
+                            sales_manager: sales_manager_id,
+                            company: {
+                                name: company_name,
+                                type,
+                            },
                         }}
                         onSubmit={vals => handleSubmit({ ...vals })}
                         innerRef={form => (formikRef = form)}
@@ -286,16 +296,19 @@ const InternationalForm = ({ handleSubmit, handleRequest, handleClose, formType 
                                                 )}
                                             </Field>
                                         </Grid>
-                                        <CustomerContacts />
+                                        <CustomerContacts  readOnly={id} />
                                     </Grid>
-                                    <BankRequisits />
+                                    <BankRequisits readOnly={id} />
                                 </Grid>
                             </Form>
                         )}
                     </Formik>
                 </DialogContentText>
             </DialogContent>
-            <CreateFormActions handleClose={handleClose} handleSave={() => formikRef.submitForm()} />
+            {
+                id ? null  : <CreateFormActions handleClose={handleClose} handleSave={() => formikRef.submitForm()} />
+            }
+           
         </>
     )
 }

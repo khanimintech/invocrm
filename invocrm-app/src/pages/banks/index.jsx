@@ -26,7 +26,7 @@ const Banks = ({ handleRequest, user, loading, enqueueSnackbar }) => {
 
 
     const getBanks = (filters) => {
-        handleRequest(
+        return handleRequest(
             BanksService.index(filters)
         ).then(res => {
             setBanks(res.body)

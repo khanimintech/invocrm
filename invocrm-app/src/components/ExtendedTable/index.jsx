@@ -21,19 +21,21 @@ import Chip from '@material-ui/core/Chip';
 import { contractTypes, contractStatuses } from '../../constants';
 import { format, parseISO } from 'date-fns'
 import { InputText } from 'primereact/inputtext';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
-const ExtendedTable = ({ 
-    entityName, data, columns, loading, 
-    statuses, elRef, actions , headerTitle, onDelete, 
+const ExtendedTable = ({
+    entityName, data, columns,
+    statuses, elRef, actions, headerTitle, onDelete,
     enqueueSnackbar, getData,
     getItem
- }) => {
+}) => {
 
     const [globalFilter, setGlobalFilter] = useState();
-    const [selectedColumns, setSelectedColumns] = useState(columns); 
+    const [selectedColumns, setSelectedColumns] = useState(columns);
     const [showDeleteModal, toggleShowDeleteModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState();
     const [filters, setFilters] = useState({});
+    const [loading, toggleLoading] = useState(false);
 
 
     useEffect(() => {
@@ -47,23 +49,28 @@ const ExtendedTable = ({
     }, [columns])
 
     useEffect(() => {
+        toggleLoading(true)
         const delayDebounceFn = setTimeout(() => {
-          getData(filters)
+            getData(filters)
+                .then(() => {
+                    toggleLoading(false)
+                })
         }, 1000)
-    
+
         return () => clearTimeout(delayDebounceFn)
-      }, [filters])
+    }, [filters])
 
     const handleDelete = () => {
         onDelete(selectedRow)
-        .then(() => {
-            getData();
-            toggleShowDeleteModal(false)
-            setSelectedRow();
-            enqueueSnackbar("Uğurla silinmişdir .", { variant: "success" }) // this row will be moved to handleRequest
-        })
+            .then(() => {
+                toggleLoading(true)
+                getData();
+                toggleShowDeleteModal(false)
+                setSelectedRow();
+                enqueueSnackbar("Uğurla silinmişdir .", { variant: "success" }) // this row will be moved to handleRequest
+            })
     }
-  
+
 
     const onColumnToggle = (event) => {
         let selectedColumns = event.value;
@@ -71,7 +78,7 @@ const ExtendedTable = ({
         setSelectedColumns(orderedSelectedColumns);
     }
 
- 
+
 
     const closeDeleteModal = () => toggleShowDeleteModal(false)
 
@@ -99,21 +106,21 @@ const ExtendedTable = ({
                 {
                     actions.plus ? (
                         <Tooltip title="Yenisin yarat" placement="top">
-                        <IconButton size="small" className="add-icon">
-                            <AddIcon />
-                        </IconButton>
-                    </Tooltip>
-                    ): null
+                            <IconButton size="small" className="add-icon">
+                                <AddIcon />
+                            </IconButton>
+                        </Tooltip>
+                    ) : null
                 }
-               {
-                   actions.attach  ?(
+                {
+                    actions.attach ? (
                         <Tooltip title="Bax" placement="top">
-                        <IconButton size="small" className="attach-icon">
-                            <AttachFileIcon />
-                        </IconButton>
-                    </Tooltip>
-                   ): null
-               }
+                            <IconButton size="small" className="attach-icon">
+                                <AttachFileIcon />
+                            </IconButton>
+                        </Tooltip>
+                    ) : null
+                }
                 {
                     actions.edit ? (
                         <Tooltip title="Redaktə et" placement="top">
@@ -121,18 +128,19 @@ const ExtendedTable = ({
                                 <EditIcon />
                             </IconButton>
                         </Tooltip>
-                    ): null
+                    ) : null
                 }
+
                 {
                     actions.delete ? (
                         <Tooltip title="Sil" placement="top">
-                    <IconButton size="small" onClick={()=> handleDeleteClick(rowData)} className="delete-icon">
-                        <DeleteIcon />
-                    </IconButton>
-                </Tooltip>
-                    ): null
+                            <IconButton size="small" onClick={() => handleDeleteClick(rowData)} className="delete-icon">
+                                <DeleteIcon />
+                            </IconButton>
+                        </Tooltip>
+                    ) : null
                 }
-                
+
             </div>
         )
     }
@@ -140,7 +148,7 @@ const ExtendedTable = ({
     const statusItemTemplate = (option) => {
         return <Chip label={option.label} className={`status-${option.value}`} />
     }
-        
+
     const typeItemTemplate = (option) => <span value={option.value} >{option.label}</span>
 
     const statusBodyTemplate = (value) => {
@@ -153,10 +161,11 @@ const ExtendedTable = ({
         );
     }
 
+    const handleShow = (row) => getItem(row)
 
-    const cellTemplate = (value, columnName, col ) => {
+    const cellTemplate = (value, columnName, col, showDetails, row) => {
         if (col === "created" || col === "due_date" || col === "signature_date")
-            return  (
+            return (
                 <React.Fragment>
                     <span className="p-column-title">{columnName}</span>
                     {value ? format(parseISO(value), "MM.dd.yyyy") : "-"}
@@ -164,8 +173,8 @@ const ExtendedTable = ({
             )
         return (
             <React.Fragment>
-                <span className="p-column-title">{columnName}</span>
-                {value}
+                <span  className="p-column-title">{columnName}</span>
+                <span  className={`${showDetails ? "clickable-column" : ""}`} onClick={showDetails ? () => handleShow(row) : null}>{value}</span>
             </React.Fragment>
         )
     }
@@ -181,23 +190,23 @@ const ExtendedTable = ({
 
 
     const handleFilterInputChange = (filterName, filterValue) => {
-        setFilters({ ... filters, [filterName]: filterValue || "" })
+        setFilters({ ...filters, [filterName]: filterValue || "" })
     }
 
     const columnComponents = selectedColumns.map(col => {
-        
-        const isDateField = col.field === "created" || col.field === "due_date" ||  col.field === "signature_date";
+
+        const isDateField = col.field === "created" || col.field === "due_date" || col.field === "signature_date";
         const isStatusField = col.field === "status";
         const isTypeField = col.field === "contract_type" || col.field === "type";
-        const dateFilter = field => <Calendar value={filters[field]}  onChange={(e) => handleFilterInputChange(field,  e.target.value ?  format(e.target.value, "yyyy-MM-dd'T'HH:mm:ss.SSS") : "")}   className="p-co.lumn-filter"  />;
-        const statusFilter = field => <Dropdown value={filters[field]} options={statuses}  onChange={(e) => handleFilterInputChange(field, e.target.value)}  itemTemplate={statusItemTemplate}  className="p-column-filter" showClear />;
-        const textFilter = field => <InputText onChange={(e) => handleFilterInputChange(field, e.target.value)}   value={filters[field]} />
-        const typeFilter = field =>  <Dropdown value={filters[field]} options={Object.keys(contractTypes).map(type => ({ value: type, label: contractTypes[type]}))}  onChange={(e) => handleFilterInputChange(field, e.target.value)}  itemTemplate={typeItemTemplate}  className="p-column-filter" showClear />;
+        const dateFilter = field => <Calendar value={filters[field]} onChange={(e) => handleFilterInputChange(field, e.target.value ? format(e.target.value, "yyyy-MM-dd'T'HH:mm:ss.SSS") : "")} className="p-co.lumn-filter" />;
+        const statusFilter = field => <Dropdown value={filters[field]} options={statuses} onChange={(e) => handleFilterInputChange(field, e.target.value)} itemTemplate={statusItemTemplate} className="p-column-filter" showClear />;
+        const textFilter = field => <InputText onChange={(e) => handleFilterInputChange(field, e.target.value)} value={filters[field]} />
+        const typeFilter = field => <Dropdown value={filters[field]} options={Object.keys(contractTypes).map(type => ({ value: type, label: contractTypes[type] }))} onChange={(e) => handleFilterInputChange(field, e.target.value)} itemTemplate={typeItemTemplate} className="p-column-filter" showClear />;
         const renderFilter = () => {
             if (isDateField)
                 return dateFilter(col.field)
-            if (isStatusField) return  statusFilter(col.field)
-            if (isTypeField)  return typeFilter(col.field)
+            if (isStatusField) return statusFilter(col.field)
+            if (isTypeField) return typeFilter(col.field)
             return textFilter(col.field)
         }
         return (
@@ -205,11 +214,11 @@ const ExtendedTable = ({
                 key={col.field}
                 field={col.field}
                 body={(rowData) => {
-                    if ( col.field === "status" )
+                    if (col.field === "status")
                         return statusBodyTemplate(rowData.status);
                     if (col.field === "type" || col.field === "contract_type")
                         return typeTemplate(rowData[col.field], col.header)
-                    return cellTemplate(rowData[col.field], col.header, col.field)
+                    return cellTemplate(rowData[col.field], col.header, col.field, col.showDetails, rowData)
                 }}
                 filterField={col.field}
                 header={col.header}
@@ -227,40 +236,40 @@ const ExtendedTable = ({
     return (
         <Grid item xs={12} className="datatable-filter">
             <DataTable
-                ref={elRef} 
-                value={data} 
-                header={header} 
+                ref={elRef}
+                value={data}
+                header={header}
                 className="p-datatable p-datatable-responsive p-datatable-gridlines"
-                loading={loading} 
-                globalFilter={globalFilter} 
+                loading={loading}
+                globalFilter={globalFilter}
                 emptyMessage="Heç bir məlumat tapılmadı.">
                 {columnComponents}
-                <Column header={"Əmaliyyatlar"} 
+                <Column header={"Əmaliyyatlar"}
                     body={actionsBodyTemplate}
                 />
             </DataTable>
             <Dialog
-                    open={showDeleteModal}
-                    onClose={closeDeleteModal}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                >
-                    <DialogTitle id="alert-dialog-title">{selectedRow && selectedRow.name}</DialogTitle>
-                    <DialogContent>
+                open={showDeleteModal}
+                onClose={closeDeleteModal}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{selectedRow && selectedRow.name}</DialogTitle>
+                <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         Əminsiniz ?
                     </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
+                </DialogContent>
+                <DialogActions>
                     <Button onClick={handleDelete} color="primary">
                         Sil
                     </Button>
-                    <Button onClick={closeDeleteModal}  autoFocus>
+                    <Button onClick={closeDeleteModal} autoFocus>
                         Ləğv et
                     </Button>
-                    </DialogActions>
-                </Dialog>
-    </Grid>
+                </DialogActions>
+            </Dialog>
+        </Grid>
     )
 }
 

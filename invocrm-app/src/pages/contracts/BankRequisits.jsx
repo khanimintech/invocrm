@@ -6,7 +6,7 @@ import { validateRequired } from '../../utils';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 
-const BankRequisits = ({ hideTin }) => {
+const BankRequisits = ({ hideTin, readOnly }) => {
     return (
         <Grid item md={6} sm={12} xs={12}>
         <Grid item md={12}>
@@ -28,6 +28,7 @@ const BankRequisits = ({ hideTin }) => {
                         field={field}
                         form={form}
                         meta={meta}
+                        readOnly={readOnly}
                     />
                 )}
             </Field>
@@ -43,6 +44,7 @@ const BankRequisits = ({ hideTin }) => {
                         field={field}
                         form={form}
                         meta={meta}
+                        readOnly={readOnly}
                     />
                 )}
             </Field>
@@ -58,6 +60,7 @@ const BankRequisits = ({ hideTin }) => {
                         field={field}
                         form={form}
                         meta={meta}
+                        readOnly={readOnly}
                     />
                 )}
             </Field>
@@ -75,6 +78,7 @@ const BankRequisits = ({ hideTin }) => {
                         field={field}
                         form={form}
                         meta={meta}
+                        readOnly={readOnly}
                     />
                 )}
             </Field>
@@ -90,6 +94,7 @@ const BankRequisits = ({ hideTin }) => {
                         field={field}
                         form={form}
                         meta={meta}
+                        readOnly={readOnly}
                     />
                 )}
             </Field>
@@ -107,6 +112,7 @@ const BankRequisits = ({ hideTin }) => {
                                 field={field}
                                 form={form}
                                 meta={meta}
+                                readOnly={readOnly}
                             />
                         )}
                     </Field>
@@ -125,6 +131,7 @@ const BankRequisits = ({ hideTin }) => {
                         field={field}
                         form={form}
                         meta={meta}
+                        readOnly={readOnly}
                     />
                 )}
             </Field>

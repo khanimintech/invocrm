@@ -13,8 +13,11 @@ import { companyTypes } from './../../constants';
 import BankRequisits from './BankRequisits';
 import CustomerContacts from './CustomerContacts';
 
-const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType }) => {
+const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selectedContract }) => {
     let formikRef = useRef();
+    const {contract_no, annex_count, company_name, 
+        created, due_date, id, sales_manager_id, type ,
+    } = selectedContract || {};
 
     const [salesManagers, setSalesManagers] = useState([]);
 
@@ -39,8 +42,15 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType }) => {
                 <DialogContentText>
                     <Formik
                         initialValues={{
-                            due_date: new Date(),
-                            created: new Date(),
+                            id,
+                            due_date: due_date || new Date(),
+                            created: created || new Date(),
+                            contract_no,
+                            sales_manager: sales_manager_id,
+                            company: {
+                                name: company_name,
+                                type,
+                            },
                         }}
                         onSubmit={vals => handleSubmit({ ...vals })}
                         innerRef={form => (formikRef = form)}
@@ -67,6 +77,7 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType }) => {
                                                         field={field}
                                                         form={form}
                                                         meta={meta}
+                                                        readOnly={id}
                                                     />
                                                 )}
                                             </Field>
@@ -86,6 +97,7 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType }) => {
                                                                 field={field}
                                                                 form={form}
                                                                 meta={meta}
+                                                                readOnly={id}
                                                             />
                                                         )}
                                                     </Field>
@@ -104,6 +116,7 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType }) => {
                                                                 meta={meta}
                                                                 select
                                                                 options={companyTypes}
+                                                                readOnly={id}
                                                             />
                                                         )}
                                                     </Field>
@@ -121,6 +134,7 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType }) => {
                                                             field={field}
                                                             form={form}
                                                             meta={meta}
+                                                            readOnly={id}
                                                         />
                                                     )}
                                                 </Field>
@@ -140,6 +154,7 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType }) => {
                                                         meta={meta}
                                                         select
                                                         options={salesManagers}
+                                                        readOnly={id}
                                                     />
                                                 )}
                                             </Field>
@@ -156,6 +171,7 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType }) => {
                                                         form={form}
                                                         meta={meta}
                                                         date
+                                                        readOnly={id}
                                                     />
                                                 )}
                                             </Field>
@@ -172,20 +188,24 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType }) => {
                                                         form={form}
                                                         meta={meta}
                                                         date
+                                                        readOnly={id}
                                                     />
                                                 )}
                                             </Field>
                                         </Grid>
                                         <CustomerContacts />
                                     </Grid>
-                                    <BankRequisits hideTin />
+                                    <BankRequisits hideTin readOnly={id} />
                                 </Grid>
                             </Form>
                         )}
                     </Formik>
                 </DialogContentText>
             </DialogContent>
-            <CreateFormActions handleClose={handleClose} handleSave={() => formikRef.submitForm()} />
+            {
+                id ? null :  <CreateFormActions handleClose={handleClose} handleSave={() => formikRef.submitForm()} />
+            }
+           
         </>
     )
 }

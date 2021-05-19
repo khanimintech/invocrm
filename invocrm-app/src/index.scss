@@ -181,7 +181,7 @@ body {
   .active {
       svg,
       .MuiListItemText-root {
-          color: $color-purple;
+          color: #003059;
       }
   }
 
@@ -218,4 +218,10 @@ body {
 .icon-wrapper {
     display: flex;
     align-items: center;
+}
+
+.clickable-column{
+    cursor: pointer;
+    text-decoration: underline;
+    color: $color-blue;
 }

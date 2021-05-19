@@ -16,7 +16,7 @@ const columns = [
     { header: "Cami qiyməti", field: "total", type: "number", readOnly: true },
 ]
 
-const CreateAnnex = ({ products, units }) => {
+const CreateAnnex = ({ products, units, readOnly }) => {
 
 
     const bodyTemplate = (row, col, arrayHelpers, products, index) => {
@@ -37,6 +37,7 @@ const CreateAnnex = ({ products, units }) => {
                         readOnly={col.readOnly}
                         size="small"
                         required
+                        readOnly={readOnly}
                         select={col.field === "unit"}
                         options={units.map(unit => ({ label: unit.name, value: unit.id }))}
                         onChange={val => {
@@ -72,7 +73,7 @@ const CreateAnnex = ({ products, units }) => {
                                     columns.map(col => <th>{col.header}</th>)
                                 }
                                 {
-                                    products.length === 1 ? null : (
+                                    products.length === 1 || readOnly ? null : (
                                         <th>
                                             <Tooltip title="Sil" placement="top">
                                                 <ClearIcon />
@@ -107,21 +108,25 @@ const CreateAnnex = ({ products, units }) => {
                             </tbody>
                         </table>
                         <br />
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            startIcon={<AddCircleOutlineIcon />}
-                            onClick={() => arrayHelpers.push({
-                                name: "",
-                                quantity: 0,
-                                unit: 0,
-                                price: "",
-                                total: 0,
-                                id: products[products.length - 1].id + 1,
-                            })}
-                        >
-                            Yenisin əlavə et
-                </Button>
+                        {
+                            readOnly ? null : (
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    startIcon={<AddCircleOutlineIcon />}
+                                    onClick={() => arrayHelpers.push({
+                                        name: "",
+                                        quantity: 0,
+                                        unit: 0,
+                                        price: "",
+                                        total: 0,
+                                        id: products[products.length - 1].id + 1,
+                                    })}
+                                >
+                                    Yenisin əlavə et
+                        </Button>
+                            )
+                        }
                     </>
                 )}
             />

@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    backgroundColor: "rgb(126, 87, 194)"
+    backgroundColor: "#003059"
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: 'nowrap',
-    paddingTop: theme.spacing(7) + 4,
+    paddingTop: theme.spacing(7) + 20,
   },
   drawerOpen: {
     width: drawerWidth,

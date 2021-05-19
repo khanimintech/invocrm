@@ -25,7 +25,7 @@ const Contacts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
 
 
     const getContacts = (filters) => {
-        handleRequest(
+        return handleRequest(
             ContactsService.index(filters)
         ).then(res => {
             setContacts(res.body)

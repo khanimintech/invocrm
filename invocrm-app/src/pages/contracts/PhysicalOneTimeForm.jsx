@@ -14,7 +14,7 @@ import BankRequisits from './BankRequisits';
 import CustomerContacts from './CustomerContacts';
 
 
-const PhysicalOneTimeForm = ({ salesManagers }) => {
+const PhysicalOneTimeForm = ({ salesManagers, readOnly }) => {
     return (
         <>
 
@@ -33,6 +33,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                                         field={field}
                                         form={form}
                                         meta={meta}
+                                        readOnly={readOnly}
                                     />
                                 )}
                             </Field>
@@ -48,6 +49,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                                         field={field}
                                         form={form}
                                         meta={meta}
+                                        readOnly={readOnly}
                                     />
                                 )}
                             </Field>
@@ -63,6 +65,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                                         field={field}
                                         form={form}
                                         meta={meta}
+                                        readOnly={readOnly}
                                     />
                                 )}
                             </Field>
@@ -81,6 +84,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                             field={field}
                             form={form}
                             meta={meta}
+                            readOnly={readOnly}
                         />
                     )}
                 </Field>
@@ -96,6 +100,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                             field={field}
                             form={form}
                             meta={meta}
+                            readOnly={readOnly}
                         />
                     )}
                 </Field>
@@ -116,6 +121,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                                         field={field}
                                         form={form}
                                         meta={meta}
+                                        readOnly={readOnly}
                                     />
                                 )}
                             </Field>
@@ -131,6 +137,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                                         field={field}
                                         form={form}
                                         meta={meta}
+                                        readOnly={readOnly}
                                     />
                                 )}
                             </Field>
@@ -146,6 +153,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                                         field={field}
                                         form={form}
                                         meta={meta}
+                                        readOnly={readOnly}
                                     />
                                 )}
                             </Field>
@@ -164,6 +172,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                             field={field}
                             form={form}
                             meta={meta}
+                            readOnly={readOnly}
                         />
                     )}
                 </Field>
@@ -179,6 +188,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                             field={field}
                             form={form}
                             meta={meta}
+                            readOnly={readOnly}
                         />
                     )}
                 </Field>
@@ -198,6 +208,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                             meta={meta}
                             select
                             options={salesManagers}
+                            readOnly={readOnly}
                         />
                     )}
                 </Field>
@@ -214,6 +225,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                             field={field}
                             form={form}
                             meta={meta}
+                            readOnly={readOnly}
                         />
                     )}
                 </Field>
@@ -229,6 +241,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                             field={field}
                             form={form}
                             meta={meta}
+                            readOnly={readOnly}
                         />
                     )}
                 </Field>
@@ -244,6 +257,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                             field={field}
                             form={form}
                             meta={meta}
+                            readOnly={readOnly}
                         />
                     )}
                 </Field>
@@ -260,6 +274,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                             field={field}
                             form={form}
                             meta={meta}
+                            readOnly={readOnly}
                         />
                     )}
                 </Field>
@@ -276,6 +291,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                             field={field}
                             form={form}
                             meta={meta}
+                            readOnly={readOnly}
                         />
                     )}
                 </Field>
@@ -292,6 +308,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                             field={field}
                             form={form}
                             meta={meta}
+                            readOnly={readOnly}
                         />
                     )}
                 </Field>
@@ -308,6 +325,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                             field={field}
                             form={form}
                             meta={meta}
+                            readOnly={readOnly}
                         />
                     )}
                 </Field>
@@ -324,6 +342,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                             field={field}
                             form={form}
                             meta={meta}
+                            readOnly={readOnly}
                         />
                     )}
                 </Field>
@@ -339,6 +358,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                             field={field}
                             form={form}
                             meta={meta}
+                            readOnly={readOnly}
                         />
                     )}
                 </Field>
@@ -354,6 +374,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                             field={field}
                             form={form}
                             meta={meta}
+                            readOnly={readOnly}
                         />
                     )}
                 </Field>
@@ -369,6 +390,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                             field={field}
                             form={form}
                             meta={meta}
+                            readOnly={readOnly}
                         />
                     )}
                 </Field>
@@ -384,6 +406,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                             field={field}
                             form={form}
                             meta={meta}
+                            readOnly={readOnly}
                         />
                     )}
                 </Field>
@@ -400,6 +423,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                             form={form}
                             meta={meta}
                             date
+                            readOnly={readOnly}
                         />
                     )}
                 </Field>

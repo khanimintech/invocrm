@@ -23,14 +23,14 @@ import './styles.scss';
 
 const initialOverviews = [
     { id: 2, status: "Vaxtı bitən", count: 0, icon: <PriorityHighIcon />, color: "#42A5F5" },
-    { id: 3, status: "Vaxtı bitir", count: 0, icon: <AccessAlarmIcon />, color: "#7E57C2" },
+    { id: 3, status: "Vaxtı bitir", count: 0, icon: <AccessAlarmIcon />, color: "rgb(90 89 204)" },
     { id: 0, status: "Prosesdə", count: 0, icon: <HourglassEmptyIcon />, color: "#FFB300" },
     { id: 1, status: "Təsdiqlənib", count: 0, icon: <CheckCircleIcon />, color: "#66BB6A" },
 ]
 
 const columns = [
     { field: 'company_name', header: 'Şirkət', filter: true },
-    { field: 'contract_no', header: 'Müqavilə Nömrəsi', filter: true },
+    { field: 'contract_no', header: 'Müqavilə Nömrəsi', filter: true, showDetails: true },
     { field: 'type', header: 'Müqavilə Növü',  filter: true },
     { field: 'created', header: 'Yaradılma Tarixi', filter: true },
     { field: 'due_date', header: "Bitmə Tarixi", filter: true },
@@ -51,11 +51,13 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [showCreateModal, toggleShowCreateModal] = useState(false);
     const [contractType, setContractType] = useState();
+    const [selectedContract, setSelectedContract] = useState();
+
     const openCreateMenu = Boolean(anchorEl);
 
 
     const getContracts = (filters) => {
-        handleRequest(
+        return handleRequest(
             ContractsService.index(filters)
         ).then(res => {
             if (res.body){
@@ -77,7 +79,11 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
 
     const getContract = contract => {
         handleRequest(ContractsService.getItem(contract.id))
-        .then(res => console.log(res.body))
+        .then(({ body }) => {
+            setContractType(body.type);
+            toggleShowCreateModal(true);
+            setSelectedContract(body)
+        })
     }
 
 
@@ -161,11 +167,10 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
             <ExtendedTable
                 headerTitle="Müqavilələrin siyahısı"
                 data={contracts}
-                loading={loading}
                 columns={columns}
                 statuses={contractStatuses}
                 elRef={dt}
-                actions={{ edit: true, delete: true, attach: true, plus: true}}
+                actions={{ edit: false, delete: true, attach: true, plus: true, show: true}}
                 enqueueSnackbar={enqueueSnackbar}
                 onDelete={deleteContract}
                 getData={getContracts}
@@ -178,6 +183,7 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 handleRequest={handleRequest}
                 enqueueSnackbar={enqueueSnackbar}
                 reloadData={getContracts}
+                selectedContract={selectedContract}
             />
         </PageContent>
     )

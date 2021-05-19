@@ -30,6 +30,7 @@ const Input = ({field, form, meta, label, placeholder, required, defaultValue, s
                     required={required}
                     error={submitCount && error}
                     variant="outlined"
+                    readOnly={readOnly}
                 />
             </MuiPickersUtilsProvider>
         )
@@ -45,6 +46,9 @@ const Input = ({field, form, meta, label, placeholder, required, defaultValue, s
                 error={submitCount && error}
                 variant="outlined"
                 size={size}
+                InputProps={{
+                    readOnly,
+                  }}
                 >
                 {options.map((option) => (
                      <MenuItem key={option.value} value={option.value}>

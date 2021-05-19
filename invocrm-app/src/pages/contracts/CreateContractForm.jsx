@@ -24,7 +24,7 @@ const formTypes = {
 
 
 
-const CreateContractModal = ({open, formType, handleRequest, handleClose, enqueueSnackbar, reloadData }) => {
+const CreateContractModal = ({open, formType, handleRequest, handleClose, enqueueSnackbar, reloadData, selectedContract }) => {
 
   const handleSubmit = vals => {
     handleRequest(
@@ -44,8 +44,8 @@ const CreateContractModal = ({open, formType, handleRequest, handleClose, enqueu
                React.cloneElement( formTypes[formType], {
                  handleSubmit,
                  handleRequest,
-                 handleClose
-
+                 handleClose,
+                 selectedContract
                 })
              : null
            }

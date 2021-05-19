@@ -10,7 +10,7 @@ const index = (filters) =>
 
 const remove = (id) =>
     makeAsyncCall({
-        url: `${BACKEND_URL}contracts/${id}`,
+        url: `${BACKEND_URL}contracts/${id}/`,
         method: 'DELETE',
     });
 
@@ -31,7 +31,7 @@ const remove = (id) =>
 
     const getItem = id =>
         makeAsyncCall({
-            url: `${BACKEND_URL}contracts/${id}`,
+            url: `${BACKEND_URL}contracts/${id}/`,
             method: 'GET',
         });
 

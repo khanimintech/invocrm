@@ -14,7 +14,7 @@ import BankRequisits from './BankRequisits';
 import CustomerContacts from './CustomerContacts';
 
 
-const CompanyOneTimeForm = ({salesManagers}) => {
+const CompanyOneTimeForm = ({salesManagers, readOnly }) => {
     return (
         <>
             <Grid item md={12} className="input-wrapper">
@@ -28,6 +28,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                         field={field}
                                                         form={form}
                                                         meta={meta}
+                                                        readOnly={readOnly}
                                                     />
                                                 )}
                                             </Field>
@@ -47,6 +48,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                                     field={field}
                                                                     form={form}
                                                                     meta={meta}
+                                                                    readOnly={readOnly}
                                                                 />
                                                             )}
                                                         </Field>
@@ -62,6 +64,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                                     field={field}
                                                                     form={form}
                                                                     meta={meta}
+                                                                    readOnly={readOnly}
                                                                 />
                                                             )}
                                                         </Field>
@@ -77,6 +80,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                                     field={field}
                                                                     form={form}
                                                                     meta={meta}
+                                                                    readOnly={readOnly}
                                                                 />
                                                             )}
                                                         </Field>
@@ -95,6 +99,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                         field={field}
                                                         form={form}
                                                         meta={meta}
+                                                        readOnly={readOnly}
                                                     />
                                                 )}
                                             </Field>
@@ -110,6 +115,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                         field={field}
                                                         form={form}
                                                         meta={meta}
+                                                        readOnly={readOnly}
                                                     />
                                                 )}
                                             </Field>
@@ -125,6 +131,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                         field={field}
                                                         form={form}
                                                         meta={meta}
+                                                        readOnly={readOnly}
                                                     />
                                                 )}
                                             </Field>
@@ -145,6 +152,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                                     field={field}
                                                                     form={form}
                                                                     meta={meta}
+                                                                    readOnly={readOnly}
                                                                 />
                                                             )}
                                                         </Field>
@@ -160,6 +168,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                                     field={field}
                                                                     form={form}
                                                                     meta={meta}
+                                                                    readOnly={readOnly}
                                                                 />
                                                             )}
                                                         </Field>
@@ -175,6 +184,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                                     field={field}
                                                                     form={form}
                                                                     meta={meta}
+                                                                    readOnly={readOnly}
                                                                 />
                                                             )}
                                                         </Field>
@@ -193,6 +203,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                         field={field}
                                                         form={form}
                                                         meta={meta}
+                                                        readOnly={readOnly}
                                                     />
                                                 )}
                                             </Field>
@@ -208,6 +219,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                         field={field}
                                                         form={form}
                                                         meta={meta}
+                                                        readOnly={readOnly}
                                                     />
                                                 )}
                                             </Field>
@@ -227,6 +239,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                         meta={meta}
                                                         select
                                                         options={salesManagers}
+                                                        readOnly={readOnly}
                                                     />
                                                 )}
                                             </Field>
@@ -243,6 +256,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                         field={field}
                                                         form={form}
                                                         meta={meta}
+                                                        readOnly={readOnly}
                                                     />
                                                 )}
                                             </Field>
@@ -258,6 +272,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                         field={field}
                                                         form={form}
                                                         meta={meta}
+                                                        readOnly={readOnly}
                                                     />
                                                 )}
                                             </Field>
@@ -273,6 +288,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                         field={field}
                                                         form={form}
                                                         meta={meta}
+                                                        readOnly={readOnly}
                                                     />
                                                 )}
                                             </Field>
@@ -289,6 +305,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                         field={field}
                                                         form={form}
                                                         meta={meta}
+                                                        readOnly={readOnly}
                                                     />
                                                 )}
                                             </Field>
@@ -305,6 +322,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                         field={field}
                                                         form={form}
                                                         meta={meta}
+                                                        readOnly={readOnly}
                                                     />
                                                 )}
                                             </Field>
@@ -321,6 +339,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                         field={field}
                                                         form={form}
                                                         meta={meta}
+                                                        readOnly={readOnly}
                                                     />
                                                 )}
                                             </Field>
@@ -337,6 +356,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                         field={field}
                                                         form={form}
                                                         meta={meta}
+                                                        readOnly={readOnly}
                                                     />
                                                 )}
                                             </Field>
@@ -353,6 +373,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                         field={field}
                                                         form={form}
                                                         meta={meta}
+                                                        readOnly={readOnly}
                                                     />
                                                 )}
                                             </Field>
@@ -368,6 +389,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                         field={field}
                                                         form={form}
                                                         meta={meta}
+                                                        readOnly={readOnly}
                                                     />
                                                 )}
                                             </Field>
@@ -383,6 +405,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                         field={field}
                                                         form={form}
                                                         meta={meta}
+                                                        readOnly={readOnly}
                                                     />
                                                 )}
                                             </Field>
@@ -398,6 +421,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                         field={field}
                                                         form={form}
                                                         meta={meta}
+                                                        readOnly={readOnly}
                                                     />
                                                 )}
                                             </Field>
@@ -413,6 +437,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                         field={field}
                                                         form={form}
                                                         meta={meta}
+                                                        readOnly={readOnly}
                                                     />
                                                 )}
                                             </Field>
@@ -429,6 +454,7 @@ const CompanyOneTimeForm = ({salesManagers}) => {
                                                         form={form}
                                                         meta={meta}
                                                         date
+                                                        readOnly={readOnly}
                                                     />
                                                 )}
                                             </Field>

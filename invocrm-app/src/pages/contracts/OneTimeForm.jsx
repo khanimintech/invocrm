@@ -19,12 +19,14 @@ import TextField from '@material-ui/core/TextField';
 import PhysicalOneTimeForm from './PhysicalOneTimeForm';
 import MenuItem from '@material-ui/core/MenuItem';
 
-const OneTimeForm = ({handleRequest, handleSubmit, handleClose }) => {
+const OneTimeForm = ({handleRequest, handleSubmit, handleClose, selectedContract }) => {
     let formikRef = useRef();
-
+    const {contract_no, annex_count, company_name, 
+        created, due_date, id, sales_manager_id, type ,
+    } = selectedContract || {};
     const [salesManagers, setSalesManagers] = useState([]);
     const [units, setUnits] = useState([]);
-    const [type, setType] = useState(1);
+    const [contractType, setContractType ] = useState(1);
 
     useEffect(() => {
         getSalesManagers();
@@ -55,8 +57,15 @@ const OneTimeForm = ({handleRequest, handleSubmit, handleClose }) => {
                 <DialogContentText>
                     <Formik
                         initialValues={{
-                            due_date: new Date(),
-                            created: new Date(),
+                            id,
+                            due_date: due_date || new Date(),
+                            created: created || new Date(),
+                            contract_no,
+                            sales_manager: sales_manager_id,
+                            company: {
+                                name: company_name,
+                                type,
+                            },
                             products: [{
                                 name: "",
                                 quantity: 0,
@@ -83,7 +92,7 @@ const OneTimeForm = ({handleRequest, handleSubmit, handleClose }) => {
                                                 fullWidth
                                                 label="Növü"
                                                 value={type}
-                                                onChange={e => setType(e.target.value)}
+                                                onChange={e => setContractType(e.target.value)}
                                                 variant="outlined"
                                                 >
                   
@@ -98,14 +107,14 @@ const OneTimeForm = ({handleRequest, handleSubmit, handleClose }) => {
                                         </Grid>
                                         <Divider />
                                             {
-                                                type === 1 ? <CompnayOneTimeForm salesManagers={salesManagers}/> : <PhysicalOneTimeForm   salesManagers={salesManagers} />
+                                                contractType === 1 ? <CompnayOneTimeForm salesManagers={salesManagers} readOnly={id}/> : <PhysicalOneTimeForm   salesManagers={salesManagers} readOnly={id} />
                                             }
                                             
 
                                         <CustomerContacts  />
                                     </Grid>
                                     <Grid item md={6}>
-                                        <CreateAnnex products={values.products} units={units} />
+                                        <CreateAnnex products={values.products} units={units} readOnly={id} />
                                     </Grid>
                                 </Grid>
                             </Form>

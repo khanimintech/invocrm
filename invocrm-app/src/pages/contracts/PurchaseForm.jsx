@@ -13,8 +13,11 @@ import IconButton from '@material-ui/core/IconButton';
 import ControlPointIcon from '@material-ui/icons/ControlPoint';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
-const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType }) => {
+const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType, selectedContract, read }) => {
     let formikRef = useRef();
+    const {contract_no, annex_count, company_name, 
+        created, due_date, id, sales_manager_id, type ,
+    } = selectedContract || {};
 
     const [salesManagers, setSalesManagers] = useState([]);
 
@@ -39,8 +42,15 @@ const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType }) =>
           <DialogContentText>
             <Formik
                 initialValues={{ 
-                    due_date: new Date(),
-                    created: new Date(),
+                    id,
+                    due_date: due_date || new Date(),
+                    created: created || new Date(),
+                    contract_no,
+                    sales_manager: sales_manager_id,
+                    company: {
+                        name: company_name,
+                        type,
+                    },
                     supplements: [{}],
                 }}
                 onSubmit={vals => handleSubmit({ ...vals})}
@@ -68,6 +78,7 @@ const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType }) =>
                                                 field={field}
                                                 form={form}
                                                 meta={meta}
+                                                readOnly={id} 
                                             />
                                         )}
                                     </Field>
@@ -84,6 +95,7 @@ const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType }) =>
                                                 field={field}
                                                 form={form}
                                                 meta={meta}
+                                                readOnly={id} 
                                             />
                                         )}
                                     </Field>
@@ -101,6 +113,7 @@ const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType }) =>
                                                 meta={meta}
                                                 select
                                                 options={salesManagers}
+                                                readOnly={id} 
                                             />
                                         )}
                                     </Field>
@@ -117,6 +130,7 @@ const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType }) =>
                                                 form={form}
                                                 meta={meta}
                                                 date
+                                                readOnly={id} 
                                             />
                                         )}
                                     </Field>
@@ -133,6 +147,7 @@ const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType }) =>
                                                 form={form}
                                                 meta={meta}
                                                 date
+                                                readOnly={id} 
                                             />
                                         )}
                                     </Field>
@@ -157,13 +172,14 @@ const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType }) =>
                                                                     field={field}
                                                                     form={form}
                                                                     meta={meta}
+                                                                    readOnly={id} 
                                                                 />
                                                                 </>
                                                             )}
                                                         </Field>
                                                     </Grid>
                                                     {
-                                                            index === values.supplements.length - 1 ? (
+                                                            id ? null : ( index === values.supplements.length - 1 ? (
                                                                 <Grid item md={1} className="icon-wrapper align-center" >
                                                                     <IconButton   onClick={() => arrayHelpers.push({ supple_no: ''})}  size="small">
                                                                         <ControlPointIcon fontSize="default" color="primary" />
@@ -176,7 +192,7 @@ const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType }) =>
                                                                 </IconButton>
                                                             </Grid>
                                                             )
-                                                        }
+                                                            )}
                                                   </Grid>
                                               ))}
                                             </>
@@ -190,7 +206,12 @@ const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType }) =>
             </Formik>
           </DialogContentText>
         </DialogContent>
-        <CreateFormActions handleClose={handleClose} handleSave={() => formikRef.submitForm()} />
+        {
+            id? null : (
+                <CreateFormActions handleClose={handleClose} handleSave={() => formikRef.submitForm()} />
+            )
+        }
+        
     </>
     )
 }
