@@ -206,6 +206,7 @@ class ContractViewSet(ModelViewSet):
 
         instance = self.get_object()
         instance.status = BaseContract.Status.EXPIRED
+        instance.save()
 
         return Response(ContractListSerializer(instance).data)
 
@@ -238,7 +239,7 @@ class BankViewSet(ModelViewSet):
 
 class ContactViewSet(ModelViewSet):
 
-    queryset = Contact.objects.all()
+    queryset = Contact.objects.filter(person__type=Person.TYPE.CONTACT)
     serializer_class = ContactListSerializer
     filter_backends = (DjangoFilterBackend,)
     filterset_class = ContactFilterSet

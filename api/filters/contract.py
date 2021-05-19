@@ -1,9 +1,17 @@
 import django_filters
+from django.db.models import Q
 from django.utils import timezone
 from datetime import timedelta
 
 from api.main_models.contract import BaseContract, Company, BankAccount, Contact
 from api.models import Person
+
+
+def filter_qs_field(qs, kwargs, value=None):
+
+    if value:
+        return qs.filter(**kwargs)
+    return qs
 
 
 class ContractFilterSet(django_filters.rest_framework.FilterSet):
@@ -19,15 +27,11 @@ class ContractFilterSet(django_filters.rest_framework.FilterSet):
 
     def filter_company_name(self, queryset, name, value):
 
-        if value:
-            queryset = queryset.filter(company__name__icontains=value)
-        return queryset
+        return filter_qs_field(queryset, {'company__name__icontains': value}, value)
 
     def filter_contract_no(self, queryset, name, value):
 
-        if value:
-            queryset = queryset.filter(contract_no__icontains=value)
-        return queryset
+        return filter_qs_field(queryset, {'contract_no__icontains': value}, value)
 
     def filter_status(self, queryset, name, value):
 
@@ -52,16 +56,44 @@ class ContractFilterSet(django_filters.rest_framework.FilterSet):
 
 class ContactFilterSet(django_filters.rest_framework.FilterSet):
 
-    responsible_person = django_filters.ModelMultipleChoiceFilter(queryset=Person.objects.filter(type=Person.TYPE.CONTACT))
-
     customer = django_filters.CharFilter(method='filter_customer')
+    address = django_filters.CharFilter(method='filter_address')
+    responsible_person = django_filters.CharFilter(method='filter_resp')
+    mobile = django_filters.CharFilter(method='filter_mobile')
+    personal_email = django_filters.CharFilter(method='filter_personal_email')
+    web_site = django_filters.CharFilter(method='filter_web_site')
 
     def filter_customer(self,  queryset, name, value):
 
         if value:
-            queryset = queryset.filter(person__agreement__company__name=value)
+            return queryset.filter(Q(person__agreement__executor__first_name__icontains=value) |
+                                   Q(person__agreement__executor__last_name__icontains=value) |
+                                   Q(person__agreement__company__name__icontains=value))
 
         return queryset
+
+    def filter_address(self, queryset, name, value):
+
+        return filter_qs_field(queryset, {'address__icontains': value}, value)
+
+    def filter_resp(self, queryset, name, value):
+
+        if value:
+            return queryset.filter(Q(person__first_name__icontains=value) | Q(person__last_name__icontains=value))
+
+        return queryset
+
+    def filter_mobile(self, queryset, name, value):
+
+        return filter_qs_field(queryset, {'mobile__icontains': value}, value)
+
+    def filter_personal_email(self, queryset, name, value):
+
+        return filter_qs_field(queryset, {'personal_email__icontains': value}, value)
+
+    def filter_web_site(self, queryset, name, value):
+
+        return filter_qs_field(queryset, {'web_site__icontains': value}, value)
 
     class Meta:
         model = Contact
@@ -76,40 +108,51 @@ class BankFilterSet(django_filters.rest_framework.FilterSet):
     code = django_filters.CharFilter(method='filter_code')
     tin = django_filters.CharFilter(method='filter_tin')
 
+    account = django_filters.CharFilter(method='filter_account')
+    address = django_filters.CharFilter(method='filter_address')
+    city = django_filters.CharFilter(method='filter_city')
+    swift_no = django_filters.CharFilter(method='filter_swift_no')
+    correspondent_account = django_filters.CharFilter(method='filter_correspondent_account')
+
     def filter_company_name(self, queryset, name, value):
 
-        if value:
-            queryset = queryset.filter(company__name=value)
-
-        return queryset
+        return filter_qs_field(queryset, {'company__name__icontains': value}, value)
 
     def filter_company_tin(self, queryset, name, value):
 
-        if value:
-            queryset = queryset.filter(company__tin=value)
-
-        return queryset
+        return filter_qs_field(queryset, {'company__tin__icontains': value}, value)
 
     def filter_name(self, queryset, name, value):
 
-        if value:
-            queryset = queryset.filter(bank__name=value)
-
-        return queryset
+        return filter_qs_field(queryset, {'bank__name__icontains': value}, value)
 
     def filter_code(self, queryset, name, value):
 
-        if value:
-            queryset = queryset.filter(bank__code=value)
-
-        return queryset
+        return filter_qs_field(queryset, {'bank__code__icontains': value}, value)
 
     def filter_tin(self, queryset, name, value):
 
-        if value:
-            queryset = queryset.filter(bank__tin=value)
+        return filter_qs_field(queryset, {'bank__tin__icontains': value}, value)
 
-        return queryset
+    def filter_account(self, queryset, name, value):
+
+        return filter_qs_field(queryset, {'account__icontains': value}, value)
+
+    def filter_address(self, queryset, name, value):
+
+        return filter_qs_field(queryset, {'address__icontains': value}, value)
+
+    def filter_city(self, queryset, name, value):
+
+        return filter_qs_field(queryset, {'city__icontains': value}, value)
+
+    def filter_swift_no(self, queryset, name, value):
+
+        return filter_qs_field(queryset, {'swift_no__icontains': value}, value)
+
+    def filter_correspondent_account(self, queryset, name, value):
+
+        return filter_qs_field(queryset, {'correspondent_account__icontains': value}, value)
 
     class Meta:
         model = BankAccount

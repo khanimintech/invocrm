@@ -113,7 +113,7 @@ class BankAccountSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = BankAccount
-        fields = ['default', 'account', 'swift_no', 'correspondent_account']
+        fields = ['default', 'account', 'swift_no', 'correspondent_account', 'city', 'address']
 
 
 class ContractCreateBaseSerializer(serializers.ModelSerializer):

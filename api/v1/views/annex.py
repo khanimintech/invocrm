@@ -2,7 +2,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import ListAPIView
 from rest_framework.viewsets import ModelViewSet
 
-from api.filters.annex import AnnexFilter
+from api.filters.annex import AnnexFilterSet
 from api.main_models.annex import BaseAnnex, UnitOfMeasure
 from api.v1.serializers.annex import AnnexSerializer, AnnexCreateSerializer, UnitSerializer
 
@@ -12,7 +12,7 @@ class AnnexViewSet(ModelViewSet):
     queryset = BaseAnnex.objects.all()
     serializer_class = AnnexSerializer
     filter_backends = (DjangoFilterBackend, )
-    filterset_class = AnnexFilter
+    filterset_class = AnnexFilterSet
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
