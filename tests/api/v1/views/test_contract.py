@@ -564,3 +564,42 @@ class TestContractStatusStatAPIView:
         assert response.json()['approved_count'] == 2
         assert response.json()['expired_count'] == 1
         assert response.json()['expires_in_2_weeks'] == 2
+
+
+class TestContactFilterSet:
+
+    def test_contacts_filter_responsible_person(self, apiclient, admin_user):
+
+        sales_manager = Person.objects.create(type=Person.TYPE.SALES_MANAGER, first_name='First', last_name='Last',
+                                              fathers_name='Father')
+
+        company = Company.objects.create(type=Company.MMC, name='company_name',
+                                         address='company_address', tin='12345')
+
+        contact = Contact.objects.create(mobile='12345', address='my_address',
+                                         personal_email='personal_email@email.email',web_site='my_site.site')
+
+        rp = Person.objects.create(type=Person.TYPE.CONTACT, first_name='First', last_name='Last',
+                                   fathers_name='Father', contact=contact)
+
+        TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                      type=BaseContract.Type.TRADE, company=company, responsible_person=rp)
+
+        contact1 = Contact.objects.create(mobile='123456', address='my_address1',
+                                          personal_email='personal_email@email.email1', web_site='my_site.site1')
+
+        rp1 = Person.objects.create(type=Person.TYPE.CONTACT, first_name='First1', last_name='Last1',
+                                    fathers_name='Father1', contact=contact1)
+
+        TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                      type=BaseContract.Type.TRADE, company=company, responsible_person=rp1)
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+        response = apiclient.get(reverse('api:v1:contacts-list') + '?responsible_person=first1')
+
+        assert response.status_code == 200, response.json()
+        payload = response.json()
+        assert len(payload) == 1
+        assert payload[0]['responsible_person'] == 'First1 Last1'

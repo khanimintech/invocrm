@@ -238,7 +238,7 @@ class BankViewSet(ModelViewSet):
 
 class ContactViewSet(ModelViewSet):
 
-    queryset = Contact.objects.all()
+    queryset = Contact.objects.filter(person__type=Person.TYPE.CONTACT)
     serializer_class = ContactListSerializer
     filter_backends = (DjangoFilterBackend,)
     filterset_class = ContactFilterSet
