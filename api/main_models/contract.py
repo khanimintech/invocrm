@@ -59,7 +59,7 @@ class BaseContract(models.Model):
 
     def save(self, **kwargs):
 
-        if issubclass(type(self), BaseContract):
+        if issubclass(type(self), BaseContract) and self.pk is None:
             self.type = self.AG_TYPE
 
             if self.AG_TYPE == BaseContract.Type.PO:

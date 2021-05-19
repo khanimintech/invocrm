@@ -34,18 +34,18 @@ class TestContractViewSet:
         response = apiclient.get(reverse('api:v1:contracts-list'))
 
         assert response.status_code == 200
-    #
-    # def test_contract_detail_ok(self, apiclient, admin_user, sales_manager):
-    #
-    #     t = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
-    #                                   type=BaseContract.Type.TRADE, contract_no='123')
-    #
-    #     admin_user.plant_name = 'plant'
-    #     admin_user.save()
-    #     apiclient.force_login(admin_user)
-    #     response = apiclient.get(reverse('api:v1:contracts-detail', args=[t.id]))
-    #
-    #     assert response.status_code == 200, response.json()
+
+    def test_contract_detail_ok(self, apiclient, admin_user, sales_manager):
+
+        t = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                          type=BaseContract.Type.TRADE, contract_no='123')
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+        response = apiclient.get(reverse('api:v1:contracts-detail', args=[t.id]))
+
+        assert response.status_code == 200, response.json()
 
     def test_contract_destroy(self, apiclient, admin_user, sales_manager):
 
@@ -60,6 +60,9 @@ class TestContractViewSet:
         assert response.status_code == 200, response.json()
         assert response.json()['id'] == t.id
         assert response.json()['status'] == BaseContract.Status.EXPIRED
+
+        t.refresh_from_db()
+        assert t.status == BaseContract.Status.EXPIRED
 
     def test_po_create(self, apiclient, admin_user, sales_manager):
 
@@ -127,7 +130,9 @@ class TestContractViewSet:
                                           'default': True,
                                           'account': 'My_account',
                                           'swift_no': '1234567890',
-                                          'correspondent_account': 'My_correspondent_account'
+                                          'correspondent_account': 'My_correspondent_account',
+                                          'city': 'city',
+                                          'address': 'address'
                                       }
 
                                   },
@@ -177,6 +182,8 @@ class TestContractViewSet:
         assert bank_acc.account == 'My_account'
         assert bank_acc.swift_no == '1234567890'
         assert bank_acc.correspondent_account == 'My_correspondent_account'
+        assert bank_acc.address == 'address'
+        assert bank_acc.city == 'city'
 
         bank = bank_acc.bank
 

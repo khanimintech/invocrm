@@ -206,6 +206,7 @@ class ContractViewSet(ModelViewSet):
 
         instance = self.get_object()
         instance.status = BaseContract.Status.EXPIRED
+        instance.save()
 
         return Response(ContractListSerializer(instance).data)
 
