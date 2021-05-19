@@ -263,7 +263,7 @@ const CompanyOneTimeForm = ({salesManagers, readOnly }) => {
                                         </Grid>
                                         <Grid item md={12} className="input-wrapper">
                                             <Field
-                                                name="sales_manager"
+                                                name="annex.payment_terms"
                                                 validate={validateRequired}
                                             >
                                                 {({ field, form, meta }) => (

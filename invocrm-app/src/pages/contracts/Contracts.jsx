@@ -178,7 +178,11 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
             />
             <CreateContractModal
                 open={showCreateModal}
-                handleClose={() => toggleShowCreateModal(false)}
+                handleClose={() => {
+                    toggleShowCreateModal(false);
+                    setSelectedContract();
+                    setContractType();
+                }}
                 formType={contractType}
                 handleRequest={handleRequest}
                 enqueueSnackbar={enqueueSnackbar}

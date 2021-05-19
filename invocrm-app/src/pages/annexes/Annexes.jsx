@@ -26,7 +26,6 @@ const columns = [
     { field: 'sum_no_invoice', header: "Məbləğ (ƏDV-siz)" , filter: true },
     { field: 'sum_with_invoice', header: "Məbləğ (ƏDV-li)" , filter: true },
      { field: 'created', header: 'Yaradılma Tarixi', filter: true  },
-    { field: 'signature_date', header: "Qarşı tərəfin imza tarixi" , filter: true },
 ];
 
 
