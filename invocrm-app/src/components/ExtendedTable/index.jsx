@@ -174,7 +174,14 @@ const ExtendedTable = ({
         return (
             <React.Fragment>
                 <span  className="p-column-title">{columnName}</span>
-                <span  className={`${showDetails ? "clickable-column" : ""}`} onClick={showDetails ? () => handleShow(row) : null}>{value}</span>
+                {
+                    showDetails ? (
+                        <Tooltip title="Göstər" placement="top">
+                            <span  className="clickable-column"  onClick={showDetails ? () => handleShow(row) : null}>{value}</span>
+                    </Tooltip>
+                    ) :  <span>{value}</span>
+                }
+               
             </React.Fragment>
         )
     }
