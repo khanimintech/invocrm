@@ -13,16 +13,16 @@ from api.main_models.contract import BaseContract, TradeAgreement, Contact, Comp
 from api.models import Person, CustomUser
 
 contract_map = {
-            BaseContract.Type.TRADE: TradeAgreement,
-            BaseContract.Type.SERVICE: ServiceAgreement,
-            BaseContract.Type.DISTRIBUTION: DistributionAgreement,
-            BaseContract.Type.AGENT: AgentAgreement,
-            BaseContract.Type.PO: POAgreement,
-            BaseContract.Type.RENT: RentAgreement,
-            BaseContract.Type.ONE_TIME: OneTimeAgreement,
-            BaseContract.Type.INTERNATIONAL: InternationalAgreement,
-            BaseContract.Type.CUSTOMER: CustomerTemplateAgreement
-        }
+    BaseContract.Type.TRADE: TradeAgreement,
+    BaseContract.Type.SERVICE: ServiceAgreement,
+    BaseContract.Type.DISTRIBUTION: DistributionAgreement,
+    BaseContract.Type.AGENT: AgentAgreement,
+    BaseContract.Type.PO: POAgreement,
+    BaseContract.Type.RENT: RentAgreement,
+    BaseContract.Type.ONE_TIME: OneTimeAgreement,
+    BaseContract.Type.INTERNATIONAL: InternationalAgreement,
+    BaseContract.Type.CUSTOMER: CustomerTemplateAgreement
+}
 
 annex_map = {
     BaseAnnex: 'Trade'

@@ -15,7 +15,7 @@ from api.models import Person
 from api.v1.serializers.contract import ContractListSerializer, TradeCreateSerializer, ServiceCreateSerializer, \
     DistributionCreateSerializer, AgentCreateSerializer, POCreateSerializer, RentCreateSerializer, \
     OneTimeCreateSerializer, InternationalCreateSerializer, CustomerCreateSerializer, BankListSerializer, \
-    ContactListSerializer, SalesManagerSerializer
+    ContactListSerializer, SalesManagerSerializer, contract_map
 
 # from django_filters.rest_framework import DjangoFilterBackend
 
@@ -187,11 +187,21 @@ class ContractViewSet(ModelViewSet):
 
         return context
 
+    def get_object(self, queryset=None):
+
+        instance = super().get_object()
+
+        if self.action == 'retrieve':
+
+            return getattr(instance, contract_map[instance.type].__name__.lower())
+
+        return instance
+
     def get_serializer_class(self, *args, **kwargs):
 
         if self.action == 'create' or self.action == 'retrieve':
 
-            contract_type = self.request.data.get('type', None) or int(self.kwargs.get('pk'))
+            contract_type = self.request.data.get('type', None) or self.get_object().type
 
             return contract_create_serializer[contract_type]
 

@@ -17,8 +17,8 @@ class TestAnnexViewSet:
                                  seller=sales_manager, sales_manager=sales_manager, annex_no=1)
 
         annex2 = BaseAnnex.objects.create(contract=contract, request_no='123', annex_date=timezone.now(),
-                                         note='1', payment_terms='1', delivery_terms='1', acquisition_terms='1',
-                                         seller=sales_manager, sales_manager=sales_manager, annex_no=2)
+                                          note='1', payment_terms='1', delivery_terms='1', acquisition_terms='1',
+                                          seller=sales_manager, sales_manager=sales_manager, annex_no=2)
 
         unit = UnitOfMeasure.objects.create(name='w')
         ProductInvoiceItem.objects.create(name='ww', annex=annex, unit=unit, quantity=1, price=1, total=2)

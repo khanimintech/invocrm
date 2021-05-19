@@ -5,7 +5,8 @@ from django.utils import timezone
 from rest_framework.reverse import reverse
 
 from api.main_models.annex import UnitOfMeasure
-from api.main_models.contract import BaseContract, TradeAgreement, Company, Bank, BankAccount, ServiceAgreement, Contact
+from api.main_models.contract import BaseContract, TradeAgreement, Company, Bank, BankAccount, ServiceAgreement, \
+    Contact, DistributionAgreement, AgentAgreement
 from api.models import Person
 
 
@@ -35,21 +36,23 @@ class TestContractViewSet:
 
         assert response.status_code == 200
 
-    # def test_contract_detail_ok(self, apiclient, admin_user, sales_manager):
-    #
-    #     company = Company.objects.create(type=Company.MMC, name='company_name',
-    #                                      address='company_address', tin='12345')
-    #
-    #     t = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
-    #                                       type=BaseContract.Type.TRADE, contract_no='123', company=company)
-    #
-    #     admin_user.plant_name = 'plant'
-    #     admin_user.save()
-    #     apiclient.force_login(admin_user)
-    #     response = apiclient.get(reverse('api:v1:contracts-detail', args=[t.id]))
-    #
-    #     assert response.status_code == 200, response.json()
-    #     print(response.json())
+    def test_contract_detail_ok(self, apiclient, admin_user, sales_manager):
+
+        company = Company.objects.create(type=Company.MMC, name='company_name',
+                                         address='company_address', tin='12345')
+
+        t = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                          type=BaseContract.Type.TRADE, contract_no='123', company=company)
+
+        d = AgentAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                  type=BaseContract.Type.TRADE, contract_no='123', company=company, territory='asdf')
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+        response = apiclient.get(reverse('api:v1:contracts-detail', args=[d.id]))
+
+        assert response.status_code == 200, response.json()
 
     def test_contract_destroy(self, apiclient, admin_user, sales_manager):
 
