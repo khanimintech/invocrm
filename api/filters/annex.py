@@ -11,6 +11,11 @@ class AnnexFilterSet(django_filters.rest_framework.FilterSet):
 
     company_name = django_filters.CharFilter(method='filter_company_name')
     contract_no = django_filters.CharFilter(method='filter_contract_no')
+    contract_type = django_filters.CharFilter(method='filter_contract_type')
+    annex_no = django_filters.CharFilter(method='filter_annex_no')
+    payment_terms = django_filters.CharFilter(method='filter_payment_terms')
+
+    created = django_filters.DateFilter(field_name='created', lookup_expr='lte')
 
     def filter_company_name(self, queryset, name, value):
 
@@ -20,11 +25,24 @@ class AnnexFilterSet(django_filters.rest_framework.FilterSet):
 
         return filter_qs_field(queryset, {'contract__contract_no__icontains': value}, value)
 
-    class Meta:
-        model = BaseAnnex
-        fields = ['company_name', 'request_no', 'contract_no', 'annex_no', 'sales_manager']
+    def filter_contract_type(self, queryset, name, value):
 
-#
-# d = ['id', 'company_name', 'request_no', 'contract_no', 'annex_no', 'sales_manager',
-#      'payment_terms', 'sum_no_invoice', 'sum_with_invoice', 'annex_date', 'signature_date',
-#      'created', 'contract_type']
+        if value:
+
+            return queryset.filter(contract__type=int(value))
+
+        return queryset
+
+    def filter_annex_no(self, queryset, name, value):
+
+        return filter_qs_field(queryset, {'annex_no__icontains': value}, value)
+
+    def filter_payment_terms(self, queryset, name, value):
+
+        return filter_qs_field(queryset, {'payment_terms__icontains': value}, value)
+
+    class Meta:
+
+        model = BaseAnnex
+        fields = ['company_name', 'request_no', 'contract_no', 'contract_type', 'annex_no', 'sales_manager',
+                  'payment_terms', 'created']
