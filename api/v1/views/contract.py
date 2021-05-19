@@ -187,11 +187,11 @@ class ContractViewSet(ModelViewSet):
 
         return context
 
-    def get_serializer_class(self):
+    def get_serializer_class(self, *args, **kwargs):
 
-        contract_type = self.request.data.get('type', None)
+        if self.action == 'create' or self.action == 'retrieve':
 
-        if self.action == 'create':
+            contract_type = self.request.data.get('type', None) or int(self.kwargs.get('pk'))
 
             return contract_create_serializer[contract_type]
 
