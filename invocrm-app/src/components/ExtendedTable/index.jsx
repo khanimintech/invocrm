@@ -198,7 +198,7 @@ const ExtendedTable = ({
         const isDateField = col.field === "created" || col.field === "due_date" || col.field === "signature_date";
         const isStatusField = col.field === "status";
         const isTypeField = col.field === "contract_type" || col.field === "type";
-        const dateFilter = field => <Calendar value={filters[field]} onChange={(e) => handleFilterInputChange(field, e.target.value ? format(e.target.value, "yyyy-MM-dd'T'HH:mm:ss.SSS") : "")} className="p-co.lumn-filter" />;
+        const dateFilter = field => <Calendar value={filters[field]} onChange={(e) => handleFilterInputChange(field, e.target.value ? format(e.target.value, "yyyy-MM-dd") : "")} className="p-co.lumn-filter" />;
         const statusFilter = field => <Dropdown value={filters[field]} options={statuses} onChange={(e) => handleFilterInputChange(field, e.target.value)} itemTemplate={statusItemTemplate} className="p-column-filter" showClear />;
         const textFilter = field => <InputText onChange={(e) => handleFilterInputChange(field, e.target.value)} value={filters[field]} />
         const typeFilter = field => <Dropdown value={filters[field]} options={Object.keys(contractTypes).map(type => ({ value: type, label: contractTypes[type] }))} onChange={(e) => handleFilterInputChange(field, e.target.value)} itemTemplate={typeItemTemplate} className="p-column-filter" showClear />;
