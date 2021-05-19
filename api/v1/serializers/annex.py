@@ -9,7 +9,6 @@ class AnnexSerializer(serializers.ModelSerializer):
     sum_with_invoice = serializers.SerializerMethodField()
     company_name = serializers.SerializerMethodField()
     contract_no = serializers.CharField(source='contract.contract_no')
-    signature_date = serializers.SerializerMethodField()
     contract_type = serializers.SerializerMethodField()
 
     class Meta:
