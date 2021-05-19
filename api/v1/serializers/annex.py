@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from api.main_models.annex import BaseAnnex, ProductInvoiceItem, UnitOfMeasure
-from django.utils import timezone
 
 
 class AnnexSerializer(serializers.ModelSerializer):
@@ -16,9 +15,8 @@ class AnnexSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = BaseAnnex
-        fields = ['id', 'company_name', 'request_no', 'contract_no', 'annex_no', 'sales_manager',
-                  'payment_terms', 'sum_no_invoice', 'sum_with_invoice', 'annex_date', 'signature_date',
-                  'created', 'contract_type']
+        fields = ['id', 'company_name', 'request_no', 'contract_no', 'annex_no', 'sales_manager', 'payment_terms',
+                  'sum_no_invoice', 'sum_with_invoice', 'annex_date', 'created', 'contract_type']
 
     def get_company_name(self, obj):
 
@@ -35,10 +33,6 @@ class AnnexSerializer(serializers.ModelSerializer):
     def get_sum_with_invoice(self, obj):
 
         return 0
-
-    def get_signature_date(self, obj):
-
-        return timezone.now()
 
     def get_contract_type(self, obj):
 
