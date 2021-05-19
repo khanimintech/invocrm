@@ -225,3 +225,7 @@ body {
     text-decoration: underline;
     color: $color-blue;
 }
+
+td {
+    word-break: break-word;
+}

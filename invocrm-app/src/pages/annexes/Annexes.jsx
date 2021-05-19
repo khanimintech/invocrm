@@ -23,8 +23,8 @@ const columns = [
     { field: 'sales_manager', header: "Satış Meneceri" , filter: true },
     // { field: '1', header: "Məhsul", filter: true  },
     { field: 'payment_terms', header: "Ödəniş şərti" , filter: true },
-    { field: 'sum_no_invoice', header: "Məbləğ (ƏDV-siz)" , filter: true },
-    { field: 'sum_with_invoice', header: "Məbləğ (ƏDV-li)" , filter: true },
+    { field: 'sum_no_invoice', header: "Məbləğ (ƏDV-siz)" , filter: false },
+    { field: 'sum_with_invoice', header: "Məbləğ (ƏDV-li)" , filter: false },
      { field: 'created', header: 'Yaradılma Tarixi', filter: true  },
 ];
 
