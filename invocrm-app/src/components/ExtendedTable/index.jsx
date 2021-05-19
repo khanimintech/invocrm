@@ -63,7 +63,7 @@ const ExtendedTable = ({
     const handleDelete = () => {
         onDelete(selectedRow)
             .then(() => {
-                toggleLoading(true)
+                toggleLoading(false)
                 getData();
                 toggleShowDeleteModal(false)
                 setSelectedRow();
