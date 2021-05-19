@@ -12,6 +12,7 @@ import CreateFormActions from './CreateFormActions';
 import { companyTypes } from './../../constants';
 import BankRequisits from './BankRequisits';
 import CustomerContacts from './CustomerContacts';
+import { parseISO } from 'date-fns'
 
 const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selectedContract }) => {
     let formikRef = useRef();
@@ -43,8 +44,8 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                     <Formik
                         initialValues={{
                             id,
-                            due_date: due_date || new Date(),
-                            created: created || new Date(),
+                            due_date: due_date? parseISO(due_date) : new Date(),
+                            created: created ? parseISO(created)  : new Date(),
                             contract_no,
                             sales_manager: sales_manager_id,
                             company: {

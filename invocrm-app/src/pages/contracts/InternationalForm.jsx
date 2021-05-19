@@ -43,8 +43,8 @@ const InternationalForm = ({ handleSubmit, handleRequest, handleClose, formType,
                     <Formik
                         initialValues={{
                             id,
-                            due_date: due_date || new Date(),
-                            created: created || new Date(),
+                            due_date: due_date? parseISO(due_date) : new Date(),
+                            created: created ? parseISO(created)  : new Date(),
                             contract_no,
                             sales_manager: sales_manager_id,
                             company: {
