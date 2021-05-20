@@ -25,9 +25,9 @@ class Person(models.Model):
             (CONTACT, _('Contact')),
         )
 
-    first_name = models.CharField(max_length=256)
-    last_name = models.CharField(max_length=256)
-    fathers_name = models.CharField(max_length=256)
+    first_name = models.CharField(max_length=256, null=True, blank=True)
+    last_name = models.CharField(max_length=256, null=True, blank=True)
+    fathers_name = models.CharField(max_length=256, null=True, blank=True)
     position = models.CharField(max_length=50, null=True, blank=True)
     contact = models.OneToOneField(Contact, on_delete=models.CASCADE, null=True, blank=True)
 
@@ -35,7 +35,10 @@ class Person(models.Model):
 
     tin = models.CharField(max_length=256, verbose_name=_('TIN'))
 
-    @property
-    def fullname(self):
+    fullname = models.CharField(max_length=256, null=True, blank=True)
 
-        return f'{self.first_name}' + ' ' + f'{self.last_name}'
+    def save(self, **kwargs):
+
+        self.fullname = self.first_name + ' ' + self.last_name
+
+        super(Person, self).save(**kwargs)

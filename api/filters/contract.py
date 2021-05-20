@@ -16,7 +16,7 @@ def filter_qs_field(qs, kwargs, value=None):
 
 class ContractFilterSet(django_filters.rest_framework.FilterSet):
 
-    sales_manager = django_filters.ModelMultipleChoiceFilter(queryset=Person.objects.filter(type=Person.TYPE.SALES_MANAGER))
+    sales_manager = django_filters.CharFilter(method='filter_sales_manager')
 
     company_name = django_filters.CharFilter(method='filter_company_name')
     contract_no = django_filters.CharFilter(method='filter_contract_no')
@@ -25,13 +25,17 @@ class ContractFilterSet(django_filters.rest_framework.FilterSet):
     created = django_filters.DateFilter(field_name='created', lookup_expr='lte')
     due_date = django_filters.DateFilter(field_name='due_date', lookup_expr='lte')
 
+    def filter_sales_manager(self,  queryset, name, value):
+
+        return filter_qs_field(queryset, {'sales_manager__fullname__icontains': value}, value)
+
     def filter_company_name(self, queryset, name, value):
 
         return filter_qs_field(queryset, {'company__name__icontains': value}, value)
 
     def filter_contract_no(self, queryset, name, value):
 
-        return filter_qs_field(queryset, {'contract_no__icontains': value}, value)
+        return filter_qs_field(queryset, {'contract_no__startswith': value}, value)
 
     def filter_status(self, queryset, name, value):
 
@@ -66,8 +70,7 @@ class ContactFilterSet(django_filters.rest_framework.FilterSet):
     def filter_customer(self,  queryset, name, value):
 
         if value:
-            return queryset.filter(Q(person__agreement__executor__first_name__icontains=value) |
-                                   Q(person__agreement__executor__last_name__icontains=value) |
+            return queryset.filter(Q(person__agreement__executor__fullname__icontains=value) |
                                    Q(person__agreement__company__name__icontains=value))
 
         return queryset

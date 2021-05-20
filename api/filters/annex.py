@@ -7,8 +7,7 @@ from api.models import Person
 
 class AnnexFilterSet(django_filters.rest_framework.FilterSet):
 
-    sales_manager = django_filters.ModelMultipleChoiceFilter(queryset=Person.objects.filter(type=Person.TYPE.SALES_MANAGER))
-
+    sales_manager = django_filters.CharFilter(method='filter_sales_manager')
     company_name = django_filters.CharFilter(method='filter_company_name')
     contract_no = django_filters.CharFilter(method='filter_contract_no')
     contract_type = django_filters.CharFilter(method='filter_contract_type')
@@ -16,6 +15,10 @@ class AnnexFilterSet(django_filters.rest_framework.FilterSet):
     payment_terms = django_filters.CharFilter(method='filter_payment_terms')
 
     created = django_filters.DateFilter(field_name='created', lookup_expr='lte')
+
+    def filter_sales_manager(self, queryset, name, value):
+
+        return filter_qs_field(queryset, {'sales_manager__fullname__icontains': value}, value)
 
     def filter_company_name(self, queryset, name, value):
 

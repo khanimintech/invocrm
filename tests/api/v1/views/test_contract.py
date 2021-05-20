@@ -294,7 +294,7 @@ class TestContactViewSet:
                                          address='company_address', tin='12345')
 
         contact = Contact.objects.create(mobile='12345', address='my_address',
-                                         personal_email='personal_email@email.email',web_site='my_site.site')
+                                         personal_email='personal_email@email.email', web_site='my_site.site')
 
         rp = Person.objects.create(type=Person.TYPE.CONTACT, first_name='First', last_name='Last',
                                    fathers_name='Father', contact=contact)
@@ -464,7 +464,7 @@ class TestContractFilterSet:
         admin_user.plant_name = 'plant'
         admin_user.save()
         apiclient.force_login(admin_user)
-        response = apiclient.get(reverse('api:v1:contracts-list') + f'?sales_manager={sales_manager.id}')
+        response = apiclient.get(reverse('api:v1:contracts-list') + f'?sales_manager={sales_manager.first_name}')
 
         assert response.status_code == 200
         assert len(response.json()) == 1

@@ -351,3 +351,11 @@ class SalesManagerSerializer(serializers.ModelSerializer):
 
         model = Person
         fields = ['id', 'fullname']
+
+
+class SellerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Person
+        fields = ['id', 'fullname']

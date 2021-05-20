@@ -15,7 +15,7 @@ from api.models import Person
 from api.v1.serializers.contract import ContractListSerializer, TradeCreateSerializer, ServiceCreateSerializer, \
     DistributionCreateSerializer, AgentCreateSerializer, POCreateSerializer, RentCreateSerializer, \
     OneTimeCreateSerializer, InternationalCreateSerializer, CustomerCreateSerializer, BankListSerializer, \
-    ContactListSerializer, SalesManagerSerializer, contract_map
+    ContactListSerializer, SalesManagerSerializer, contract_map, SellerSerializer
 
 # from django_filters.rest_framework import DjangoFilterBackend
 
@@ -259,3 +259,9 @@ class SalesMangerApiView(ListAPIView):
 
     queryset = Person.objects.filter(type=Person.TYPE.SALES_MANAGER)
     serializer_class = SalesManagerSerializer
+
+
+class SellerApiView(ListAPIView):
+
+    queryset = Person.objects.filter(type=Person.TYPE.SELLER)
+    serializer_class = SellerSerializer
