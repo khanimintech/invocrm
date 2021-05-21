@@ -14,7 +14,7 @@ class AnnexFilterSet(django_filters.rest_framework.FilterSet):
     annex_no = django_filters.CharFilter(method='filter_annex_no')
     payment_terms = django_filters.CharFilter(method='filter_payment_terms')
 
-    created = django_filters.DateFilter(field_name='created', lookup_expr='lte')
+    created = django_filters.DateFilter(field_name='created', lookup_expr='gte')
 
     def filter_sales_manager(self, queryset, name, value):
 

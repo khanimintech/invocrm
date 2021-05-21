@@ -33,7 +33,7 @@ class Person(models.Model):
 
     type = models.SmallIntegerField(choices=TYPE.CHOICES)
 
-    tin = models.CharField(max_length=256, verbose_name=_('TIN'))
+    tin = models.CharField(max_length=256, verbose_name=_('TIN'), null=True, blank=True)
 
     fullname = models.CharField(max_length=256, null=True, blank=True)
 
