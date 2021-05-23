@@ -15,12 +15,24 @@ from api.models import Person
 from api.v1.serializers.contract import ContractListSerializer, TradeCreateSerializer, ServiceCreateSerializer, \
     DistributionCreateSerializer, AgentCreateSerializer, POCreateSerializer, RentCreateSerializer, \
     OneTimeCreateSerializer, InternationalCreateSerializer, CustomerCreateSerializer, BankListSerializer, \
-    ContactListSerializer, SalesManagerSerializer, contract_map, SellerSerializer
+    ContactListSerializer, SalesManagerSerializer, contract_map, SellerSerializer, TradeGetSerializer
 
 # from django_filters.rest_framework import DjangoFilterBackend
 
 contract_create_serializer = {
     BaseContract.Type.TRADE: TradeCreateSerializer,
+    BaseContract.Type.SERVICE: ServiceCreateSerializer,
+    BaseContract.Type.DISTRIBUTION: DistributionCreateSerializer,
+    BaseContract.Type.AGENT: AgentCreateSerializer,
+    BaseContract.Type.PO: POCreateSerializer,
+    BaseContract.Type.RENT: RentCreateSerializer,
+    BaseContract.Type.ONE_TIME: OneTimeCreateSerializer,
+    BaseContract.Type.INTERNATIONAL: InternationalCreateSerializer,
+    BaseContract.Type.CUSTOMER: CustomerCreateSerializer
+}
+
+contract_get_serializer = {
+    BaseContract.Type.TRADE: TradeGetSerializer,
     BaseContract.Type.SERVICE: ServiceCreateSerializer,
     BaseContract.Type.DISTRIBUTION: DistributionCreateSerializer,
     BaseContract.Type.AGENT: AgentCreateSerializer,
@@ -199,11 +211,17 @@ class ContractViewSet(ModelViewSet):
 
     def get_serializer_class(self, *args, **kwargs):
 
-        if self.action == 'create' or self.action == 'retrieve':
+        if self.action == 'create':
 
-            contract_type = self.request.data.get('type', None) or self.get_object().type
+            contract_type = self.request.data.get('type', None)
 
             return contract_create_serializer[contract_type]
+
+        if self.action == 'retrieve':
+
+            contract_type = self.get_object().type
+
+            return contract_get_serializer[contract_type]
 
         return super().get_serializer_class()
 

@@ -44,13 +44,18 @@ class TestContractViewSet:
         t = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
                                           type=BaseContract.Type.TRADE, contract_no='123', company=company)
 
+        bank = Bank.objects.create(name='bank_name', code='123', tin='1234')
+
+        b_acc = BankAccount.objects.create(account='123', bank=bank, address='address', city='city',
+                                           swift_no='swift_123', correspondent_account='cor_123', company_owner=company)
+
         d = AgentAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
                                   type=BaseContract.Type.TRADE, contract_no='123', company=company, territory='asdf')
 
         admin_user.plant_name = 'plant'
         admin_user.save()
         apiclient.force_login(admin_user)
-        response = apiclient.get(reverse('api:v1:contracts-detail', args=[d.id]))
+        response = apiclient.get(reverse('api:v1:contracts-detail', args=[t.id]))
 
         assert response.status_code == 200, response.json()
 
