@@ -6,7 +6,7 @@ import { validateRequired } from '../../utils';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 
-const BankRequisits = ({ hideTin, readOnly, type  }) => {
+const BankRequisits = ({ hideTin, readOnly, type , banks }) => {
     return (
         <Grid item md={6} sm={12} xs={12}>
         <Grid item md={12}>
@@ -29,6 +29,24 @@ const BankRequisits = ({ hideTin, readOnly, type  }) => {
                         form={form}
                         meta={meta}
                         readOnly={readOnly}
+                        autoComplete
+                        hideTin={hideTin}
+                        renderOption={(bank) => {
+                            return <div>
+                              <b >{`VÖEN: ${bank.value || "NA"}`}</b>
+                                <br/>
+                             <span className="autocomplete-subtext">{`Bank adı: ${bank.name}`}</span>
+                             <br/>
+                             <span className="autocomplete-subtext">{`Hesab: ${bank.account}`}</span>
+                            </div>
+                        }}
+                        options={banks.map(bank => ({ value: bank.tin, label: bank.tin || "NA",  ...bank }))}
+                        onChange={(e, bank) => {
+                            form.setFieldValue(field.name, bank.value )
+                        }}
+                        onInputchange={(e, bank) => {
+                            form.setFieldValue(field.name, bank.value )
+                        }}
                     />
                 )}
             </Field>

@@ -14,7 +14,7 @@ import BankRequisits from './BankRequisits';
 import CustomerContacts from './CustomerContacts';
 import { parseISO } from 'date-fns'
 
-const InternationalForm = ({ handleSubmit, handleRequest, handleClose, formType, selectedContract, salesManagers }) => {
+const InternationalForm = ({ handleSubmit, handleRequest, handleClose, formType, selectedContract, salesManagers, banks  }) => {
     let formikRef = useRef();
     const {contract_no, annex_count, company_name, 
         created, due_date, id, sales_manager_id, type ,
@@ -285,7 +285,7 @@ const InternationalForm = ({ handleSubmit, handleRequest, handleClose, formType,
                                         </Grid>
                                         <CustomerContacts  readOnly={id} />
                                     </Grid>
-                                    <BankRequisits readOnly={id} />
+                                    <BankRequisits readOnly={id} banks={banks} />
                                 </Grid>
                             </Form>
                         )}

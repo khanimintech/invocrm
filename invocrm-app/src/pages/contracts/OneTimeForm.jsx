@@ -89,7 +89,6 @@ const OneTimeForm = ({handleRequest, handleSubmit, handleClose, selectedContract
                                                 contractType === 1 ? <CompnayOneTimeForm salesManagers={salesManagers} readOnly={id}/> : <PhysicalOneTimeForm   salesManagers={salesManagers} readOnly={id} />
                                             }
                                             
-                                           
                                         <CustomerContacts  />
                                     </Grid>
                                     <Grid item md={6}>

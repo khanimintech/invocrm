@@ -17,10 +17,11 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import CreateContractModal from './CreateContractForm';
 import { contractStatuses } from '../../constants';
-
-import './styles.scss';
 import ContractAnnexModal from './ContractAnnexModal';
 import { AnnexesService } from '../../services/AnnexesService';
+import { BanksService }from '../../services/BanksService';
+
+import './styles.scss';
 
 
 const initialOverviews = [
@@ -58,6 +59,7 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     const [salesManagers, setSalesManagers] = useState([]);
     const [sellers, setSellers] = useState([]);
     const [units, setUnits] = useState([]);
+    const [banks, setBanks] = useState([]);
 
     const openCreateMenu = Boolean(anchorEl);
 
@@ -65,9 +67,15 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
         getSalesManagers()
         getSellers()
         getUnits();
+        getBanks()
     }, [])
 
 
+    const getBanks = () => {
+        handleRequest(
+            BanksService.index()
+        ).then(res => setBanks(res.body))
+    }
 
 
     const getUnits = () => {
@@ -241,6 +249,7 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 selectedContract={selectedContract}
                 units={units}
                 salesManagers={salesManagers}
+                banks={banks}
             />{
                 annexModal ? (
                     <ContractAnnexModal

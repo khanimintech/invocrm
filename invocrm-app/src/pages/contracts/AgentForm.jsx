@@ -14,7 +14,7 @@ import BankRequisits from './BankRequisits';
 import CustomerContacts from './CustomerContacts';
 import { parseISO } from 'date-fns'
 
-const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selectedContract, salesManagers }) => {
+const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selectedContract, salesManagers, banks }) => {
     let formikRef = useRef();
     const {contract_no, annex_count, executor_name, 
         created, due_date, id, sales_manager_id, type ,
@@ -194,7 +194,7 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                         </Grid>
                                         <CustomerContacts />
                                     </Grid>
-                                    <BankRequisits hideTin readOnly={id} type={4} />
+                                    <BankRequisits hideTin readOnly={id} type={4} banks={banks} />
                                 </Grid>
                             </Form>
                         )}

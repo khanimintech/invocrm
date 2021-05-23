@@ -24,7 +24,7 @@ const formTypes = {
 
 
 
-const CreateContractModal = ({open, formType, handleRequest, handleClose, enqueueSnackbar, reloadData, selectedContract, units, salesManagers  }) => {
+const CreateContractModal = ({open, formType, handleRequest, handleClose, enqueueSnackbar, reloadData, selectedContract, units, salesManagers, banks  }) => {
 
   const handleSubmit = vals => {
     handleRequest(
@@ -47,7 +47,8 @@ const CreateContractModal = ({open, formType, handleRequest, handleClose, enqueu
                  handleClose,
                  selectedContract,
                  units,
-                 salesManagers
+                 salesManagers,
+                 banks
                 })
              : null
            }

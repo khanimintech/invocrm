@@ -14,7 +14,7 @@ import ControlPointIcon from '@material-ui/icons/ControlPoint';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { parseISO } from 'date-fns'
 
-const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType, selectedContract, salesManagers }) => {
+const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType, selectedContract, salesManagers, banks }) => {
     let formikRef = useRef();
     const {contract_no, annex_count, company_name, 
         created, due_date, id, sales_manager_id, type ,

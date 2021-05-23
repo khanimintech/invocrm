@@ -9,9 +9,11 @@ import DateFnsUtils from '@date-io/date-fns';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const Input = ({field, form, meta, label, placeholder, required, defaultValue, select, options, 
-    readOnly, type, date, size, onChange, multiline, rows, checkbox
+    readOnly, type, date, size, onChange, multiline, rows, checkbox, autoComplete, renderOption,
+    onInputChange, hideTin
  }) => {
     const { name, value } = field;
     const { setFieldValue, submitCount } = form;
@@ -74,6 +76,61 @@ const Input = ({field, form, meta, label, placeholder, required, defaultValue, s
                 />
                 }
                 label={label}
+            />
+        )
+    if (autoComplete)
+        return (
+            <Autocomplete
+                options={options}
+                getOptionLabel={option => option.label}
+                renderOption={renderOption}
+                freeSolo
+                onChange={(e, option) => {
+                    const { setFieldValue } = form
+                    if (field.name ===  "executor.tin"  || field.name ===  "company.tin"){
+                        setFieldValue(field.name, option ?  option.value : null )
+                        setFieldValue("bank_account.account", option ? option.account : null)
+                        setFieldValue("bank.name", option ?  option.name : null)
+                        setFieldValue("bank_account.swift_no", option ? option.swift_no : null)
+                        setFieldValue("bank.code", option ? option.code : null )
+                        setFieldValue("bank_account.correspondent_account", option ? option.correspondent_account : null)
+                        // setFieldValue("bank.id", option ? option.id : null)
+                    }
+                    else{
+                        setFieldValue(field.name, option ? option.value : null)
+                    }
+                }}
+                onInputChange={(e, option) => {
+                    const { setFieldValue } = form
+                    if (field.name ===  "executor.tin"  || field.name ===  "company.tin"){
+                        setFieldValue(field.name, option ? option.value : null )
+                        setFieldValue("bank_account.account", option?  option.account : null)
+                        setFieldValue("bank.name", option ?  option.name : null)
+                        setFieldValue("bank_account.swift_no", option ? option.swift_no : null)
+                        setFieldValue("bank.code", option ? option.code : null)
+                        setFieldValue("bank_account.correspondent_account", option ? option.correspondent_account : null)
+                        // setFieldValue("bank.id", option ? option.id : null)
+                    }
+                    else{
+                        setFieldValue(field.name, option ? option.value : null)
+                        setFieldValue("bank_account.account", "")
+                        setFieldValue("bank.name", "")
+                        setFieldValue("bank_account.swift_no", "")
+                        setFieldValue("bank.code", "")
+                        setFieldValue("bank_account.correspondent_account", "")
+                        // setFieldValue("bank.id", "")
+                    }
+
+                }}
+                renderInput={params => (
+                <TextField
+                    {...params}
+                    label={label}
+                    margin="normal"
+                    fullWidth
+                    variant="outlined"
+                />
+                )}
             />
         )
     return (
