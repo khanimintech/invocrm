@@ -94,6 +94,56 @@ class TestContractViewSet:
 
         assert response.status_code == 201, response.json()
 
+    def test_agent_create(self, apiclient, admin_user, sales_manager):
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+        response = apiclient.post(reverse('api:v1:contracts-list'),
+                                  data={
+                                      'contract_no': 123,
+                                      'type': BaseContract.Type.AGENT,
+                                      'sales_manager': sales_manager.id,
+                                      'due_date': timezone.now(),
+                                      'territory': 'baku',
+
+                                      'executor': {
+                                          'first_name': 'First',
+                                          'last_name': 'Last',
+                                          'fathers_name': 'Father',
+                                          'tin': '12345'
+                                      },
+                                      'responsible_person': {
+                                          'first_name': 'First',
+                                          'last_name': 'Last',
+                                          'fathers_name': 'Father',
+                                      },
+                                      'contact': {
+                                          'mobile': '1234567890',
+                                          'address': 'My_address',
+                                          'work_email': 'My_work_email@email.fake',
+                                          'personal_email': 'My_personal_email@email.fake'
+
+                                      },
+                                      'bank': {
+                                          'name': 'My_bank',
+                                          'code': '1234567890',
+                                      },
+                                      'bank_account': {
+                                          'default': True,
+                                          'account': 'My_account',
+                                          'swift_no': '1234567890',
+                                          'correspondent_account': 'My_correspondent_account',
+                                          'city': 'city',
+                                          'address': 'address'
+                                      }
+
+                                  },
+                                  format='json'
+                                  )
+
+        assert response.status_code == 201, response.json()
+
     def test_trade_create(self, apiclient, admin_user, sales_manager):
 
         admin_user.plant_name = 'plant'

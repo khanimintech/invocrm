@@ -98,7 +98,7 @@ class PersonSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = Person
-        fields = ['first_name', 'last_name', 'fathers_name',]
+        fields = ['first_name', 'last_name', 'fathers_name', 'tin']
 
 
 class ContactSerializer(serializers.ModelSerializer):
