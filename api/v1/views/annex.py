@@ -4,7 +4,9 @@ from rest_framework.viewsets import ModelViewSet
 
 from api.filters.annex import AnnexFilterSet
 from api.main_models.annex import BaseAnnex, UnitOfMeasure
-from api.v1.serializers.annex import AnnexSerializer, AnnexCreateSerializer, UnitSerializer
+from api.main_models.contract import BaseContract
+from api.v1.serializers.annex import AnnexSerializer, AnnexCreateSerializer, UnitSerializer, AgentAnnexCreateSerializer, \
+    RentAnnexCreateSerializer
 
 
 class AnnexViewSet(ModelViewSet):
@@ -23,6 +25,12 @@ class AnnexViewSet(ModelViewSet):
     def get_serializer_class(self):
 
         if self.action == 'create':
+            contract = BaseContract.objects.get(id=self.request.data.get('contract'))
+
+            if contract.type == BaseContract.Type.AGENT:
+                return AgentAnnexCreateSerializer
+            if contract.type == BaseContract.Type.RENT:
+                return RentAnnexCreateSerializer
 
             return AnnexCreateSerializer
 

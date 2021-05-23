@@ -35,6 +35,8 @@ class BaseAnnex(models.Model):
     seller = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='seller_annex_list', null=True, blank=True)
     sales_manager = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='sales_manager_annex_list', null=True, blank=True)
 
+    with_vat = models.BooleanField(default=False)
+
     def save(self, **kwargs):
 
         self.annex_no = self.contract.annex_list.latest('created').annex_no + 1 if self.contract.annex_list.exists() else 1
@@ -75,7 +77,30 @@ class ProductInvoiceItem(models.Model):
 
 class AgentInvoiceItem(models.Model):
 
+    annex = models.ForeignKey(BaseAnnex, on_delete=models.CASCADE, related_name='agent_items', null=True, blank=True)
+
     client_name = models.CharField(max_length=256)
     invoice_no = models.CharField(max_length=256)
     date = models.DateField(default=timezone.now)
-    annex_no = models.IntegerField(default=timezone.now)
+    annex_no = models.IntegerField(default=1)
+    paids_from_customer = models.IntegerField(null=True, blank=True)
+    agent_reward = models.IntegerField(null=True, blank=True)
+
+
+class RentConditions(models.Model):
+
+    annex = models.ForeignKey(BaseAnnex, on_delete=models.CASCADE, related_name='rent_conditions')
+    name = models.TextField()
+
+
+class RentItems(models.Model):
+
+    annex = models.ForeignKey(BaseAnnex, on_delete=models.CASCADE, related_name='rent_items')
+    unit = models.ForeignKey('UnitOfMeasure', on_delete=models.CASCADE)
+
+    item_name = models.CharField(max_length=256)
+    term = models.IntegerField()
+    quantity = models.IntegerField()
+    one_day_rent = models.IntegerField()
+    total = models.IntegerField()
+

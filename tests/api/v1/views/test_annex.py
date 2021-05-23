@@ -2,7 +2,7 @@ from rest_framework.reverse import reverse
 from django.utils import timezone
 
 from api.main_models.annex import BaseAnnex, ProductInvoiceItem, UnitOfMeasure
-from api.main_models.contract import TradeAgreement, BaseContract
+from api.main_models.contract import TradeAgreement, BaseContract, AgentAgreement, RentAgreement
 
 
 class TestAnnexViewSet:
@@ -70,6 +70,7 @@ class TestAnnexViewSet:
                                       'created': timezone.now(),
                                       'seller': sales_manager.id,
                                       'sales_manager': sales_manager.id,
+                                      'with_vat': True,
                                       'products': [
                                           {
                                               'name': '123',
@@ -104,6 +105,92 @@ class TestAnnexViewSet:
         assert annex.seller.id == sales_manager.id
         assert annex.sales_manager.id == sales_manager.id
         assert annex.products.count() == 2
+        assert annex.with_vat is True
+
+    def test_agent_annex_create(self, apiclient, admin_user, sales_manager):
+
+        contract = AgentAgreement.objects.create(plant_name='plant', sales_manager=sales_manager,
+                                                 due_date=timezone.now(), type=BaseContract.Type.AGENT, territory='Baku')
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+        response = apiclient.post(reverse('api:v1:annexes-list'),
+                                  data={
+                                      'contract': contract.id,
+                                      'created': timezone.now(),
+                                      'agent_items': [
+                                          {
+                                              'client_name': '123',
+                                              'invoice_no': '1234',
+                                              'date': timezone.now().strftime('%Y-%m-%d'),
+                                              'annex_no': 123,
+                                              'paids_from_customer': 123,
+                                              'agent_reward': 123
+                                          },
+                                          {
+                                              'client_name': '123',
+                                              'invoice_no': '1234',
+                                              'date': timezone.now().strftime('%Y-%m-%d'),
+                                              'annex_no': 123,
+                                              'paids_from_customer': 123,
+                                              'agent_reward': 123
+                                          },
+                                      ]
+
+                                  },
+                                  format='json'
+                                  )
+
+        assert response.status_code == 201, response.json()
+
+    def test_rent_annex_create(self, apiclient, admin_user, sales_manager):
+
+        contract = RentAgreement.objects.create(plant_name='plant', sales_manager=sales_manager,
+                                                 due_date=timezone.now(), type=BaseContract.Type.RENT)
+        unit = UnitOfMeasure.objects.create(name='KQ')
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+        response = apiclient.post(reverse('api:v1:annexes-list'),
+                                  data={
+                                      'contract': contract.id,
+                                      'created': timezone.now(),
+                                      'rent_conditions': [
+                                          {
+                                              'name': 'condition1',
+
+                                          },
+                                          {
+                                              'name': 'condition2',
+
+                                          },
+                                      ],
+                                      'rent_items': [
+                                          {
+                                              'item_name': 'item1',
+                                              'term': 1,
+                                              'quantity': 1,
+                                              'one_day_rent': 1,
+                                              'total': 1,
+                                              'unit': unit.id
+                                          },
+                                          {
+                                              'item_name': 'item2',
+                                              'term': 1,
+                                              'quantity': 1,
+                                              'one_day_rent': 1,
+                                              'total': 1,
+                                              'unit': unit.id
+                                          },
+                                      ]
+
+                                  },
+                                  format='json'
+                                  )
+
+        assert response.status_code == 201, response.json()
 
 
 class TestUnitOfMeasureAPIView:
@@ -121,3 +208,6 @@ class TestUnitOfMeasureAPIView:
 
         assert response.status_code == 200, response.json()
         assert len(response.json()) == 2
+
+
+
