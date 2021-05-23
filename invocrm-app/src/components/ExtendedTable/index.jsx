@@ -24,7 +24,7 @@ import { InputText } from 'primereact/inputtext';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 
 const ExtendedTable = ({
-    entityName, data, columns,
+    data, columns,
     statuses, elRef, actions, headerTitle, onDelete,
     enqueueSnackbar, getData,
     getItem, addItem
@@ -49,13 +49,11 @@ const ExtendedTable = ({
     }, [columns])
 
     useEffect(() => {
-        toggleLoading(true)
         const delayDebounceFn = setTimeout(() => {
+            toggleLoading(true)
             getData(filters)
-                .then(() => {
-                    toggleLoading(false)
-                })
-        }, 1000)
+                .then(() => toggleLoading(false))
+        }, 2000)
 
         return () => clearTimeout(delayDebounceFn)
     }, [filters])

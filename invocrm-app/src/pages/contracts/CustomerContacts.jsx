@@ -14,7 +14,7 @@ const CustomerContacts = ({ readOnly }) => {
             <Grid item md={12} className="input-wrapper">
                 <Typography variant="h6" gutterBottom>
                     Müştəri ilə əlaqə məlumatları
-                                            </Typography>
+                </Typography>
             </Grid>
             <Divider />
             <Grid container spacing={0} justify="space-between">

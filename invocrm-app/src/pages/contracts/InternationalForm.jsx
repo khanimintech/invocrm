@@ -14,26 +14,12 @@ import BankRequisits from './BankRequisits';
 import CustomerContacts from './CustomerContacts';
 import { parseISO } from 'date-fns'
 
-const InternationalForm = ({ handleSubmit, handleRequest, handleClose, formType, selectedContract }) => {
+const InternationalForm = ({ handleSubmit, handleRequest, handleClose, formType, selectedContract, salesManagers }) => {
     let formikRef = useRef();
     const {contract_no, annex_count, company_name, 
         created, due_date, id, sales_manager_id, type ,
     } = selectedContract || {};
-    
-    const [salesManagers, setSalesManagers] = useState([]);
 
-
-    useEffect(() => {
-        getSalesManagers()
-    }, [])
-
-
-    const getSalesManagers = () => {
-        handleRequest(
-            ContractsService.getSalesManagers()
-        )
-            .then(res => setSalesManagers(res.body.map(salesManager => ({ value: salesManager.id, label: salesManager.fullname }))))
-    }
 
 
 

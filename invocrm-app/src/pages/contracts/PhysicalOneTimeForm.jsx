@@ -17,8 +17,6 @@ import CustomerContacts from './CustomerContacts';
 const PhysicalOneTimeForm = ({ salesManagers, readOnly }) => {
     return (
         <>
-
-
             <Grid item md={12} >
                 <Grid item md={12} >
                     <Grid container spacing={0} justify="space-between">
