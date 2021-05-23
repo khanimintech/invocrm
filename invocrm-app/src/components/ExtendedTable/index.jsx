@@ -177,7 +177,7 @@ const ExtendedTable = ({
                 {
                     showDetails ? (
                         <Tooltip title="Göstər" placement="top">
-                            <span className="clickable-column" onClick={showDetails ? () => handleShow(row) : null}>{value || "NA"}</span>
+                            <span className="clickable-column" onClick={showDetails ? () => handleShow(row) : null}>{`${type === 7 ? "PO " : ""}${value || "NA"}`}</span>
                         </Tooltip>
                     ) : <span>
                             {value}
