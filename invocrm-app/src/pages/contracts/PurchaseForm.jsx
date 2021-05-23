@@ -39,7 +39,7 @@ const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType, sele
     
     return (
         <>
-        <DialogContent>
+        <DialogContent className="create-contract-wrapper">
           <DialogContentText>
             <Formik
                 initialValues={{ 

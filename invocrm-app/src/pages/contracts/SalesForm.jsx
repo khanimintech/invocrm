@@ -16,8 +16,8 @@ import { parseISO } from 'date-fns';
 
 const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selectedContract }) => {
     let formikRef = useRef();
-    const {contract_no, annex_count, company_name, 
-        created, due_date, id, sales_manager_id, type ,
+    const {contract_no, company, executor, responsible_person,
+        created, due_date, id, sales_manager, type ,
     } = selectedContract || {};
     const [salesManagers, setSalesManagers] = useState([]);
 
@@ -38,7 +38,7 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
 
     return (
         <>
-            <DialogContent>
+            <DialogContent className="create-contract-wrapper">
                 <DialogContentText>
                     <Formik
                         initialValues={{
@@ -46,13 +46,17 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                             due_date: due_date? parseISO(due_date) : new Date(),
                             created: created ? parseISO(created)  : new Date(),
                             contract_no,
-                            sales_manager: sales_manager_id,
+                            sales_manager,
                             company: {
-                                name: company_name,
-                                type,
+                                name: company ? company.name : "",
+                                type: company ? company.type : "",
+                                address: company ? company.address : ""
                             },
-
-
+                            executor: {
+                                first_name: executor ? executor.first_name : "",
+                                last_name: executor ? executor.last_name : "",
+                                fathers_name: executor ? executor.fathers_name : ""
+                            }
                         }}
                         onSubmit={vals => handleSubmit({ ...vals })}
                         innerRef={form => (formikRef = form)}

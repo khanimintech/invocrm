@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PageContent from '../../components/PageContainer';
 import DescriptionIcon from '@material-ui/icons/Description';
 import PriorityHighIcon from '@material-ui/icons/PriorityHigh';
@@ -19,6 +19,8 @@ import CreateContractModal from './CreateContractForm';
 import { contractStatuses } from '../../constants';
 
 import './styles.scss';
+import ContractAnnexModal from './ContractAnnexModal';
+import { AnnexesService } from '../../services/AnnexesService';
 
 
 const initialOverviews = [
@@ -36,7 +38,7 @@ const columns = [
     { field: 'due_date', header: "Bitmə Tarixi", filter: true },
     { field: 'sales_manager', header: "Satış Meneceri", filter: true },
     { field: 'status', header: 'Status', filter: true },
-    { field: 'annex_count', header: "Elave sayi", filter: false },
+    { field: 'annex_count', header: "Elave sayi", filter: false, add: true },
 ];
 
 
@@ -52,8 +54,44 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     const [showCreateModal, toggleShowCreateModal] = useState(false);
     const [contractType, setContractType] = useState();
     const [selectedContract, setSelectedContract] = useState();
+    const [annexModal, toggleAnnexModal] = useState();
+    const [salesManagers, setSalesManagers] = useState([]);
+    const [sellers, setSellers] = useState([]);
+    const [units, setUnits] = useState([]);
 
     const openCreateMenu = Boolean(anchorEl);
+
+    useEffect(() => {
+        getSalesManagers()
+        getSellers()
+        getUnits();
+    }, [])
+
+
+
+
+    const getUnits = () => {
+        handleRequest(
+            AnnexesService.getUnits()
+        ).then((res) => {
+            if (res.body)
+                setUnits(res.body)
+        })
+    }
+
+    const getSalesManagers = () => {
+        handleRequest(
+            ContractsService.getSalesManagers()
+        )
+        .then(res => setSalesManagers(res.body.map(salesManager => ({ value: salesManager.id, label: salesManager.fullname }))))
+    }
+
+    const getSellers = () => {
+        handleRequest(
+            ContractsService.getSellers()
+        )
+        .then(res => setSellers(res.body.map(seller => ({ value: seller.id, label: seller.fullname }))))
+    }
 
 
     const getContracts = (filters) => {
@@ -108,8 +146,8 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     }
 
     const handleOpenContractModal =  contractType => {
-        toggleShowCreateModal(true);
         setContractType(contractType);
+        toggleShowCreateModal(true);
         setAnchorEl(null)
     }
 
@@ -153,6 +191,18 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     )
 
 
+    const handleAdd = (contract) =>{
+        setContractType(contract.type);
+        setSelectedContract(contract);
+        toggleAnnexModal(true)
+    }
+
+    const handleAddAnenx = vals => {
+        return handleRequest(
+            ContractsService.createAnnex(vals)
+        )
+    }
+
 
     return (
         <PageContent
@@ -170,11 +220,12 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 columns={columns}
                 statuses={contractStatuses}
                 elRef={dt}
-                actions={{ edit: false, delete: true, attach: true, plus: true, show: true}}
+                actions={{ edit: false, delete: true, attach: true, plus: false, show: true}}
                 enqueueSnackbar={enqueueSnackbar}
                 onDelete={deleteContract}
                 getData={getContracts}
                 getItem={getContract}
+                addItem={handleAdd}
             />
             <CreateContractModal
                 open={showCreateModal}
@@ -188,7 +239,27 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 enqueueSnackbar={enqueueSnackbar}
                 reloadData={getContracts}
                 selectedContract={selectedContract}
-            />
+                units={units}
+                salesManagers={salesManagers}
+            />{
+                annexModal ? (
+                    <ContractAnnexModal
+                        open={true}
+                        handleClose={() => {
+                            toggleAnnexModal(false)
+                            setSelectedContract(null)
+                        }}
+                        handleSubmit={handleAddAnenx}
+                        handleRequest={handleRequest}
+                        formType={contractType}
+                        salesManagers={salesManagers}
+                        contract={selectedContract}
+                        sellers={sellers}
+                        units={units}
+                        reloadData={getContracts}
+                    />
+                ) : null
+            }
         </PageContent>
     )
 }

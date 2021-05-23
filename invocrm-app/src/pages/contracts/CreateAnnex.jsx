@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { Field, FieldArray } from 'formik';
 import Input from '../../components/Input';
 import { validateRequired } from '../../utils';
@@ -6,19 +6,44 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { Button, IconButton, Tooltip } from '@material-ui/core';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import ClearIcon from '@material-ui/icons/Clear';
-
-const columns = [
-    { header: "№", field: "id", type: "text", readOnly: true },
-    { header: "Məhsul adı", field: "name", type: "text" },
-    { header: "Miqdarı", field: "quantity", type: "number" },
-    { header: "Ö.V", field: "unit", type: "select" },
-    { header: "Vahidin qiyməti (AZN)", field: "price", type: "number" },
-    { header: "Cami qiyməti", field: "total", type: "number", readOnly: true },
-]
-
-const CreateAnnex = ({ products, units, readOnly }) => {
+import Typography from '@material-ui/core/Typography';
 
 
+const columns ={
+    1:  [
+        { header: "№", field: "id", type: "text", readOnly: true },
+        { header: "Məhsul adı", field: "name", type: "text" },
+        { header: "Miqdarı", field: "quantity", type: "number" },
+        { header: "Ö.V", field: "unit", type: "select" },
+        { header: "Vahidin qiyməti (AZN)", field: "price", type: "number" },
+        { header: "Cəmi qiyməti", field: "total", type: "number", readOnly: true },
+    ],
+    4: [
+        { header: "№", field: "id", type: "text", readOnly: true },
+        { header: "Müştəri adı", field: "client_name", type: "text" },
+        { header: "Müqavilə №", field: "invoice_no", type: "text" },
+        { header: "Tarixi", field: "date", type: "date" },
+        { header: "Əlavə №", field: "annex_no", type: "number" },
+        { header: "Müştəri tərəfdən ödənilmiş vəsait", field: "paids_from_customer", type: "text"},
+        { header: "Agent mükafat", field: "agent_reward", type: "text"},
+    ],
+    5: [
+        { header: "№", field: "id", type: "text", readOnly: true },
+        { header: "Cihazın adı", field: "item_name", type: "text" },
+        { header: "Müddət", field: "term", type: "number" },
+        { header: "Ö.V", field: "unit", type: "select" },
+        { header: "Miqdarı", field: "quantity", type: "number" },
+        { header: "Bir günlük icarə qiyməti (AZN)", field: "one_day_rent", type: "number" },
+        { header: "Cəmi qiyməti", field: "total", type: "number", readOnly: true },
+    ]
+}
+
+const CreateAnnex = ({ products, units, readOnly, type, productsFieldName  }) => {
+
+    const [withVat, setWithVat] = useState(false);
+
+
+    const arrayFieldName = productsFieldName || "products";
     const bodyTemplate = (row, col, arrayHelpers, products, index) => {
         if (col.field === "id" || col.field === "total")
             return <span>{products[index][col.field]}</span>
@@ -26,7 +51,7 @@ const CreateAnnex = ({ products, units, readOnly }) => {
             <Field
                 name={col.field}
                 validate={validateRequired}
-                name={`products[${index}].${col.field}`}
+                name={`${arrayFieldName}[${index}].${col.field}`}
             >
                 {({ field, form, meta }) => (
                     <Input
@@ -39,16 +64,18 @@ const CreateAnnex = ({ products, units, readOnly }) => {
                         required
                         readOnly={readOnly}
                         select={col.field === "unit"}
-                        options={units.map(unit => ({ label: unit.name, value: unit.id }))}
+                        options={units ? units.map(unit => ({ label: unit.name, value: unit.id })) : []}
                         onChange={val => {
-                            if (col.field === "price" || col.field === "quantity")
+                            if (col.field === "price" || col.field === "quantity" || col.field === "one_day_rent")
                                 form.setFieldValue(field.name, val < 0 ? 0 : val)
                             if (col.field === "price") {
-                                form.setFieldValue(`products[${index}].total`, val * (+products[index].quantity))
-
+                                form.setFieldValue(`${arrayFieldName}[${index}].total`, val * products[index].quantity)
                             }
                             if (col.field === "quantity") {
-                                form.setFieldValue(`products[${index}].total`, +products[index].price * val)
+                                form.setFieldValue(`${arrayFieldName}[${index}].total`, type === 5 ? products[index].one_day_rent * val : products[index].price * val)
+                            }
+                            if (col.field === "one_day_rent") {
+                                form.setFieldValue(`${arrayFieldName}[${index}].total`, val*products[index].quantity)
                             }
                             else form.setFieldValue(field.name, val)
                         }}
@@ -62,15 +89,32 @@ const CreateAnnex = ({ products, units, readOnly }) => {
         <>
             <FieldArray
                 validate={validateRequired}
-                name="products"
+                name={arrayFieldName}
                 render={arrayHelpers => (
-                    <>
+                    <div>
+                        <Field
+                            name="with_vat"
+                        >
+                            {({ field, form, meta }) => (
+                                <Input
+                                    label="ƏDV"
+                                    field={field}
+                                    form={form}
+                                    meta={meta}
+                                    checkbox
+                                    onChange={ checked => {
+                                        form.setFieldValue(field.name, checked)
+                                        setWithVat(checked)
+                                    }}
+                                />
+                            )}
+                        </Field>
                         <table
                             className="p-datatable p-datatable-responsive p-datatable-gridlines product-table"
                         >
                             <thead className="p-datatable-thead">
                                 {
-                                    columns.map(col => <th>{col.header}</th>)
+                                    columns[type || 1].map(col => <th>{col.header}</th>)
                                 }
                                 {
                                     products.length === 1 || readOnly ? null : (
@@ -84,10 +128,11 @@ const CreateAnnex = ({ products, units, readOnly }) => {
                                 }
                             </thead>
                             <tbody className="p-datatable-tbody">
+
                                 {
                                     products.map((product, index) => (
                                         <tr>
-                                            {columns.map(col => (
+                                            {  columns[type || "sales"].map(col => (
                                                 <td>
                                                     {bodyTemplate(product, col, arrayHelpers, products, index)}
                                                 </td>
@@ -108,26 +153,38 @@ const CreateAnnex = ({ products, units, readOnly }) => {
                             </tbody>
                         </table>
                         <br />
-                        {
-                            readOnly ? null : (
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    startIcon={<AddCircleOutlineIcon />}
-                                    onClick={() => arrayHelpers.push({
-                                        name: "",
-                                        quantity: 0,
-                                        unit: 0,
-                                        price: "",
-                                        total: 0,
-                                        id: products[products.length - 1].id + 1,
-                                    })}
-                                >
-                                    Yenisin əlavə et
-                        </Button>
-                            )
-                        }
-                    </>
+                        <div className="bottom-wrapper">
+                            {
+                                readOnly ? null : (
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        startIcon={<AddCircleOutlineIcon />}
+                                        onClick={() => arrayHelpers.push({
+                                            name: "",
+                                            quantity: 0,
+                                            unit: 0,
+                                            price: "",
+                                            total: 0,
+                                            id: products[products.length - 1].id + 1,
+                                        })}
+                                    >
+                                        Yenisin əlavə et
+                            </Button>
+                                )
+                            }
+                        <div>
+                            <Typography variant="subtitle1" gutterBottom>
+								{`Ümumi: ${products.reduce((total, product) => total + product.total, 0)} ₼`}
+                            </Typography>
+                        
+                            <Typography variant="subtitle1" gutterBottom>
+                                {`ƏDV-li:  ${products.reduce((total, product) => total + product.total +  (withVat  ? product.total*  0.18 : 0), 0)} ₼`}
+                            </Typography>
+
+                        </div>
+                        </div>
+                    </div>
                 )}
             />
 

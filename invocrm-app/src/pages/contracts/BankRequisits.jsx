@@ -6,7 +6,7 @@ import { validateRequired } from '../../utils';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 
-const BankRequisits = ({ hideTin, readOnly }) => {
+const BankRequisits = ({ hideTin, readOnly, type  }) => {
     return (
         <Grid item md={6} sm={12} xs={12}>
         <Grid item md={12}>
@@ -19,7 +19,7 @@ const BankRequisits = ({ hideTin, readOnly }) => {
 
         <Grid item md={12} className="input-wrapper">
             <Field
-                name="company.tin"
+                name={ type === 4 ? "executor.tin" : "company.tin"}
                 validate={validateRequired}
             >
                 {({ field, form, meta }) => (

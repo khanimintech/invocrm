@@ -27,7 +27,7 @@ const ExtendedTable = ({
     entityName, data, columns,
     statuses, elRef, actions, headerTitle, onDelete,
     enqueueSnackbar, getData,
-    getItem
+    getItem, addItem
 }) => {
 
     const [globalFilter, setGlobalFilter] = useState();
@@ -163,25 +163,40 @@ const ExtendedTable = ({
 
     const handleShow = (row) => getItem(row)
 
-    const cellTemplate = (value, columnName, col, showDetails, row) => {
-        if (col === "created" || col === "due_date" || col === "signature_date")
+    const cellTemplate = (value, col, row) => {
+        const { header, showDetails, add, field } = col;
+        const { type } = row;
+        if (field === "created" || field === "due_date" || field === "signature_date")
             return (
                 <React.Fragment>
-                    <span className="p-column-title">{columnName}</span>
+                    <span className="p-column-title">{header}</span>
                     {value ? format(parseISO(value), "MM.dd.yyyy") : "-"}
                 </React.Fragment>
             )
         return (
             <React.Fragment>
-                <span  className="p-column-title">{columnName}</span>
+                <span className="p-column-title">{header}</span>
                 {
                     showDetails ? (
                         <Tooltip title="Göstər" placement="top">
-                            <span  className="clickable-column"  onClick={showDetails ? () => handleShow(row) : null}>{value}</span>
-                    </Tooltip>
-                    ) :  <span>{value}</span>
+                            <span className="clickable-column" onClick={showDetails ? () => handleShow(row) : null}>{value || "NA"}</span>
+                        </Tooltip>
+                    ) : <span>
+                            {value}
+                            &nbsp;
+                            {
+                                add  && (type === 1 || type === 2 || type === 3 || type === 4 || type === 5 ||  type === 8 )? (
+                                    <Tooltip title="Yenisin yarat" placement="top">
+                                        <IconButton size="small" color="primary" className="add-icon" onClick={() => addItem(row)}>
+                                            <AddIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                ) : null
+                            }
+
+                        </span>
                 }
-               
+
             </React.Fragment>
         )
     }
@@ -225,7 +240,7 @@ const ExtendedTable = ({
                         return statusBodyTemplate(rowData.status);
                     if (col.field === "type" || col.field === "contract_type")
                         return typeTemplate(rowData[col.field], col.header)
-                    return cellTemplate(rowData[col.field], col.header, col.field, col.showDetails, rowData)
+                    return cellTemplate(rowData[col.field], col, rowData)
                 }}
                 filterField={col.field}
                 header={col.header}

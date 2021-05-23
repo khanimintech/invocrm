@@ -39,7 +39,7 @@ const InternationalForm = ({ handleSubmit, handleRequest, handleClose, formType,
 
     return (
         <>
-            <DialogContent>
+            <DialogContent className="create-contract-wrapper">
                 <DialogContentText>
                     <Formik
                         initialValues={{

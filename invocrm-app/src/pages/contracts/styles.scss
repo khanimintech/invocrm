@@ -6,3 +6,28 @@
         border: 1px solid #E9ECEF;
     }
 }
+
+
+.create-annex-form {
+    .MuiGrid-container {
+        .input-wrapper {
+            &:first-of-type{
+                padding-right: 10px;
+            }
+        }
+    }
+    .MuiFormControlLabel-labelPlacementStart {
+        margin-left: 0;
+    }
+}
+
+.bottom-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    div {
+        h6 {
+            font-weight: 500;
+        }
+    }
+}

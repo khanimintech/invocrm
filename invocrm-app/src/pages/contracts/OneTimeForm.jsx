@@ -20,41 +20,18 @@ import PhysicalOneTimeForm from './PhysicalOneTimeForm';
 import MenuItem from '@material-ui/core/MenuItem';
 import { parseISO } from 'date-fns'
 
-const OneTimeForm = ({handleRequest, handleSubmit, handleClose, selectedContract }) => {
+const OneTimeForm = ({handleRequest, handleSubmit, handleClose, selectedContract, units, salesManagers  }) => {
     let formikRef = useRef();
     const {contract_no, annex_count, company_name, 
         created, due_date, id, sales_manager_id, type ,
     } = selectedContract || {};
-    const [salesManagers, setSalesManagers] = useState([]);
-    const [units, setUnits] = useState([]);
+
     const [contractType, setContractType ] = useState(1);
-
-    useEffect(() => {
-        getSalesManagers();
-        getUnits();
-    }, [])
-
-    const getUnits = () => {
-        handleRequest(
-            AnnexesService.getUnits()
-        ).then((res) => {
-            if (res.body)
-                setUnits(res.body)
-        })
-    }
-
-
-    const getSalesManagers = () => {
-        handleRequest(
-            ContractsService.getSalesManagers()
-        )
-            .then(res => setSalesManagers(res.body.map(salesManager => ({ value: salesManager.id, label: salesManager.fullname }))))
-    }
 
 
     return (
          <>
-            <DialogContent>
+            <DialogContent className="create-contract-wrapper">
                 <DialogContentText>
                     <Formik
                         initialValues={{
@@ -63,10 +40,10 @@ const OneTimeForm = ({handleRequest, handleSubmit, handleClose, selectedContract
                             created: created ? parseISO(created)  : new Date(),
                             contract_no,
                             sales_manager: sales_manager_id,
-                            company: {
+                            ...( contractType  === 1 ? { company: {
                                 name: company_name,
                                 type,
-                            },
+                            }} : {} ),
                             products: [{
                                 name: "",
                                 quantity: 0,
@@ -78,6 +55,7 @@ const OneTimeForm = ({handleRequest, handleSubmit, handleClose, selectedContract
                         }}
                         onSubmit={vals => handleSubmit({ ...vals })}
                         innerRef={form => (formikRef = form)}
+                        enableReinitialize
                     >
 
                         {({ values }) => (
@@ -111,11 +89,11 @@ const OneTimeForm = ({handleRequest, handleSubmit, handleClose, selectedContract
                                                 contractType === 1 ? <CompnayOneTimeForm salesManagers={salesManagers} readOnly={id}/> : <PhysicalOneTimeForm   salesManagers={salesManagers} readOnly={id} />
                                             }
                                             
-
+                                           
                                         <CustomerContacts  />
                                     </Grid>
                                     <Grid item md={6}>
-                                        <CreateAnnex products={values.products} units={units} readOnly={id} />
+                                        <CreateAnnex products={values.products} units={units} readOnly={id} type={1} />
                                     </Grid>
                                 </Grid>
                             </Form>

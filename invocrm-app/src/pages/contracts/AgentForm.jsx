@@ -16,7 +16,7 @@ import { parseISO } from 'date-fns'
 
 const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selectedContract }) => {
     let formikRef = useRef();
-    const {contract_no, annex_count, company_name, 
+    const {contract_no, annex_count, executor_name, 
         created, due_date, id, sales_manager_id, type ,
     } = selectedContract || {};
 
@@ -39,7 +39,7 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
 
     return (
         <>
-            <DialogContent>
+            <DialogContent className="create-contract-wrapper">
                 <DialogContentText>
                     <Formik
                         initialValues={{
@@ -48,9 +48,7 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                             created: created ? parseISO(created)  : new Date(),
                             contract_no,
                             sales_manager: sales_manager_id,
-                            company: {
-                                name: company_name,
-                                type,
+                            executor: {
                             },
                         }}
                         onSubmit={vals => handleSubmit({ ...vals })}
@@ -87,10 +85,10 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
 
                                         <Grid item md={12} >
                                             <Grid container spacing={0} justify="space-between">
-                                                <Grid item md={7} className="input-wrapper">
+                                                <Grid item md={3} className="input-wrapper">
                                                     <Field
                                                         validate={validateRequired}
-                                                        name="company.name"
+                                                        name="executor.first_name"
                                                     >
                                                         {({ field, form, meta }) => (
                                                             <Input
@@ -103,25 +101,40 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                         )}
                                                     </Field>
                                                 </Grid>
-
-                                                <Grid item md={4} className="input-wrapper">
+                                                <Grid item md={3} className="input-wrapper">
                                                     <Field
                                                         validate={validateRequired}
-                                                        name="company.type"
+                                                        name="executor.last_name"
                                                     >
                                                         {({ field, form, meta }) => (
                                                             <Input
-                                                                label="Sahibkar növü"
+                                                                label="Sahibkar soyadı"
                                                                 field={field}
                                                                 form={form}
                                                                 meta={meta}
-                                                                select
-                                                                options={companyTypes}
                                                                 readOnly={id}
                                                             />
                                                         )}
                                                     </Field>
                                                 </Grid>
+                                                <Grid item md={3} className="input-wrapper">
+                                                    <Field
+                                                        validate={validateRequired}
+                                                        name="executor.fathers_name"
+                                                    >
+                                                        {({ field, form, meta }) => (
+                                                            <Input
+                                                                label="Sahibkar ata adı"
+                                                                field={field}
+                                                                form={form}
+                                                                meta={meta}
+                                                                readOnly={id}
+                                                            />
+                                                        )}
+                                                    </Field>
+                                                </Grid>
+
+                                          
                                             </Grid>
 
                                             <Grid item md={12} className="input-wrapper">
@@ -196,7 +209,7 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                         </Grid>
                                         <CustomerContacts />
                                     </Grid>
-                                    <BankRequisits hideTin readOnly={id} />
+                                    <BankRequisits hideTin readOnly={id} type={4} />
                                 </Grid>
                             </Form>
                         )}

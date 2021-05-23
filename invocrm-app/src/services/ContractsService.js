@@ -1,5 +1,5 @@
 import { makeAsyncCall, createFilterUrl } from "../utils"
-import {BACKEND_URL} from './../constants'
+import { BACKEND_URL } from './../constants'
 
 
 const index = (filters) =>
@@ -15,30 +15,45 @@ const remove = (id) =>
     });
 
 
-    const getSalesManagers = ()=> 
-        makeAsyncCall({
-            url: `${BACKEND_URL}sales-managers/`,
-            method: 'GET',
-        });
+const getSalesManagers = () =>
+    makeAsyncCall({
+        url: `${BACKEND_URL}sales-managers/`,
+        method: 'GET',
+    });
 
-    const save = values => 
-        makeAsyncCall({
-            url: `${BACKEND_URL}contracts/`,
-            method: 'POST',
-            body: JSON.stringify(values)
-        });
-    
+const getSellers = () =>
+    makeAsyncCall({
+        url: `${BACKEND_URL}sellers/`,
+        method: 'GET',
+    });
 
-    const getItem = id =>
-        makeAsyncCall({
-            url: `${BACKEND_URL}contracts/${id}/`,
-            method: 'GET',
-        });
+const save = values =>
+    makeAsyncCall({
+        url: `${BACKEND_URL}contracts/`,
+        method: 'POST',
+        body: JSON.stringify(values)
+    });
+
+
+const getItem = id =>
+    makeAsyncCall({
+        url: `${BACKEND_URL}contracts/${id}/`,
+        method: 'GET',
+    });
+
+const createAnnex = values => 
+    makeAsyncCall({
+        url: `${BACKEND_URL}annexes/`,
+        method: 'POST',
+        body: JSON.stringify(values)
+    });
 
 export const ContractsService = {
     index: (filters) => index(filters),
     getItem: id => getItem(id),
     remove: id => remove(id),
     getSalesManagers: () => getSalesManagers(),
-    save: values => save(values)
+    getSellers: () => getSellers(),
+    save: values => save(values),
+    createAnnex: vals => createAnnex(vals)
 }
