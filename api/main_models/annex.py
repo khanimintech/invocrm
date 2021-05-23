@@ -22,7 +22,7 @@ class BaseAnnex(models.Model):
     contract = models.ForeignKey(BaseContract, on_delete=models.CASCADE, related_name='annex_list')
 
     annex_no = models.IntegerField(default=1)
-    request_no = models.CharField(max_length=256, unique=True)
+    request_no = models.CharField(max_length=256, unique=True, null=True, blank=True)
 
     annex_date = models.DateTimeField(null=True, blank=True)
     note = models.TextField(null=True, blank=True)
