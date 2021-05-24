@@ -15,7 +15,9 @@ from api.models import Person
 from api.v1.serializers.contract import ContractListSerializer, TradeCreateSerializer, ServiceCreateSerializer, \
     DistributionCreateSerializer, AgentCreateSerializer, POCreateSerializer, RentCreateSerializer, \
     OneTimeCreateSerializer, InternationalCreateSerializer, CustomerCreateSerializer, BankListSerializer, \
-    ContactListSerializer, SalesManagerSerializer, contract_map, SellerSerializer, TradeGetSerializer
+    ContactListSerializer, SalesManagerSerializer, contract_map, SellerSerializer, TradeGetSerializer, \
+    ServiceGetSerializer, DistributionGetSerializer, AgentGetSerializer, POGetSerializer, RentGetSerializer, \
+    OneTimeGetSerializer, InternationalGetSerializer, CustomerGetSerializer
 
 # from django_filters.rest_framework import DjangoFilterBackend
 
@@ -31,16 +33,17 @@ contract_create_serializer = {
     BaseContract.Type.CUSTOMER: CustomerCreateSerializer
 }
 
+
 contract_get_serializer = {
     BaseContract.Type.TRADE: TradeGetSerializer,
-    BaseContract.Type.SERVICE: ServiceCreateSerializer,
-    BaseContract.Type.DISTRIBUTION: DistributionCreateSerializer,
-    BaseContract.Type.AGENT: AgentCreateSerializer,
-    BaseContract.Type.PO: POCreateSerializer,
-    BaseContract.Type.RENT: RentCreateSerializer,
-    BaseContract.Type.ONE_TIME: OneTimeCreateSerializer,
-    BaseContract.Type.INTERNATIONAL: InternationalCreateSerializer,
-    BaseContract.Type.CUSTOMER: CustomerCreateSerializer
+    BaseContract.Type.SERVICE: ServiceGetSerializer,
+    BaseContract.Type.DISTRIBUTION: DistributionGetSerializer,
+    BaseContract.Type.AGENT: AgentGetSerializer,
+    BaseContract.Type.PO: POGetSerializer,
+    BaseContract.Type.RENT: RentGetSerializer,
+    BaseContract.Type.ONE_TIME: OneTimeGetSerializer,
+    BaseContract.Type.INTERNATIONAL: InternationalGetSerializer,
+    BaseContract.Type.CUSTOMER: CustomerGetSerializer
 }
 
 

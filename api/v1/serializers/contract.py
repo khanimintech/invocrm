@@ -256,6 +256,52 @@ class ServiceCreateSerializer(ContractCreateBaseSerializer):
         ]
 
 
+class ServiceGetSerializer(serializers.ModelSerializer):
+
+    company = EntitySerializer()
+    executor = PersonSerializer()
+    responsible_person = PersonSerializer()
+    contract_no = serializers.CharField()
+    bank = serializers.SerializerMethodField()
+    contact = serializers.SerializerMethodField()
+    bank_account = serializers.SerializerMethodField()
+
+    class Meta:
+
+        model = ServiceAgreement
+
+        fields = [
+            'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
+            'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'id'
+        ]
+
+    def get_contact(self, obj):
+
+        if obj.responsible_person and obj.responsible_person.contact:
+            return ContactSerializer(obj.responsible_person.contact).data
+        return None
+
+    def get_bank(self, obj):
+
+        if obj.company and obj.company.bank_acc_list:
+
+            return BankSerializer(obj.company.bank_acc_list.last().bank).data
+
+        if obj.executor and obj.executor.b_acc_list:
+
+            return BankSerializer(obj.executor.b_acc_list.last().bank).data
+
+    def get_bank_account(self, obj):
+
+        if obj.company and obj.company.bank_acc_list:
+
+            return BankAccountSerializer(obj.company.bank_acc_list.last()).data
+
+        if obj.executor and obj.executor.bankaccounts:
+
+            return BankAccountSerializer(obj.executor.b_acc_list.last()).data
+
+
 class DistributionCreateSerializer(ContractCreateBaseSerializer):
 
     class Meta:
@@ -269,6 +315,53 @@ class DistributionCreateSerializer(ContractCreateBaseSerializer):
         ]
 
 
+class DistributionGetSerializer(serializers.ModelSerializer):
+
+    company = EntitySerializer()
+    executor = PersonSerializer()
+    responsible_person = PersonSerializer()
+    contract_no = serializers.CharField()
+    bank = serializers.SerializerMethodField()
+    contact = serializers.SerializerMethodField()
+    bank_account = serializers.SerializerMethodField()
+
+    class Meta:
+
+        model = DistributionAgreement
+
+        fields = [
+            'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
+            'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'id', 'territory',
+            'subject_of_distribution'
+        ]
+
+    def get_contact(self, obj):
+
+        if obj.responsible_person and obj.responsible_person.contact:
+            return ContactSerializer(obj.responsible_person.contact).data
+        return None
+
+    def get_bank(self, obj):
+
+        if obj.company and obj.company.bank_acc_list:
+
+            return BankSerializer(obj.company.bank_acc_list.last().bank).data
+
+        if obj.executor and obj.executor.b_acc_list:
+
+            return BankSerializer(obj.executor.b_acc_list.last().bank).data
+
+    def get_bank_account(self, obj):
+
+        if obj.company and obj.company.bank_acc_list:
+
+            return BankAccountSerializer(obj.company.bank_acc_list.last()).data
+
+        if obj.executor and obj.executor.bankaccounts:
+
+            return BankAccountSerializer(obj.executor.b_acc_list.last()).data
+
+
 class AgentCreateSerializer(ContractCreateBaseSerializer):
 
     class Meta:
@@ -280,6 +373,52 @@ class AgentCreateSerializer(ContractCreateBaseSerializer):
         ]
 
 
+class AgentGetSerializer(serializers.ModelSerializer):
+
+    company = EntitySerializer()
+    executor = PersonSerializer()
+    responsible_person = PersonSerializer()
+    contract_no = serializers.CharField()
+    bank = serializers.SerializerMethodField()
+    contact = serializers.SerializerMethodField()
+    bank_account = serializers.SerializerMethodField()
+
+    class Meta:
+
+        model = AgentAgreement
+
+        fields = [
+            'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
+            'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'id', 'territory',
+        ]
+
+    def get_contact(self, obj):
+
+        if obj.responsible_person and obj.responsible_person.contact:
+            return ContactSerializer(obj.responsible_person.contact).data
+        return None
+
+    def get_bank(self, obj):
+
+        if obj.company and obj.company.bank_acc_list:
+
+            return BankSerializer(obj.company.bank_acc_list.last().bank).data
+
+        if obj.executor and obj.executor.b_acc_list:
+
+            return BankSerializer(obj.executor.b_acc_list.last().bank).data
+
+    def get_bank_account(self, obj):
+
+        if obj.company and obj.company.bank_acc_list:
+
+            return BankAccountSerializer(obj.company.bank_acc_list.last()).data
+
+        if obj.executor and obj.executor.bankaccounts:
+
+            return BankAccountSerializer(obj.executor.b_acc_list.last()).data
+
+
 class RentCreateSerializer(ContractCreateBaseSerializer):
 
     class Meta:
@@ -289,6 +428,52 @@ class RentCreateSerializer(ContractCreateBaseSerializer):
             'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
             'bank', 'bank_account', 'contact', 'responsible_person', 'type'
         ]
+
+
+class RentGetSerializer(serializers.ModelSerializer):
+
+    company = EntitySerializer()
+    executor = PersonSerializer()
+    responsible_person = PersonSerializer()
+    contract_no = serializers.CharField()
+    bank = serializers.SerializerMethodField()
+    contact = serializers.SerializerMethodField()
+    bank_account = serializers.SerializerMethodField()
+
+    class Meta:
+
+        model = RentAgreement
+
+        fields = [
+            'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
+            'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'id'
+        ]
+
+    def get_contact(self, obj):
+
+        if obj.responsible_person and obj.responsible_person.contact:
+            return ContactSerializer(obj.responsible_person.contact).data
+        return None
+
+    def get_bank(self, obj):
+
+        if obj.company and obj.company.bank_acc_list:
+
+            return BankSerializer(obj.company.bank_acc_list.last().bank).data
+
+        if obj.executor and obj.executor.b_acc_list:
+
+            return BankSerializer(obj.executor.b_acc_list.last().bank).data
+
+    def get_bank_account(self, obj):
+
+        if obj.company and obj.company.bank_acc_list:
+
+            return BankAccountSerializer(obj.company.bank_acc_list.last()).data
+
+        if obj.executor and obj.executor.bankaccounts:
+
+            return BankAccountSerializer(obj.executor.b_acc_list.last()).data
 
 
 class OneTimeAnnexSerializer(serializers.ModelSerializer):
@@ -326,6 +511,47 @@ class OneTimeCreateSerializer(ContractCreateBaseSerializer):
         ]
 
 
+class OneTimePersonSerializer(serializers.ModelSerializer):
+
+    contact = ContactSerializer()
+
+    class Meta:
+
+        model = Person
+
+        fields = ['first_name', 'last_name', 'fathers_name', 'position', 'contact', 'type', 'tin', 'fullname']
+
+
+class OneTimeAnnexGetSerializer(serializers.ModelSerializer):
+
+    seller = PersonSerializer()
+    products = OneTimeProductSerializer(many=True)
+
+    class Meta:
+
+        model = BaseAnnex
+
+        fields = ['request_no', 'payment_terms', 'delivery_terms', 'acquisition_terms', 'seller', 'products']
+
+
+class OneTimeGetSerializer(ContractCreateBaseSerializer):
+
+    seller = PersonSerializer()
+    company = EntitySerializer()
+    executor = OneTimePersonSerializer()
+    annex = OneTimeAnnexGetSerializer()
+
+    class Meta:
+        model = OneTimeAgreement
+
+        fields = [
+            'sales_manager', 'created', 'company', 'executor', 'type',
+            'final_amount_with_writing', 'price_offer', 'price_offer_validity', 'warranty_period',
+            'unpaid_period', 'unpaid_value', 'part_payment', 'part_acquisition', 'standard', 'annex',
+            'products', 'responsible_person', 'contact', 'seller'
+        ]
+
+
 class InternationalCreateSerializer(ContractCreateBaseSerializer):
 
     class Meta:
@@ -338,14 +564,108 @@ class InternationalCreateSerializer(ContractCreateBaseSerializer):
         ]
 
 
+class InternationalGetSerializer(serializers.ModelSerializer):
+
+    company = EntitySerializer()
+    executor = PersonSerializer()
+    responsible_person = PersonSerializer()
+    contract_no = serializers.CharField()
+    bank = serializers.SerializerMethodField()
+    contact = serializers.SerializerMethodField()
+    bank_account = serializers.SerializerMethodField()
+
+    class Meta:
+
+        model = InternationalAgreement
+
+        fields = [
+            'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
+            'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'id', 'country',
+            'payment_condition'
+        ]
+
+    def get_contact(self, obj):
+
+        if obj.responsible_person and obj.responsible_person.contact:
+            return ContactSerializer(obj.responsible_person.contact).data
+        return None
+
+    def get_bank(self, obj):
+
+        if obj.company and obj.company.bank_acc_list:
+
+            return BankSerializer(obj.company.bank_acc_list.last().bank).data
+
+        if obj.executor and obj.executor.b_acc_list:
+
+            return BankSerializer(obj.executor.b_acc_list.last().bank).data
+
+    def get_bank_account(self, obj):
+
+        if obj.company and obj.company.bank_acc_list:
+
+            return BankAccountSerializer(obj.company.bank_acc_list.last()).data
+
+        if obj.executor and obj.executor.bankaccounts:
+
+            return BankAccountSerializer(obj.executor.b_acc_list.last()).data
+
+
 class CustomerCreateSerializer(ContractCreateBaseSerializer):
 
     class Meta:
+
         model = CustomerTemplateAgreement
         fields = [
             'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
             'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'custom_contract_type'
         ]
+
+
+class CustomerGetSerializer(serializers.ModelSerializer):
+
+    company = EntitySerializer()
+    executor = PersonSerializer()
+    responsible_person = PersonSerializer()
+    contract_no = serializers.CharField()
+    bank = serializers.SerializerMethodField()
+    contact = serializers.SerializerMethodField()
+    bank_account = serializers.SerializerMethodField()
+
+    class Meta:
+
+        model = CustomerTemplateAgreement
+
+        fields = [
+            'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
+            'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'id', 'custom_contract_type'
+        ]
+
+    def get_contact(self, obj):
+
+        if obj.responsible_person and obj.responsible_person.contact:
+            return ContactSerializer(obj.responsible_person.contact).data
+        return None
+
+    def get_bank(self, obj):
+
+        if obj.company and obj.company.bank_acc_list:
+
+            return BankSerializer(obj.company.bank_acc_list.last().bank).data
+
+        if obj.executor and obj.executor.b_acc_list:
+
+            return BankSerializer(obj.executor.b_acc_list.last().bank).data
+
+    def get_bank_account(self, obj):
+
+        if obj.company and obj.company.bank_acc_list:
+
+            return BankAccountSerializer(obj.company.bank_acc_list.last()).data
+
+        if obj.executor and obj.executor.bankaccounts:
+
+            return BankAccountSerializer(obj.executor.b_acc_list.last()).data
 
 
 class POCreateSerializer(ContractCreateBaseSerializer):
@@ -358,6 +678,24 @@ class POCreateSerializer(ContractCreateBaseSerializer):
         fields = [
             'po_number', 'sales_manager', 'created', 'due_date', 'company', 'type', 'supplements'
         ]
+
+
+class POGetSerializer(ContractCreateBaseSerializer):
+
+    supplements = SupplementsSerializer(many=True)
+
+    class Meta:
+        model = POAgreement
+
+        fields = [
+            'po_number', 'sales_manager', 'created', 'due_date', 'company', 'type', 'supplements'
+        ]
+    #
+    # def get_supplement(self, obj):
+    #
+    #     if obj.supplements:
+    #
+    #         return SupplementsSerializer(obj.supplements.last()).data
 
 
 class BankListSerializer(serializers.ModelSerializer):
