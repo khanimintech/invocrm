@@ -43,7 +43,19 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
         return handleRequest(
             AnnexesService.index(filters)
         ).then(res => {
-            setAnnexes(res.body)
+            if (res.body){
+                setAnnexes(res.body)
+                const withVat = res.body.filter(a => a.with_vat)
+                const withoutVat = res.body.filter(a =>  !a.with_vat)
+                const updatedOverviews = overviews.map( o => {
+                    if (o.id === 2) return { ...o, count: withVat? withVat.length : 0}
+                    if (o.id === 1) return { ...o, count: withoutVat? withoutVat.length : 0}
+                    if (o.id === 3) return { ...o, count: res.body ? res.body.length : 0}
+                })
+                setOverviews(updatedOverviews)
+            }
+
+            
         })
     }
 

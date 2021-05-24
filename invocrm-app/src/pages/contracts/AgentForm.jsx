@@ -16,8 +16,8 @@ import { parseISO } from 'date-fns'
 
 const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selectedContract, salesManagers, banks }) => {
     let formikRef = useRef();
-    const {contract_no, annex_count, executor_name, 
-        created, due_date, id, sales_manager_id, type ,
+    const {contract_no, responsible_person, executor, 
+        created, due_date, id, sales_manager_id, type , bank, bank_account, 
     } = selectedContract || {};
 
 
@@ -33,8 +33,9 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                             created: created ? parseISO(created)  : new Date(),
                             contract_no,
                             sales_manager: sales_manager_id,
-                            executor: {
-                            },
+                            executor,
+                            responsible_person,
+                            bank, bank_account,
                         }}
                         onSubmit={vals => handleSubmit({ ...vals })}
                         innerRef={form => (formikRef = form)}

@@ -67,7 +67,7 @@ const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units }) => {
 													{`Tarix : ${contract.created ? format(parseISO(contract.created), "MM.dd.yyyy") : "-"}`}
 												</Typography>
 												<Typography variant="subtitle1" gutterBottom>
-													{`Əlavə № : ${contract.annex_no || 0}`}
+													{`Əlavə № : ${contract.annex_count + 1}`}
 												</Typography>
 											</Grid>
 										</Grid>

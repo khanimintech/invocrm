@@ -17,7 +17,7 @@ import { parseISO } from 'date-fns';
 const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selectedContract, salesManagers, banks }) => {
     let formikRef = useRef();
     const {contract_no, company, executor, responsible_person,
-        created, due_date, id, sales_manager, type ,
+        created, due_date, id, sales_manager, type , bank, bank_account, contact,
     } = selectedContract || {};
 
 
@@ -35,13 +35,18 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                             company: {
                                 name: company ? company.name : "",
                                 type: company ? company.type : "",
-                                address: company ? company.address : ""
+                                address: company ? company.address : "",
+                                tin: company ? company.tin : null,
                             },
                             executor: {
                                 first_name: executor ? executor.first_name : "",
                                 last_name: executor ? executor.last_name : "",
                                 fathers_name: executor ? executor.fathers_name : ""
-                            }
+                            },
+                            contact,
+                            responsible_person,
+                            bank,
+                            bank_account
                         }}
                         onSubmit={vals => handleSubmit({ ...vals })}
                         innerRef={form => (formikRef = form)}
@@ -304,8 +309,6 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                 )}
                                             </Field>
                                         </Grid>
-                               
-                         
                                         <CustomerContacts readOnly={id} />
                                     </Grid>
                                     <BankRequisits  readOnly={id} banks={banks} />
