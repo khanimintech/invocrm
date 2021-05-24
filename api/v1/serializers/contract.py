@@ -545,10 +545,10 @@ class OneTimeGetSerializer(ContractCreateBaseSerializer):
         model = OneTimeAgreement
 
         fields = [
-            'sales_manager', 'created', 'company', 'executor', 'type',
+            'sales_manager', 'created', 'company', 'executor', 'type', 'id',
             'final_amount_with_writing', 'price_offer', 'price_offer_validity', 'warranty_period',
             'unpaid_period', 'unpaid_value', 'part_payment', 'part_acquisition', 'standard', 'annex',
-            'products', 'responsible_person', 'contact', 'seller'
+            'responsible_person', 'seller'
         ]
 
 
