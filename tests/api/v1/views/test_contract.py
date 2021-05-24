@@ -4,7 +4,7 @@ from django.utils import timezone
 
 from rest_framework.reverse import reverse
 
-from api.main_models.annex import UnitOfMeasure
+from api.main_models.annex import UnitOfMeasure, BaseAnnex
 from api.main_models.contract import BaseContract, TradeAgreement, Company, Bank, BankAccount, ServiceAgreement, \
     Contact, DistributionAgreement, AgentAgreement
 from api.models import Person
@@ -37,6 +37,17 @@ class TestContractViewSet:
         assert response.status_code == 200
 
     def test_contract_detail_ok(self, apiclient, admin_user, sales_manager):
+
+        t = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                          type=BaseContract.Type.TRADE, contract_no='123')
+
+        annex = BaseAnnex.objects.create(contract=t, annex_date=timezone.now(),
+                                         note='122', payment_terms='122', delivery_terms='111', acquisition_terms='133',
+                                         seller=sales_manager, sales_manager=sales_manager, annex_no=1)
+
+        annex2 = BaseAnnex.objects.create(contract=t, annex_date=timezone.now(),
+                                          note='1', payment_terms='1', delivery_terms='1', acquisition_terms='1',
+                                          seller=sales_manager, sales_manager=sales_manager, annex_no=2)
 
         company = Company.objects.create(type=Company.MMC, name='company_name',
                                          address='company_address', tin='12345')

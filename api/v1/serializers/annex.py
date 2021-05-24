@@ -16,7 +16,7 @@ class AnnexSerializer(serializers.ModelSerializer):
 
         model = BaseAnnex
         fields = ['id', 'company_name', 'request_no', 'contract_no', 'annex_no', 'sales_manager', 'payment_terms',
-                  'sum_no_invoice', 'sum_with_invoice', 'annex_date', 'created', 'contract_type']
+                  'sum_no_invoice', 'sum_with_invoice', 'annex_date', 'created', 'contract_type', 'with_vat']
 
     def get_company_name(self, obj):
 
