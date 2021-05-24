@@ -53,7 +53,7 @@ const ExtendedTable = ({
             toggleLoading(true)
             getData(filters)
                 .then(() => toggleLoading(false))
-        }, 2000)
+        }, 1000)
 
         return () => clearTimeout(delayDebounceFn)
     }, [filters])
