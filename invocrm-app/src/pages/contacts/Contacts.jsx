@@ -38,6 +38,7 @@ const Contacts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
             title="Müştəri ilə əlaqə"
             titleIcon={<ContactPhoneIcon />}
             onExportCSV={() => dt.current.exportCSV()}
+            sum={contacts ? contacts.length : 0}
         >
              <ExtendedTable
                 data={contacts}

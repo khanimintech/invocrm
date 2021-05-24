@@ -39,6 +39,7 @@ const Banks = ({ handleRequest, user, loading, enqueueSnackbar }) => {
             title="Bank rekvizitləri"
             titleIcon={<ContactPhoneIcon />}
             onExportCSV={() => dt.current.exportCSV()}
+            sum={banks ? banks.length : 0}
         >
              <ExtendedTable
                 data={banks}
