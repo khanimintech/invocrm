@@ -536,10 +536,9 @@ class OneTimeAnnexGetSerializer(serializers.ModelSerializer):
 
 class OneTimeGetSerializer(ContractCreateBaseSerializer):
 
-    seller = PersonSerializer()
     company = EntitySerializer()
     executor = OneTimePersonSerializer()
-    annex = OneTimeAnnexGetSerializer()
+    annex = serializers.SerializerMethodField()
 
     class Meta:
         model = OneTimeAgreement
@@ -548,8 +547,12 @@ class OneTimeGetSerializer(ContractCreateBaseSerializer):
             'sales_manager', 'created', 'company', 'executor', 'type', 'id',
             'final_amount_with_writing', 'price_offer', 'price_offer_validity', 'warranty_period',
             'unpaid_period', 'unpaid_value', 'part_payment', 'part_acquisition', 'standard', 'annex',
-            'responsible_person', 'seller'
+            'responsible_person',
         ]
+
+    def get_annex(self, obj):
+
+        return OneTimeAnnexGetSerializer(obj.annex_list.last()).data
 
 
 class InternationalCreateSerializer(ContractCreateBaseSerializer):
