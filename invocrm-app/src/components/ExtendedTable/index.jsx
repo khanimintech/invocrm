@@ -19,15 +19,14 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Chip from '@material-ui/core/Chip';
 import { contractTypes, contractStatuses } from '../../constants';
-import { format, parseISO } from 'date-fns'
+import { format, parseISO } from 'date-fns';
 import { InputText } from 'primereact/inputtext';
-import VisibilityIcon from '@material-ui/icons/Visibility';
 
 const ExtendedTable = ({
     data, columns,
     statuses, elRef, actions, headerTitle, onDelete,
     enqueueSnackbar, getData,
-    getItem, addItem, onAttachmentClick
+    getItem, addItem, onAttachmentClick, showTimeRange
 }) => {
 
     const [globalFilter, setGlobalFilter] = useState();
@@ -95,6 +94,8 @@ const ExtendedTable = ({
             columns={columns}
             onColumnToggle={onColumnToggle}
             setGlobalFilter={setGlobalFilter}
+            showTimeRange={showTimeRange}
+            handleFilter={({from, to}) =>  setFilters({ ...filters, contract_created_after: from , contract_created_before : to })}
         />
     );
 

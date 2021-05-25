@@ -242,6 +242,7 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 getItem={getContract}
                 addItem={handleAdd}
                 onAttachmentClick={handleAttachmentClick}
+                showTimeRange
             />
             <CreateContractModal
                 open={showCreateModal}
