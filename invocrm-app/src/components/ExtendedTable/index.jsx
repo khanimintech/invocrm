@@ -26,7 +26,8 @@ const ExtendedTable = ({
     data, columns,
     statuses, elRef, actions, headerTitle, onDelete,
     enqueueSnackbar, getData,
-    getItem, addItem, onAttachmentClick, showTimeRange
+    getItem, addItem, onAttachmentClick, showTimeRange,
+    entityName
 }) => {
 
     const [globalFilter, setGlobalFilter] = useState();
@@ -95,7 +96,7 @@ const ExtendedTable = ({
             onColumnToggle={onColumnToggle}
             setGlobalFilter={setGlobalFilter}
             showTimeRange={showTimeRange}
-            handleFilter={({from, to}) =>  setFilters({ ...filters, contract_created_after: from , contract_created_before : to })}
+            handleFilter={({from, to}) =>  setFilters({ ...filters, [`${entityName}_created_after`]: from , [`${entityName}_created_before`] : to })}
         />
     );
 

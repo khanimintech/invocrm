@@ -77,6 +77,8 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 actions={{edit: true, delete: true}}
                 enqueueSnackbar={enqueueSnackbar}
                 getData={getAnnexes}
+                showTimeRange
+                entityName="annex"
             />
 
 
