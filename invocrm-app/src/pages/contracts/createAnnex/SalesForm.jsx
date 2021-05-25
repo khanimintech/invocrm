@@ -91,7 +91,6 @@ const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units }) => {
 											<Grid item md={6} sm={12} xs={12} className="input-wrapper">
 												<Field
 													name="note"
-													validate={validateRequired}
 												>
 													{({ field, form, meta }) => (
 														<Input

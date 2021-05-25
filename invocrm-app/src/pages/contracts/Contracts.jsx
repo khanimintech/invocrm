@@ -22,6 +22,7 @@ import { AnnexesService } from '../../services/AnnexesService';
 import { BanksService }from '../../services/BanksService';
 
 import './styles.scss';
+import Attachments from './Attachments';
 
 
 const initialOverviews = [
@@ -60,6 +61,7 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     const [sellers, setSellers] = useState([]);
     const [units, setUnits] = useState([]);
     const [banks, setBanks] = useState([]);
+    const [attachmentsSidebar, toggleAttachmentsSidebar] = useState(false);
 
     const openCreateMenu = Boolean(anchorEl);
 
@@ -212,6 +214,11 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     }
 
 
+    const handleAttachmentClick = (contract) => {
+
+    }
+
+
     return (
         <PageContent
             title="Müqavilələr"
@@ -234,6 +241,7 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 getData={getContracts}
                 getItem={getContract}
                 addItem={handleAdd}
+                onAttachmentClick={handleAttachmentClick}
             />
             <CreateContractModal
                 open={showCreateModal}
@@ -269,6 +277,7 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                     />
                 ) : null
             }
+            <Attachments open={attachmentsSidebar} setOpen={toggleAttachmentsSidebar} />
         </PageContent>
     )
 }

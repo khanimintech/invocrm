@@ -100,7 +100,7 @@ const OneTimeForm = ({handleRequest, handleSubmit, handleClose, selectedContract
                     </Formik>
                 </DialogContentText>
             </DialogContent>
-            <CreateFormActions handleClose={handleClose} handleSave={() => formikRef.submitForm()} />
+            <CreateFormActions handleClose={handleClose} id={id} handleSave={() => formikRef.submitForm()} />
         </>
     )
 }

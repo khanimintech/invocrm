@@ -27,7 +27,7 @@ const ExtendedTable = ({
     data, columns,
     statuses, elRef, actions, headerTitle, onDelete,
     enqueueSnackbar, getData,
-    getItem, addItem
+    getItem, addItem, onAttachmentClick
 }) => {
 
     const [globalFilter, setGlobalFilter] = useState();
@@ -113,7 +113,7 @@ const ExtendedTable = ({
                 {
                     actions.attach ? (
                         <Tooltip title="Bax" placement="top">
-                            <IconButton size="small" className="attach-icon">
+                            <IconButton size="small" className="attach-icon" onClick={() => onAttachmentClick(rowData)}>
                                 <AttachFileIcon />
                             </IconButton>
                         </Tooltip>

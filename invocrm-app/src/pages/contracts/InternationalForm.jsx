@@ -292,9 +292,7 @@ const InternationalForm = ({ handleSubmit, handleRequest, handleClose, formType,
                     </Formik>
                 </DialogContentText>
             </DialogContent>
-            {
-                id ? null  : <CreateFormActions handleClose={handleClose} handleSave={() => formikRef.submitForm()} />
-            }
+            <CreateFormActions handleClose={handleClose} id={id} handleSave={() => formikRef.submitForm()} />
            
         </>
     )

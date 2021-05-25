@@ -202,10 +202,7 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                     </Formik>
                 </DialogContentText>
             </DialogContent>
-            {
-                id ? null :  <CreateFormActions handleClose={handleClose} handleSave={() => formikRef.submitForm()} />
-            }
-           
+           <CreateFormActions id={id} handleClose={handleClose} handleSave={() => formikRef.submitForm()} />
         </>
     )
 }

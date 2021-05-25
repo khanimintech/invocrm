@@ -190,7 +190,10 @@ const Layout = props => {
       keepMounted
       transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={isMenuOpen}
-      onClose={handleMenuClose}
+      onClose={() => {
+        setAnchorEl(null);
+      }}
+      getContentAnchorEl={null}
     >
       <MenuItem onClick={handleMenuClose}>Çıxış</MenuItem>
     </Menu>

@@ -318,11 +318,7 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                     </Formik>
                 </DialogContentText>
             </DialogContent>
-            {
-                id ? null : (
-                    <CreateFormActions handleClose={handleClose} handleSave={() => formikRef.submitForm()} />
-                )
-            }
+            <CreateFormActions handleClose={handleClose} id={id} handleSave={() => formikRef.submitForm()} />
             
         </>
     )
