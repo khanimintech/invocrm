@@ -24,6 +24,7 @@ class ContractFilterSet(django_filters.rest_framework.FilterSet):
 
     created = django_filters.DateFilter(field_name='created', lookup_expr='gte')
     due_date = django_filters.DateFilter(field_name='due_date', lookup_expr='gte')
+    contract_created = django_filters.DateFromToRangeFilter('created')
 
     def filter_sales_manager(self,  queryset, name, value):
 
@@ -54,7 +55,7 @@ class ContractFilterSet(django_filters.rest_framework.FilterSet):
     class Meta:
         model = BaseContract
         fields = [
-            'company_name', 'contract_no', 'type', 'status', 'created', 'due_date', 'sales_manager'
+            'company_name', 'contract_no', 'type', 'status', 'created', 'due_date', 'sales_manager', 'contract_created'
         ]
 
 

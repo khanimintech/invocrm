@@ -576,6 +576,45 @@ class TestContractFilterSet:
         assert response.status_code == 200, response.json()
         assert len(response.json()) == 1
 
+    def test_contract_list_filter_created_range(self, apiclient, admin_user, sales_manager):
+
+        yesterday = timezone.now() - timedelta(days=1)
+        tomorrow = timezone.now() + timedelta(days=1)
+
+        two_days_ago = timezone.now() - timedelta(days=2)
+        after_two_days = timezone.now() + timedelta(days=2)
+
+        today = timezone.now()
+
+        TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                      type=BaseContract.Type.TRADE, contract_no='123',
+                                      status=BaseContract.Status.IN_PROCESS, created=two_days_ago)
+
+        TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                      type=BaseContract.Type.CUSTOMER, contract_no='12',
+                                      status=BaseContract.Status.APPROVED, created=after_two_days)
+
+        TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                      type=BaseContract.Type.TRADE, contract_no='123',
+                                      status=BaseContract.Status.IN_PROCESS)
+
+        yesterday = yesterday.strftime('%Y-%m-%d')
+        tomorrow = tomorrow.strftime('%Y-%m-%d')
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+
+        response = apiclient.get(reverse('api:v1:contracts-list') +
+                                 f'?contract_created_after={yesterday}'
+                                 f'&contract_created_before={tomorrow}')
+
+        assert response.status_code == 200, response.json()
+
+        assert len(response.json()) == 1
+
+        assert response.json()[0]['created'][0:10] == today.strftime('%Y-%m-%d')
+
     def test_contract_list_filter_status_expires(self, apiclient, admin_user, sales_manager):
 
         ta1 = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
