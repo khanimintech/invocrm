@@ -4,7 +4,7 @@ from rest_framework.routers import SimpleRouter
 from api.v1.views.annex import AnnexViewSet, UnitOfMeasureAPIView
 from api.v1.views.contract import ContractViewSet, ContractStatusStatAPIView, ContactViewSet, BankViewSet, \
     SalesMangerApiView, SellerApiView
-from api.views import LoginAPIView
+from api.views import LoginAPIView, LogoutAPIView
 from api.v1.views.contract import StubAPI
 
 router = SimpleRouter()
@@ -16,6 +16,7 @@ router.register('banks', BankViewSet, basename='banks')
 
 urlpatterns = [
     path('login', LoginAPIView.as_view(), name='login'),
+    path('logout', LogoutAPIView.as_view(), name='logout'),
     path(r'status-count/', ContractStatusStatAPIView.as_view(), name='status-count'),
     path(r'stub-api/', StubAPI.as_view(), name='stub-api'),
     path(r'sales-managers/', SalesMangerApiView.as_view(), name='sales-managers'),

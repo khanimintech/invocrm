@@ -15,6 +15,7 @@ class AnnexFilterSet(django_filters.rest_framework.FilterSet):
     payment_terms = django_filters.CharFilter(method='filter_payment_terms')
 
     created = django_filters.DateFilter(field_name='created', lookup_expr='gte')
+    annex_created = django_filters.DateFromToRangeFilter('created')
 
     def filter_sales_manager(self, queryset, name, value):
 
@@ -48,4 +49,4 @@ class AnnexFilterSet(django_filters.rest_framework.FilterSet):
 
         model = BaseAnnex
         fields = ['company_name', 'request_no', 'contract_no', 'contract_type', 'annex_no', 'sales_manager',
-                  'payment_terms', 'created']
+                  'payment_terms', 'created', 'annex_created']
