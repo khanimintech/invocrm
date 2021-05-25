@@ -8,6 +8,7 @@ import ContactPhoneIcon from '@material-ui/icons/ContactPhone';
 const columns = [
     { field: 'company_tin', header: 'VÖEN' , filter: true },
     { field: 'account', header: 'Hesab №' , filter: true },
+    { field: 'company_name', header: 'Şirkət' , filter: true },
     { field: 'name', header: 'Bank adı', filter: true  },
     // { field: 'address', header: 'Yerləşdiyi yer', filter: true  },
     // { field: 'city', header: 'Şəhər', filter: true  },
