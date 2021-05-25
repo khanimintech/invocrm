@@ -636,7 +636,9 @@ class TestContractFilterSet:
 
     def test_contract_list_filter_status_expires(self, apiclient, admin_user, sales_manager):
 
-        ta1 = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+        tomorrow = timezone.now() + timedelta(days=1)
+
+        ta1 = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=tomorrow,
                                             type=BaseContract.Type.TRADE, contract_no='123',
                                             status=BaseContract.Status.IN_PROCESS)
 
