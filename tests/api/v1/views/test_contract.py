@@ -22,6 +22,25 @@ def test_login(apiclient, admin_user, PASSWORD):
     assert response.status_code == 200, response.json()
 
 
+def test_logout(apiclient, admin_user, PASSWORD):
+
+    admin_user.is_active = True
+    admin_user.save()
+
+    response = apiclient.post(reverse('api:v1:login'), data={
+        'email': admin_user.email,
+        'password': PASSWORD
+    })
+
+    assert response.status_code == 200, response.json()
+
+    apiclient.force_login(admin_user)
+
+    response = apiclient.post(reverse('api:v1:logout'))
+
+    assert response.status_code == 401
+
+
 class TestContractViewSet:
 
     def test_contract_list_ok(self, apiclient, admin_user, sales_manager):

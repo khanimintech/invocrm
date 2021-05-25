@@ -26,12 +26,12 @@ class LoginAPIView(APIView):
         #     return Response(serializer.errors)
 
 
-class LogoutView(APIView):
+class LogoutAPIView(APIView):
 
     serializer_class = None
 
     def post(self, request, *args, **kwargs):
 
         logout(request)
-        response = Response(status=status.HTTP_204_NO_CONTENT)
+        response = Response(status=status.HTTP_401_UNAUTHORIZED)
         return response
