@@ -40,12 +40,12 @@ const BankRequisits = ({ hideTin, readOnly, type , banks }) => {
                              <span className="autocomplete-subtext">{`Hesab: ${bank.account}`}</span>
                             </div>
                         }}
-                        options={banks.map(bank => ({ value: bank.tin, label: bank.tin || "NA",  ...bank }))}
+                        options={banks.map(bank => ({ value: bank.company_tin, label: bank.company_tin || "NA",  ...bank }))}
                         onChange={(e, bank) => {
-                            form.setFieldValue(field.name, bank.value )
+                            form.setFieldValue(type === 4 ? "executor.tin" : "company.tin", bank.value )
                         }}
                         onInputchange={(e, bank) => {
-                            form.setFieldValue(field.name, bank.value )
+                            form.setFieldValue(type === 4 ? "executor.tin" : "company.tin", bank.value )
                         }}
                     />
                 )}

@@ -86,41 +86,25 @@ const Input = ({field, form, meta, label, placeholder, required, defaultValue, s
                 renderOption={renderOption}
                 freeSolo
                 onChange={(e, option) => {
-                    const { setFieldValue } = form
+                    const { setFieldValue } = form;
+                    const selectedOption = option ? options.find(o => option.value === o.value) : null;
                     if (field.name ===  "executor.tin"  || field.name ===  "company.tin"){
-                        setFieldValue(field.name, option ?  option.value : null )
-                        setFieldValue("bank_account.account", option ? option.account : null)
-                        setFieldValue("bank.name", option ?  option.name : null)
-                        setFieldValue("bank_account.swift_no", option ? option.swift_no : null)
-                        setFieldValue("bank.code", option ? option.code : null )
-                        setFieldValue("bank_account.correspondent_account", option ? option.correspondent_account : null)
+                        setFieldValue(field.name, selectedOption ?  selectedOption.value : null )
+                        setFieldValue("bank_account.account", selectedOption ? selectedOption.account : null)
+                        setFieldValue("bank.name", selectedOption ?  selectedOption.name : null)
+                        setFieldValue("bank_account.swift_no", selectedOption ? selectedOption.swift_no : null)
+                        setFieldValue("bank.code", selectedOption ? selectedOption.code : null )
+                        setFieldValue("bank_account.correspondent_account", selectedOption ? selectedOption.correspondent_account : null)
+                        setFieldValue("bank.tin", selectedOption ? selectedOption.tin : null)
                         // setFieldValue("bank.id", option ? option.id : null)
                     }
                     else{
-                        setFieldValue(field.name, option ? option.value : null)
+                        setFieldValue(field.name, selectedOption ? selectedOption.value : null)
                     }
                 }}
                 onInputChange={(e, option) => {
-                    const { setFieldValue } = form
-                    if (field.name ===  "executor.tin"  || field.name ===  "company.tin"){
-                        setFieldValue(field.name, option ? option.value : null )
-                        setFieldValue("bank_account.account", option?  option.account : null)
-                        setFieldValue("bank.name", option ?  option.name : null)
-                        setFieldValue("bank_account.swift_no", option ? option.swift_no : null)
-                        setFieldValue("bank.code", option ? option.code : null)
-                        setFieldValue("bank_account.correspondent_account", option ? option.correspondent_account : null)
-                        // setFieldValue("bank.id", option ? option.id : null)
-                    }
-                    else{
-                        setFieldValue(field.name, option ? option.value : null)
-                        setFieldValue("bank_account.account", "")
-                        setFieldValue("bank.name", "")
-                        setFieldValue("bank_account.swift_no", "")
-                        setFieldValue("bank.code", "")
-                        setFieldValue("bank_account.correspondent_account", "")
-                        // setFieldValue("bank.id", "")
-                    }
-
+                    const { setFieldValue } = form;
+                    setFieldValue(field.name, option )
                 }}
                 renderInput={params => (
                 <TextField
@@ -129,6 +113,7 @@ const Input = ({field, form, meta, label, placeholder, required, defaultValue, s
                     margin="normal"
                     fullWidth
                     variant="outlined"
+                    error={submitCount && error}
                 />
                 )}
             />
