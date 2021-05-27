@@ -20,9 +20,9 @@ import { contractStatuses } from '../../constants';
 import ContractAnnexModal from './ContractAnnexModal';
 import { AnnexesService } from '../../services/AnnexesService';
 import { BanksService }from '../../services/BanksService';
+import Attachments from './Attachments';
 
 import './styles.scss';
-import Attachments from './Attachments';
 
 
 const initialOverviews = [
@@ -62,6 +62,8 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     const [units, setUnits] = useState([]);
     const [banks, setBanks] = useState([]);
     const [attachmentsSidebar, toggleAttachmentsSidebar] = useState(false);
+    const [filters, setFilters] = useState({});
+    const [tableLoading, toggleLoading] = useState(false);
 
     const openCreateMenu = Boolean(anchorEl);
 
@@ -105,6 +107,7 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
 
 
     const getContracts = (filters) => {
+        toggleLoading(true)
         return handleRequest(
             ContractsService.index(filters)
         ).then(res => {
@@ -123,6 +126,7 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 setOverviews(updatedOverviews)
             }
         })
+        .finally(() => toggleLoading(false))
     }
 
     const getContract = contract => {
@@ -228,6 +232,10 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
             onExportCSV={() => dt.current.exportCSV()}
             addIcon={addIcon}
             onExportPDF={exportPDF}
+            showTimeRange
+            handleFilter={({from, to}) =>  {
+                getContracts({ ...filters, "contract_created_after": from , "contract_created_before" : to })
+            }}
         >
             <ExtendedTable
                 headerTitle="Müqavilələrin siyahısı"
@@ -242,8 +250,9 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 getItem={getContract}
                 addItem={handleAdd}
                 onAttachmentClick={handleAttachmentClick}
-                showTimeRange
-                entityName="contract"
+                filters={filters}
+                setFilters={setFilters}
+                tableLoading={tableLoading}
             />
             <CreateContractModal
                 open={showCreateModal}

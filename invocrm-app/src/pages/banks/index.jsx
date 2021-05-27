@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import PageContent from '../../components/PageContainer';
 import { BanksService } from '../../services/BanksService';
 import ExtendedTable from '../../components/ExtendedTable';
@@ -22,7 +22,7 @@ const columns = [
 const Banks = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     let dt = useRef(null);
     const [banks, setBanks] = useState(null);
-
+    const [filters, setFilters] = useState({});
 
 
 
@@ -51,6 +51,8 @@ const Banks = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 headerTitle="Rekvizitləri siyahısı"
                 enqueueSnackbar={enqueueSnackbar}
                 getData={getBanks}
+                filters={filters}
+                setFilters={setFilters}
             />
 
 

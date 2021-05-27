@@ -34,16 +34,18 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
 
     const [overviews, setOverviews] = useState(initialOverviews);
     const [annexes, setAnnexes] = useState(null);
-
-
+    const [filters, setFilters] = useState({});
+    const [tableLoading, toggleLoading] = useState(false);
 
 
 
     const getAnnexes = (filters) => {
+        toggleLoading(true)
         return handleRequest(
             AnnexesService.index(filters)
         ).then(res => {
             if (res.body){
+                toggleLoading(false)
                 setAnnexes(res.body)
                 const withVat = res.body.filter(a => a.with_vat)
                 const withoutVat = res.body.filter(a =>  !a.with_vat)
@@ -67,6 +69,8 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
             overviewCards={overviews}
             sum={annexes ? annexes.length : 0}
             onExportCSV={() => dt.current.exportCSV()}
+            showTimeRange
+            handleFilter={({from, to}) =>  getAnnexes({ ...filters, "annex_created_after": from , "annex_created_before" : to })}
         >
              <ExtendedTable
                 headerTitle="Müqaviləyə əlavələrin siyahısı"
@@ -77,8 +81,9 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 actions={{edit: true, delete: true}}
                 enqueueSnackbar={enqueueSnackbar}
                 getData={getAnnexes}
-                showTimeRange
-                entityName="annex"
+                filters={filters}
+                setFilters={setFilters}
+                tableLoading={tableLoading}
             />
 
 

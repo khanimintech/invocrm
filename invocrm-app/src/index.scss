@@ -240,12 +240,16 @@ td {
     .p-multiselect {
         max-width: 100%;
     }
-    .range-wrapper {
-        display: flex;
-        span {
-            font-size: 16px;
-            color: #495057;
-            font-weight: normal;
-        }
+}
+
+
+.range-wrapper {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    span {
+        font-size: 16px;
+        color: #495057;
+        font-weight: normal;
     }
 }

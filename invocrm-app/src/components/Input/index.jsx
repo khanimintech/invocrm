@@ -13,7 +13,6 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const Input = ({field, form, meta, label, placeholder, required, defaultValue, select, options, 
     readOnly, type, date, size, onChange, multiline, rows, checkbox, autoComplete, renderOption,
-    onInputChange, hideTin
  }) => {
     const { name, value } = field;
     const { setFieldValue, submitCount } = form;
@@ -23,7 +22,6 @@ const Input = ({field, form, meta, label, placeholder, required, defaultValue, s
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardDatePicker
                     disableToolbar
-                    variant="inline"
                     format={"MM/dd/yyyy"}
                     margin="normal"
                     label={label}

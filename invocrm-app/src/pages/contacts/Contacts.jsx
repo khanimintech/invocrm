@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import PageContent from '../../components/PageContainer';
 import ExtendedTable from '../../components/ExtendedTable';
 import ContactPhoneIcon from '@material-ui/icons/ContactPhone';
@@ -21,7 +21,7 @@ const columns = [
 const Contacts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     let dt = useRef(null);
     const [contacts, setContacts] = useState(null);
-
+    const [filters, setFilters] = useState({});
 
 
     const getContacts = (filters) => {
@@ -49,6 +49,8 @@ const Contacts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 headerTitle="Əlaqələrin siyahısı"
                 enqueueSnackbar={enqueueSnackbar}
                 getData={getContacts}
+                filters={filters}
+                setFilters={setFilters}
             />
 
 

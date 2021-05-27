@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, {useState, useEffect, useRef } from 'react';
 import { Dropdown } from 'primereact/dropdown';
 import { Calendar } from 'primereact/calendar';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
@@ -27,16 +27,22 @@ const ExtendedTable = ({
     statuses, elRef, actions, headerTitle, onDelete,
     enqueueSnackbar, getData,
     getItem, addItem, onAttachmentClick, showTimeRange,
-    entityName
+    filters, setFilters ,
+    tableLoading
 }) => {
 
     const [globalFilter, setGlobalFilter] = useState();
     const [selectedColumns, setSelectedColumns] = useState(columns);
     const [showDeleteModal, toggleShowDeleteModal] = useState(false);
     const [selectedRow, setSelectedRow] = useState();
-    const [filters, setFilters] = useState({});
     const [loading, toggleLoading] = useState(false);
 
+
+
+
+    useEffect(() => {
+        toggleLoading(tableLoading)
+    }, [tableLoading])
 
     useEffect(() => {
         let initialFilters = {};
@@ -49,12 +55,12 @@ const ExtendedTable = ({
     }, [columns])
 
     useEffect(() => {
-        const delayDebounceFn = setTimeout(() => {
-            toggleLoading(true)
-            getData(filters)
-                .then(() => toggleLoading(false))
-        }, 1000)
-
+        let delayDebounceFn;
+            delayDebounceFn = setTimeout(() => {
+                toggleLoading(true)
+                getData(filters)
+                    .then(() => toggleLoading(false))
+            }, 1000)
         return () => clearTimeout(delayDebounceFn)
     }, [filters])
 
@@ -95,8 +101,6 @@ const ExtendedTable = ({
             columns={columns}
             onColumnToggle={onColumnToggle}
             setGlobalFilter={setGlobalFilter}
-            showTimeRange={showTimeRange}
-            handleFilter={({from, to}) =>  setFilters({ ...filters, [`${entityName}_created_after`]: from , [`${entityName}_created_before`] : to })}
         />
     );
 
@@ -287,7 +291,7 @@ const ExtendedTable = ({
                         Sil
                     </Button>
                     <Button onClick={closeDeleteModal} autoFocus>
-                        Ləğv et
+                        Bağla
                     </Button>
                 </DialogActions>
             </Dialog>
