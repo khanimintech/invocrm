@@ -66,6 +66,7 @@ class ContractListSerializer(serializers.ModelSerializer):
 
     def get_status(self, obj):
 
+        APPROVED = 1
         EXPIRED = 2
         EXPIRES = 3
 
@@ -76,7 +77,7 @@ class ContractListSerializer(serializers.ModelSerializer):
 
         two_week_for_expire = timezone.now() + timedelta(weeks=2)
 
-        if obj.status != EXPIRED and obj.due_date and obj.due_date < two_week_for_expire:
+        if (obj.status != EXPIRED or obj.status != APPROVED) and obj.due_date and obj.due_date < two_week_for_expire:
 
             return EXPIRES
 

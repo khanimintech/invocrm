@@ -46,9 +46,9 @@ class ContractFilterSet(django_filters.rest_framework.FilterSet):
             two_week_for_expire = timezone.now() + timedelta(weeks=2)
 
             if value == EXPIRES:
-                queryset = queryset.filter(due_date__lt=two_week_for_expire).exclude(status=EXPIRED)
+                queryset = queryset.filter(due_date__lt=two_week_for_expire).exclude(Q(status=EXPIRED) | Q(status=APPROVED))
             else:
-                queryset = queryset.filter(status=value)
+                queryset = queryset.filter(status=value).exclude(due_date__lt=two_week_for_expire)
 
         return queryset
 
