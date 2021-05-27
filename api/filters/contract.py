@@ -59,6 +59,18 @@ class ContractFilterSet(django_filters.rest_framework.FilterSet):
         ]
 
 
+class StatFilterSet(django_filters.rest_framework.FilterSet):
+
+    contract_created = django_filters.DateFromToRangeFilter('created')
+
+    class Meta:
+
+        model = BaseContract
+        fields = [
+             'contract_created'
+        ]
+
+
 class ContactFilterSet(django_filters.rest_framework.FilterSet):
 
     customer = django_filters.CharFilter(method='filter_customer')

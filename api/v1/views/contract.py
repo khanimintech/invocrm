@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from api.filters.contract import ContractFilterSet, BankFilterSet, ContactFilterSet
+from api.filters.contract import ContractFilterSet, BankFilterSet, ContactFilterSet, StatFilterSet
 from api.main_models.contract import BaseContract, BankAccount, Contact
 from api.models import Person
 from api.v1.serializers.contract import ContractListSerializer, TradeCreateSerializer, ServiceCreateSerializer, \
@@ -174,13 +174,18 @@ class StubAPI(APIView):
 
 def filter_status_count(qs, status):
 
+    APPROVED = 1
     EXPIRED = 2
     EXPIRES = 3
 
     two_week_for_expire = timezone.now() + timedelta(weeks=2)
 
-    if status == EXPIRES and status != EXPIRED:
+    if status == EXPIRES and (status != EXPIRED or status != APPROVED):
         return qs.filter(due_date__lt=two_week_for_expire).count()
+
+    if status in [EXPIRED, APPROVED]:
+
+        return qs.filter(status=status).count()
 
     return qs.filter(status=status).exclude(due_date__lt=two_week_for_expire).count()
 
@@ -242,21 +247,30 @@ class ContractViewSet(ModelViewSet):
         return Response(ContractListSerializer(instance).data)
 
 
-class ContractStatusStatAPIView(APIView):
+class ContractStatusStatAPIView(ListAPIView):
 
-    def get(self, request):
+    queryset = BaseContract.objects.all()
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = StatFilterSet
+
+    def get_queryset(self):
+        queryset = self.queryset
+        return queryset.filter(plant_name=self.request.user.plant_name)
+
+    def list(self, request, *args, **kwargs):
+
+        qs = self.filter_queryset(self.get_queryset())
 
         EXPIRES = 3
 
-        qs = BaseContract.objects.filter(plant_name=request.user.plant_name)
-
         response = {
-                'all_count': qs.count(),
-                'in_process_count': filter_status_count(qs, BaseContract.Status.IN_PROCESS),
-                'approved_count': filter_status_count(qs, BaseContract.Status.APPROVED),
-                'expired_count': filter_status_count(qs, BaseContract.Status.EXPIRED),
-                'expires_in_2_weeks': filter_status_count(qs, EXPIRES)
-            }
+            'all_count': qs.count(),
+            'in_process_count': filter_status_count(qs, BaseContract.Status.IN_PROCESS),
+            'approved_count': filter_status_count(qs, BaseContract.Status.APPROVED),
+            'expired_count': filter_status_count(qs, BaseContract.Status.EXPIRED),
+            'expires_in_2_weeks': filter_status_count(qs, EXPIRES)
+        }
+
         return Response(response)
 
 

@@ -668,12 +668,12 @@ class TestContractStatusStatAPIView:
         TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager,
                                       due_date=timezone.now(),
                                       type=BaseContract.Type.TRADE, contract_no='12',
-                                      status=BaseContract.Status.APPROVED)
+                                      status=BaseContract.Status.IN_PROCESS)
 
         TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager,
                                       due_date=timezone.now(),
                                       type=BaseContract.Type.TRADE, contract_no='12',
-                                      status=BaseContract.Status.APPROVED)
+                                      status=BaseContract.Status.IN_PROCESS)
 
         TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager,
                                       due_date=three_weeks_for_expire,
