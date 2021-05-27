@@ -605,7 +605,6 @@ class TestContractFilterSet:
         response = apiclient.get(reverse('api:v1:contracts-list') + f'?status={BaseContract.Status.APPROVED}')
 
         assert response.status_code == 200
-        print(response.json())
         assert len(response.json()) == 1
         assert response.json()[0]['status'] == BaseContract.Status.APPROVED
 
