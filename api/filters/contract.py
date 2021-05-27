@@ -42,7 +42,7 @@ class ContractFilterSet(django_filters.rest_framework.FilterSet):
 
         IN_PROCESS, APPROVED, EXPIRED, EXPIRES= range(0, 4)
 
-        if value:
+        if value is not None:
             two_week_for_expire = timezone.now() + timedelta(weeks=2)
 
             if value == EXPIRES:
