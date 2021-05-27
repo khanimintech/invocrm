@@ -212,7 +212,7 @@ const ExtendedTable = ({
 
 
     const handleFilterInputChange = (filterName, filterValue) => {
-        setFilters({ ...filters, [filterName]: filterValue || "" })
+        setFilters({ ...filters, [filterName]: filterValue || filterValue === 0 ? filterValue :  "" })
     }
 
     const columnComponents = selectedColumns.map(col => {

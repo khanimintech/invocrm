@@ -51,7 +51,7 @@ export const createFilterUrl = (url, filters) => {
   let filterUrl = `${url}?`
   if (filters)
       Object.keys(filters).map(field => {
-          if (filters[field])
+          if (filters[field] || filters[field] === 0)
             filterUrl +=`${field}=${filters[field]}&`
       })
   return filterUrl;
