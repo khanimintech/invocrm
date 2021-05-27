@@ -19,8 +19,6 @@ from api.v1.serializers.contract import ContractListSerializer, TradeCreateSeria
     ServiceGetSerializer, DistributionGetSerializer, AgentGetSerializer, POGetSerializer, RentGetSerializer, \
     OneTimeGetSerializer, InternationalGetSerializer, CustomerGetSerializer
 
-# from django_filters.rest_framework import DjangoFilterBackend
-
 contract_create_serializer = {
     BaseContract.Type.TRADE: TradeCreateSerializer,
     BaseContract.Type.SERVICE: ServiceCreateSerializer,

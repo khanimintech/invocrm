@@ -33,5 +33,5 @@ class LogoutAPIView(APIView):
     def post(self, request, *args, **kwargs):
 
         logout(request)
-        response = Response(status=status.HTTP_401_UNAUTHORIZED)
+        response = Response(status=status.HTTP_204_NO_CONTENT)
         return response
