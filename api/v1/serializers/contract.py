@@ -107,6 +107,14 @@ class PersonSerializer(serializers.ModelSerializer):
         fields = ['first_name', 'last_name', 'fathers_name', 'tin']
 
 
+class PersonUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Person
+        fields = '__all__'
+
+
 class ContactSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -207,8 +215,8 @@ class TradeCreateSerializer(ContractCreateBaseSerializer):
 class TradeGetSerializer(serializers.ModelSerializer):
 
     company = EntitySerializer()
-    executor = PersonSerializer()
-    responsible_person = PersonSerializer()
+    executor = PersonUpdateSerializer()
+    responsible_person = PersonUpdateSerializer()
     contract_no = serializers.CharField()
     bank = serializers.SerializerMethodField()
     contact = serializers.SerializerMethodField()
@@ -248,6 +256,46 @@ class TradeGetSerializer(serializers.ModelSerializer):
         if obj.executor and obj.executor.bankaccounts:
 
             return BankAccountSerializer(obj.executor.b_acc_list.last()).data
+
+    def update(self, instance, validated_data):
+
+        def update_if_not_none(cls, id, data):
+
+            if data:
+                return cls.objects.filter(id=id).update(**data)
+
+        update_if_not_none(Company, instance.company.id, validated_data.pop('company', None))
+        update_if_not_none(Person, instance.executor.id, validated_data.pop('executor', None))
+        update_if_not_none(Bank, instance.company.bank_acc_list.last().bank.id,validated_data.pop('bank', None))
+        update_if_not_none(BankAccount, instance.company.bank_acc_list.last().bank.id, validated_data.pop('bank_account', None))
+
+        responsible_person_data = validated_data.pop('responsible_person', None)
+        contact_data = validated_data.pop('contact', None)
+
+        if responsible_person_data is not None and instance.responsible_person is not None:
+            print('burda')
+            update_if_not_none(Person, instance.responsible_person.id,  responsible_person_data)
+
+            if contact_data is not None and instance.responsible_person.contact is not None:
+                update_if_not_none(Contact, instance.esponsible_person.contact.id, contact_data)
+
+            if contact_data is not None and not instance.responsible_person.contact:
+
+                con = Contact.objects.create(**contact_data)
+                instance.responsible_person.contact = con
+                instance.responsible_person.save()
+
+        if responsible_person_data is not None and not instance.responsible_person:
+
+            rp = Person.objects.create(**responsible_person_data)
+            if contact_data is not None:
+                con = Contact.objects.create(**contact_data)
+                rp.contact = con
+                rp.save()
+
+            validated_data['responsible_person'] = rp
+
+        return super().update(instance, validated_data)
 
 
 class ServiceCreateSerializer(ContractCreateBaseSerializer):

@@ -223,7 +223,7 @@ class ContractViewSet(ModelViewSet):
 
             return contract_create_serializer[contract_type]
 
-        if self.action == 'retrieve':
+        if self.action in ('retrieve', 'update'):
 
             contract_type = self.get_object().type
 

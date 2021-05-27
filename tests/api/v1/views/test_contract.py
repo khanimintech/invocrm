@@ -93,6 +93,88 @@ class TestContractViewSet:
 
         assert response.status_code == 200, response.json()
 
+    def test_contract_update(self, apiclient, admin_user, sales_manager):
+
+        t = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                          type=BaseContract.Type.TRADE, contract_no='123')
+
+        annex = BaseAnnex.objects.create(contract=t, annex_date=timezone.now(),
+                                         note='122', payment_terms='122', delivery_terms='111', acquisition_terms='133',
+                                         seller=sales_manager, sales_manager=sales_manager, annex_no=1)
+
+        annex2 = BaseAnnex.objects.create(contract=t, annex_date=timezone.now(),
+                                          note='1', payment_terms='1', delivery_terms='1', acquisition_terms='1',
+                                          seller=sales_manager, sales_manager=sales_manager, annex_no=2)
+
+        company = Company.objects.create(type=Company.MMC, name='company_name',
+                                         address='company_address', tin='12345')
+
+        t = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                          type=BaseContract.Type.TRADE, contract_no='123', company=company, executor=sales_manager)
+
+        bank = Bank.objects.create(name='bank_name', code='123', tin='1234')
+
+        b_acc = BankAccount.objects.create(account='123', bank=bank, address='address', city='city',
+                                           swift_no='swift_123', correspondent_account='cor_123', company_owner=company)
+
+        d = AgentAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                  type=BaseContract.Type.TRADE, contract_no='123', company=company, territory='asdf')
+
+        TradeAgreement.objects.filter(id=t.id).update(contract_no='eeee')
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+        response = apiclient.put(reverse('api:v1:contracts-detail', args=[t.id]), data={
+
+                                      'contract_no': 123,
+                                      'type': BaseContract.Type.TRADE,
+                                      'sales_manager': sales_manager.id,
+                                      'due_date': timezone.now(),
+                                      'company': {
+                                          'name': 'My_company',
+                                          'type': Company.MMC,
+                                          'tin': '1234567890',
+                                          'address': 'My_address'
+                                      },
+                                      'executor': {
+                                          'type': Person.TYPE.SELLER,
+                                          'first_name': 'First',
+                                          'last_name': 'Last',
+                                          'fathers_name': 'Father',
+                                      },
+                                      'responsible_person': {
+                                          'type': Person.TYPE.CONTACT,
+                                          'first_name': 'First',
+                                          'last_name': 'Last',
+                                          'fathers_name': 'Father',
+                                      },
+                                      'contact': {
+                                          'mobile': '1234567890',
+                                          'address': 'My_address',
+                                          'work_email': 'My_work_email@email.fake',
+                                          'personal_email': 'My_personal_email@email.fake'
+
+                                      },
+                                      'bank': {
+                                          'name': 'My_bank',
+                                          'code': '1234567890',
+                                          'tin': '1234567890'
+                                      },
+                                      'bank_account': {
+                                          'default': True,
+                                          'account': 'My_account',
+                                          'swift_no': '1234567890',
+                                          'correspondent_account': 'My_correspondent_account',
+                                          'city': 'city',
+                                          'address': 'address'
+                                      }
+
+                                  },
+                                  format='json'
+                                  )
+
+        assert response.status_code == 200, response.json()
+
     def test_contract_destroy(self, apiclient, admin_user, sales_manager):
 
         t = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager,
