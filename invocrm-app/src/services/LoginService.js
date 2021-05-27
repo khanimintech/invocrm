@@ -12,7 +12,7 @@ export const LoginService = {
     ),
     logout: () => (
         makeAsyncCall({
-            url: `${BACKEND_URL}logout/`,
+            url: `${BACKEND_URL}logout`,
             method: 'POST',
         })
     )

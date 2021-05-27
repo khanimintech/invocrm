@@ -3,7 +3,7 @@ import { format, parseISO } from 'date-fns'
 
 function processResponse(response) {
   const statusCode = response.status;
-  const data = response.json();
+  const data = statusCode === 204 ? response : response.json();
   return Promise.all([statusCode, data]).then(res => {
     const statusCode = res[0];
     const body = res[1] || undefined;
