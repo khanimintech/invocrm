@@ -64,6 +64,7 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     const [attachmentsSidebar, toggleAttachmentsSidebar] = useState(false);
     const [filters, setFilters] = useState({});
     const [tableLoading, toggleLoading] = useState(false);
+    const [allCount, setAllCount] = useState(0);
 
     const openCreateMenu = Boolean(anchorEl);
 
@@ -71,9 +72,13 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
         getSalesManagers()
         getSellers()
         getUnits();
-        getBanks()
+        getBanks();
     }, [])
 
+
+    useEffect(() => {
+        getOverviews();
+    }, [filters.contract_created_after, filters.contract_created_before])
 
     const getBanks = () => {
         handleRequest(
@@ -113,17 +118,6 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
         ).then(res => {
             if (res.body){
                 setContracts(res.body);
-                const ended = res.body.filter(c => c.status === 2)
-                const inProcess = res.body.filter(c => c.status === 0)
-                const approved = res.body.filter(c => c.status === 1)
-                const twoWeeks = res.body.filter(c => c.status === 3)
-                const updatedOverviews = overviews.map( o => {
-                    if (o.id === 0) return { ...o, count: inProcess? inProcess.length : 0}
-                    if (o.id === 1) return { ...o, count: approved? approved.length : 0}
-                    if (o.id === 2) return { ...o, count: ended? ended.length : 0}
-                    if (o.id === 3) return { ...o, count: twoWeeks? twoWeeks.length : 0}
-                })
-                setOverviews(updatedOverviews)
             }
         })
         .finally(() => toggleLoading(false))
@@ -138,6 +132,22 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
         })
     }
 
+    const getOverviews = () => {
+        handleRequest(
+            ContractsService.getStateCounts({ contract_created_after: filters.contract_created_after, contract_created_before: filters.contract_created_before})
+        ).then(res => {
+            if (res.body) {
+                const updatedOverviews = overviews.map( o => {
+                    if (o.id === 0) return { ...o, count: res.body.in_process_count}
+                    if (o.id === 1) return { ...o, count: res.body.approved_count}
+                    if (o.id === 2) return { ...o, count: res.body.expired_count}
+                    if (o.id === 3) return { ...o, count: res.body.expires_in_2_weeks}
+                })
+                setOverviews(updatedOverviews)
+                setAllCount(res.body.all_count)
+            }
+        })
+    }
 
     const deleteContract = (contract) =>  handleRequest(ContractsService.remove(contract.id));
 
@@ -228,13 +238,13 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
             title="Müqavilələr"
             titleIcon={<DescriptionIcon />}
             overviewCards={overviews}
-            sum={contracts ? contracts.length : 0}
+            sum={allCount}
             onExportCSV={() => dt.current.exportCSV()}
             addIcon={addIcon}
             onExportPDF={exportPDF}
             showTimeRange
             handleFilter={({from, to}) =>  {
-                getContracts({ ...filters, "contract_created_after": from , "contract_created_before" : to })
+                setFilters({ ...filters, "contract_created_after": from , "contract_created_before" : to })
             }}
         >
             <ExtendedTable

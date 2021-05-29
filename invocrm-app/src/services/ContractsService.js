@@ -48,6 +48,12 @@ const createAnnex = values =>
         body: JSON.stringify(values)
     });
 
+const getStateCounts = filters =>
+    makeAsyncCall({
+        url: createFilterUrl(`${BACKEND_URL}status-count/`, filters),
+        method: 'GET',
+    });
+
 export const ContractsService = {
     index: (filters) => index(filters),
     getItem: id => getItem(id),
@@ -55,5 +61,6 @@ export const ContractsService = {
     getSalesManagers: () => getSalesManagers(),
     getSellers: () => getSellers(),
     save: values => save(values),
-    createAnnex: vals => createAnnex(vals)
+    createAnnex: vals => createAnnex(vals),
+    getStateCounts: filters => getStateCounts(filters)
 }

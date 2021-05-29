@@ -6,58 +6,59 @@ import { LoginService } from '../../services/LoginService';
 import { withRouter } from 'react-router-dom';
 
 
-const Login = ({ setUser, history , handleRequest}) => {
+const Login = ({ setUser, history, handleRequest, enqueueSnackbar }) => {
 
 
     const handleSubmit = (values, { setErrors }) => {
         handleRequest(
-            LoginService.login(values)
+            LoginService.login(values),
+            true,
         )
-        .then(res => {
-            const user = res.body.user;
-            setUser(user);
-            localStorage.setItem("user", JSON.stringify(user));
-            history.push("/contracts")
-        })
-        .catch(err => {
-            if (err.body.email || err.body.password) setErrors({"email_or_password": true});
-        })
+            .then(res => {
+                const user = res.body.user;
+                setUser(user);
+                localStorage.setItem("user", JSON.stringify(user));
+                history.push("/contracts")
+            })
+            .catch(err => {
+                enqueueSnackbar("Xəta baş verdi!", { variant: "error", anchorOrigin: { vertical: 'top', horizontal: 'right', autoHideDuration: 3454354354353534535 } });
+                if (err.statusCode < 500 && Object.keys(err.body)) {
+                    let errors = {};
+                    Object.keys(err.body).forEach(errKey => {
+                        errors = { ...errors, [errKey]: err.body[errKey] }
+                    })
+                    setErrors(errors)
+                }
+                else {
+                    enqueueSnackbar("Xəta baş verdi!", { variant: "error", anchorOrigin: { vertical: 'top', horizontal: 'right' } });
+                }
+            })
     }
 
-    
+
     return (
         <div class="login-wrapper">
             <div id="formContent">
-            <h2 class="active"> İnvoCRM </h2>
-            <Formik
-                initialValues={{ email: '', password: '' }}
-                validate={values => {
-                    const errors = {};
-                    if (!values.email) {
-                    errors.email = 'Bu sahə mütləqdir';
-                    }
-                    return errors;
-                }}
-                onSubmit={handleSubmit}>
-                {({  errors }) => (
-                    <Form>
-                        <Field type="email" name="email" id="login"  type="text" placeholder="E-mail" />
-                        <Field type="password" name="password"   id="password" placeholder="Şifrə" />
-                        <ErrorMessage name="password" component="div" />
-                        <button type="submit" >
-                            Daxil ol
+                <h2 class="active"> İnvoCRM </h2>
+                <Formik
+                    initialValues={{ email: '', password: '' }}
+                    onSubmit={handleSubmit}>
+                    {({ errors }) => (
+                        <Form>
+                            <Field type="email" name="email" id="login" type="text" placeholder="E-mail" />
+                            <p className="err-text">{errors.email ? errors.email : ""}</p>
+                            <Field type="password" name="password" id="password" placeholder="Şifrə" />
+                            <p className="err-text">{errors.password ? errors.password : ""}</p>
+                            <button type="submit" >
+                                Daxil ol
                         </button>
-                        {
-                                errors.email_or_password ? (
-                                    <p style={{fontSize: "14px", color: "#d32f2f"}} >
-                                        Login ve ya şifrə yalnışdır.
-                                </p>
-                                ): null
-                            }
-                    </Form>
-                )}
+                            <p className="err-text" >
+                                {errors.non_field_errors ? errors.non_field_errors.join("\r\n") : ""}
+                            </p>
+                        </Form>
+                    )}
                 </Formik>
-        </div>
+            </div>
         </div>
     )
 }
