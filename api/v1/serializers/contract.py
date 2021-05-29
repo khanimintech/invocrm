@@ -70,7 +70,7 @@ class ContractListSerializer(serializers.ModelSerializer):
         EXPIRED = 2
         EXPIRES = 3
 
-        if obj.due_date is not None and obj.due_date < timezone.now():
+        if obj.due_date is not None and obj.due_date < timezone.now() and obj.status != APPROVED:
 
             obj.status = EXPIRED
             obj.save()

@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.db.models import Q
 from django.http import JsonResponse
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
@@ -172,20 +173,20 @@ class StubAPI(APIView):
 
 def filter_status_count(qs, status):
 
+    IN_PROCESS = 0
     APPROVED = 1
     EXPIRED = 2
     EXPIRES = 3
 
     two_week_for_expire = timezone.now() + timedelta(weeks=2)
 
-    if status == EXPIRES and (status != EXPIRED or status != APPROVED):
-        return qs.filter(due_date__lt=two_week_for_expire).count()
+    if status == EXPIRES:
+        return qs.filter(due_date__lt=two_week_for_expire).exclude(Q(status=APPROVED) | Q(status=EXPIRED)).count()
 
-    if status in [EXPIRED, APPROVED]:
+    if status == IN_PROCESS:
+        return qs.filter(status=IN_PROCESS).exclude(due_date__lt=two_week_for_expire).count()
 
-        return qs.filter(status=status).count()
-
-    return qs.filter(status=status).exclude(due_date__lt=two_week_for_expire).count()
+    return qs.filter(status=status).count()
 
 
 class ContractViewSet(ModelViewSet):
