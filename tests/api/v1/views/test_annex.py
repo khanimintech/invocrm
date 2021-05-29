@@ -31,23 +31,23 @@ class TestAnnexViewSet:
         assert response.status_code == 200
         payload = response.json()
 
-        assert payload[0]['id'] == annex.id
-        assert payload[0]['company_name'] == 'N/A'
-        assert payload[0]['request_no'] == '1223'
-        assert payload[0]['contract_no'] is None
-        assert payload[0]['annex_no'] == 1
-        assert payload[0]['sales_manager'] == sales_manager.id
-        assert payload[0]['payment_terms'] == '122'
-        assert payload[0]['contract_type'] == annex.contract.type
-
-        assert payload[1]['id'] == annex2.id
+        assert payload[1]['id'] == annex.id
         assert payload[1]['company_name'] == 'N/A'
-        assert payload[1]['request_no'] == '123'
+        assert payload[1]['request_no'] == '1223'
         assert payload[1]['contract_no'] is None
-        assert payload[1]['annex_no'] == 2
+        assert payload[1]['annex_no'] == 1
         assert payload[1]['sales_manager'] == sales_manager.id
-        assert payload[1]['payment_terms'] == '1'
-        assert payload[1]['contract_type'] == annex2.contract.type
+        assert payload[1]['payment_terms'] == '122'
+        assert payload[1]['contract_type'] == annex.contract.type
+
+        assert payload[0]['id'] == annex2.id
+        assert payload[0]['company_name'] == 'N/A'
+        assert payload[0]['request_no'] == '123'
+        assert payload[0]['contract_no'] is None
+        assert payload[0]['annex_no'] == 2
+        assert payload[0]['sales_manager'] == sales_manager.id
+        assert payload[0]['payment_terms'] == '1'
+        assert payload[0]['contract_type'] == annex2.contract.type
 
     def test_annex_create(self, apiclient, admin_user, sales_manager):
 
