@@ -210,4 +210,33 @@ class TestUnitOfMeasureAPIView:
         assert len(response.json()) == 2
 
 
+class TestAnnexStatusStatAPIView:
+
+    def test_annex_list_vat_status_count(self, apiclient, admin_user, sales_manager):
+
+        contract = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager,
+                                                 due_date=timezone.now(),type=BaseContract.Type.TRADE)
+
+        annex = BaseAnnex.objects.create(contract=contract, request_no='1223', annex_date=timezone.now(),
+                                 note='122', payment_terms='122', delivery_terms='111', acquisition_terms='133',
+                                 seller=sales_manager, sales_manager=sales_manager, annex_no=1)
+
+        annex2 = BaseAnnex.objects.create(contract=contract, request_no='123', annex_date=timezone.now(),
+                                          note='1', payment_terms='1', delivery_terms='1', acquisition_terms='1',
+                                          seller=sales_manager, sales_manager=sales_manager, annex_no=2, with_vat=True)
+
+        unit = UnitOfMeasure.objects.create(name='w')
+        ProductInvoiceItem.objects.create(name='ww', annex=annex, unit=unit, quantity=1, price=1, total=2)
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+        response = apiclient.get(reverse('api:v1:annex-status-count'))
+
+        assert response.status_code == 200
+        assert response.json()['all_count'] == 2
+        assert response.json()['with_vat'] == 1
+        assert response.json()['vat_free'] == 1
+
+
 

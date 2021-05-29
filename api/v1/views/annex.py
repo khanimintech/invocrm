@@ -1,5 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import ListAPIView
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from api.filters.annex import AnnexFilterSet
@@ -15,6 +16,11 @@ class AnnexViewSet(ModelViewSet):
     serializer_class = AnnexSerializer
     filter_backends = (DjangoFilterBackend, )
     filterset_class = AnnexFilterSet
+
+    def get_queryset(self):
+
+        queryset = self.queryset
+        return queryset.filter(contract__plant_name=self.request.user.plant_name)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -35,6 +41,30 @@ class AnnexViewSet(ModelViewSet):
             return AnnexCreateSerializer
 
         return super().get_serializer_class()
+
+
+class AnnexStatusStatAPIView(ListAPIView):
+
+    queryset = BaseAnnex.objects.all()
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = AnnexFilterSet
+
+    def get_queryset(self):
+        queryset = self.queryset
+        return queryset.filter(contract__plant_name=self.request.user.plant_name)
+
+    def list(self, request, *args, **kwargs):
+
+        qs = self.filter_queryset(self.get_queryset())
+
+        response = {
+            'all_count': qs.count(),
+            'with_vat': qs.filter(with_vat=True).count(),
+            'vat_free': qs.filter(with_vat=False).count(),
+
+        }
+
+        return Response(response)
 
 
 class UnitOfMeasureAPIView(ListAPIView):
