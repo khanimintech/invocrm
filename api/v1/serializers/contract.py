@@ -750,6 +750,27 @@ class OneTimeGetSerializer(ContractCreateBaseSerializer):
 
         return OneTimeAnnexGetSerializer(obj.annex_list.last()).data
 
+    def update(self, instance, validated_data):
+
+        def update_if_not_none(cls, id, data):
+
+            if data:
+                return cls.objects.filter(id=id).update(**data)
+
+        update_if_not_none(Company, instance.company.id, validated_data.pop('company', None))
+        update_if_not_none(Person, instance.executor.id, validated_data.pop('executor', None))
+
+        update_if_not_none(Person, instance.executor.id, validated_data.get('annex').pop('seller'))
+
+        annex = validated_data.pop('annex')
+        products = annex.pop('products')
+
+        update_if_not_none(BaseAnnex, instance.executor.id, annex)
+
+        [ProductInvoiceItem.objects.filter(id=p.pop('id')).update(agreement=instance, **p) for p in products]
+
+        return super().update(instance, validated_data)
+
 
 class InternationalCreateSerializer(ContractCreateBaseSerializer):
 
@@ -905,6 +926,45 @@ class CustomerGetSerializer(serializers.ModelSerializer):
 
             return BankAccountSerializer(obj.executor.b_acc_list.last()).data
 
+    def update(self, instance, validated_data):
+
+        def update_if_not_none(cls, id, data):
+
+            if data:
+                return cls.objects.filter(id=id).update(**data)
+
+        update_if_not_none(Company, instance.company.id, validated_data.pop('company', None))
+        update_if_not_none(Person, instance.executor.id, validated_data.pop('executor', None))
+        update_if_not_none(Bank, instance.company.bank_acc_list.last().bank.id,validated_data.pop('bank', None))
+        update_if_not_none(BankAccount, instance.company.bank_acc_list.last().bank.id, validated_data.pop('bank_account', None))
+
+        responsible_person_data = validated_data.pop('responsible_person', None)
+        contact_data = validated_data.pop('contact', None)
+
+        if responsible_person_data is not None and instance.responsible_person is not None:
+            update_if_not_none(Person, instance.responsible_person.id,  responsible_person_data)
+
+            if contact_data is not None and instance.responsible_person.contact is not None:
+                update_if_not_none(Contact, instance.esponsible_person.contact.id, contact_data)
+
+            if contact_data is not None and not instance.responsible_person.contact:
+
+                con = Contact.objects.create(**contact_data)
+                instance.responsible_person.contact = con
+                instance.responsible_person.save()
+
+        if responsible_person_data is not None and not instance.responsible_person:
+
+            rp = Person.objects.create(**responsible_person_data)
+            if contact_data is not None:
+                con = Contact.objects.create(**contact_data)
+                rp.contact = con
+                rp.save()
+
+            validated_data['responsible_person'] = rp
+
+        return super().update(instance, validated_data)
+
 
 class POCreateSerializer(ContractCreateBaseSerializer):
 
@@ -928,12 +988,21 @@ class POGetSerializer(ContractCreateBaseSerializer):
         fields = [
             'po_number', 'sales_manager', 'created', 'due_date', 'company', 'type', 'supplements'
         ]
-    #
-    # def get_supplement(self, obj):
-    #
-    #     if obj.supplements:
-    #
-    #         return SupplementsSerializer(obj.supplements.last()).data
+
+    def update(self, instance, validated_data):
+
+        def update_if_not_none(cls, id, data):
+
+            if data:
+                return cls.objects.filter(id=id).update(**data)
+
+        update_if_not_none(Company, instance.company.id, validated_data.pop('company', None))
+
+        supplements = validated_data.pop('supplements')
+
+        [POAgreementSupplements.objects.filter(id=s.pop('id')).update(agreement=instance, **s) for s in supplements]
+
+        return super().update(instance, validated_data)
 
 
 class BankListSerializer(serializers.ModelSerializer):

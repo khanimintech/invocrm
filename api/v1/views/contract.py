@@ -125,6 +125,15 @@ class BankViewSet(ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_class = BankFilterSet
 
+    def get_queryset(self):
+
+        queryset = self.queryset
+
+        return queryset.filter(
+            Q(company_owner__basecontract__plant_name=self.request.user.plant_name) |
+            Q(personal_owner__agreement__plant_name=self.request.user.plant_name)
+        )
+
 
 class ContactViewSet(ModelViewSet):
 
@@ -132,6 +141,12 @@ class ContactViewSet(ModelViewSet):
     serializer_class = ContactListSerializer
     filter_backends = (DjangoFilterBackend,)
     filterset_class = ContactFilterSet
+
+    def get_queryset(self):
+
+        queryset = self.queryset
+
+        return queryset.filter(person__agreement__plant_name=self.request.user.plant_name)
 
 
 class SalesMangerApiView(ListAPIView):
