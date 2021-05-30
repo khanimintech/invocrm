@@ -242,7 +242,7 @@ class TradeGetSerializer(serializers.ModelSerializer):
 
             return BankAccountSerializer(obj.company.bank_acc_list.last()).data
 
-        if obj.executor and obj.executor.bankaccounts:
+        if obj.executor and obj.executor.b_acc_list:
 
             return BankAccountSerializer(obj.executor.b_acc_list.last()).data
 
@@ -339,7 +339,7 @@ class ServiceGetSerializer(serializers.ModelSerializer):
 
             return BankAccountSerializer(obj.company.bank_acc_list.last()).data
 
-        if obj.executor and obj.executor.bankaccounts:
+        if obj.executor and obj.executor.b_acc_list:
 
             return BankAccountSerializer(obj.executor.b_acc_list.last()).data
 
@@ -438,7 +438,7 @@ class DistributionGetSerializer(serializers.ModelSerializer):
 
             return BankAccountSerializer(obj.company.bank_acc_list.last()).data
 
-        if obj.executor and obj.executor.bankaccounts:
+        if obj.executor and obj.executor.b_acc_list:
 
             return BankAccountSerializer(obj.executor.b_acc_list.last()).data
 
@@ -533,7 +533,7 @@ class AgentGetSerializer(serializers.ModelSerializer):
 
             return BankAccountSerializer(obj.company.bank_acc_list.last()).data
 
-        if obj.executor and obj.executor.bankaccounts:
+        if obj.executor and obj.executor.b_acc_list:
 
             return BankAccountSerializer(obj.executor.b_acc_list.last()).data
 
@@ -628,7 +628,7 @@ class RentGetSerializer(serializers.ModelSerializer):
 
             return BankAccountSerializer(obj.company.bank_acc_list.last()).data
 
-        if obj.executor and obj.executor.bankaccounts:
+        if obj.executor and obj.executor.b_acc_list:
 
             return BankAccountSerializer(obj.executor.b_acc_list.last()).data
 
@@ -805,7 +805,7 @@ class InternationalGetSerializer(serializers.ModelSerializer):
 
             return BankAccountSerializer(obj.company.bank_acc_list.last()).data
 
-        if obj.executor and obj.executor.bankaccounts:
+        if obj.executor and obj.executor.b_acc_list:
 
             return BankAccountSerializer(obj.executor.b_acc_list.last()).data
 
@@ -901,7 +901,7 @@ class CustomerGetSerializer(serializers.ModelSerializer):
 
             return BankAccountSerializer(obj.company.bank_acc_list.last()).data
 
-        if obj.executor and obj.executor.bankaccounts:
+        if obj.executor and obj.executor.b_acc_list:
 
             return BankAccountSerializer(obj.executor.b_acc_list.last()).data
 
