@@ -963,7 +963,7 @@ class BankListSerializer(serializers.ModelSerializer):
 
 class ContactListSerializer(serializers.ModelSerializer):
 
-    customer = serializers.CharField(source='person.agreement.company.name')
+    customer = serializers.SerializerMethodField()
     responsible_person = serializers.SerializerMethodField()
 
     class Meta:
@@ -975,6 +975,12 @@ class ContactListSerializer(serializers.ModelSerializer):
 
         if obj.person:
             return obj.person.fullname
+
+    def get_customer(self, obj):
+
+        if obj.person.agreement and obj.person.agreement.company:
+
+            return obj.person.agreement.company.name
 
 
 class SalesManagerSerializer(serializers.ModelSerializer):
