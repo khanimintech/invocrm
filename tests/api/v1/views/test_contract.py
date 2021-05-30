@@ -508,16 +508,21 @@ class TestContactViewSet:
 
 class TestBankViewSet:
 
-    def test_bank_list_ok(self, apiclient, admin_user):
+    def test_bank_list_ok(self, apiclient, admin_user, sales_manager):
+
+        company = Company.objects.create(type=Company.MMC, name='company_name',
+                                         address='company_address', tin='12345')
+        contract = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager,
+                                                 due_date=timezone.now(), type=BaseContract.Type.TRADE, company=company)
 
         bank = Bank.objects.create(name='bank_name', code='123', tin='1234')
         bank1 = Bank.objects.create(name='bank_name1', code='321', tin='4321')
 
         BankAccount.objects.create(account='123', bank=bank, address='address', city='city',
-                                   swift_no='swift_123', correspondent_account='cor_123')
+                                   swift_no='swift_123', correspondent_account='cor_123', company_owner=company)
 
         BankAccount.objects.create(account='1234', bank=bank1, address='address1', city='city1',
-                                   swift_no='swift_1234', correspondent_account='cor_1234')
+                                   swift_no='swift_1234', correspondent_account='cor_1234', company_owner=company)
 
         admin_user.plant_name = 'plant'
         admin_user.save()
@@ -528,21 +533,21 @@ class TestBankViewSet:
         payload = response.json()
         assert len(payload) == 2
 
-        assert payload[0]['name'] == 'bank_name'
-        assert payload[0]['code'] == '123'
-        assert payload[0]['tin'] == '1234'
-        assert payload[0]['address'] == 'address'
-        assert payload[0]['city'] == 'city'
-        assert payload[0]['swift_no'] == 'swift_123'
-        assert payload[0]['correspondent_account'] == 'cor_123'
+        assert payload[1]['name'] == 'bank_name'
+        assert payload[1]['code'] == '123'
+        assert payload[1]['tin'] == '1234'
+        assert payload[1]['address'] == 'address'
+        assert payload[1]['city'] == 'city'
+        assert payload[1]['swift_no'] == 'swift_123'
+        assert payload[1]['correspondent_account'] == 'cor_123'
 
-        assert payload[1]['name'] == 'bank_name1'
-        assert payload[1]['code'] == '321'
-        assert payload[1]['tin'] == '4321'
-        assert payload[1]['address'] == 'address1'
-        assert payload[1]['city'] == 'city1'
-        assert payload[1]['swift_no'] == 'swift_1234'
-        assert payload[1]['correspondent_account'] == 'cor_1234'
+        assert payload[0]['name'] == 'bank_name1'
+        assert payload[0]['code'] == '321'
+        assert payload[0]['tin'] == '4321'
+        assert payload[0]['address'] == 'address1'
+        assert payload[0]['city'] == 'city1'
+        assert payload[0]['swift_no'] == 'swift_1234'
+        assert payload[0]['correspondent_account'] == 'cor_1234'
 
 
 class TestSalesMangerApiView:
