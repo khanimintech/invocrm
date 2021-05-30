@@ -21,7 +21,6 @@ const Login = ({ setUser, history, handleRequest, enqueueSnackbar }) => {
                 history.push("/contracts")
             })
             .catch(err => {
-                enqueueSnackbar("Xəta baş verdi!", { variant: "error", anchorOrigin: { vertical: 'top', horizontal: 'right', autoHideDuration: 3454354354353534535 } });
                 if (err.statusCode < 500 && Object.keys(err.body)) {
                     let errors = {};
                     Object.keys(err.body).forEach(errKey => {
