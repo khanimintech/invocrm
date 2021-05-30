@@ -1,6 +1,7 @@
 import pytest
 from rest_framework.test import APIClient
 
+
 from api.main_models.contract import Contact
 from api.models import Person
 

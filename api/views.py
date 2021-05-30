@@ -1,37 +1,127 @@
-from django.contrib.auth import login, logout
-from rest_framework import status
-from rest_framework.response import Response
+from django.http import JsonResponse
 from rest_framework.views import APIView
 
-from api.serializers import LoginSerializer
-from invocrm.auth import CsrfExemptSessionAuthentication
 
+class StubAPI(APIView):
 
-class LoginAPIView(APIView):
+    def get(self, request):
 
-    authentication_classes = (CsrfExemptSessionAuthentication, )
-    serializer_class = LoginSerializer
+        return JsonResponse({'data': [
+            {
+                'id': 1,
+                'contract_id': 1,
+                'company_name': 'Vacib MMC',
+                'type': 'Birdəfəlik müqavilə',
+                'created': '2018-09-02',
+                'end_date': '2019-09-02',
+                'sales_name': 'Asif Veliyev',
+                'status': 'In process',
+                'executor': 'Sabina ',
+                'annex_count': 2,
 
-    def post(self, request, *args, **kwargs):
+            },
+            {
+                'id': 2,
+                'contract_id': 2,
+                'company_name': 'Vacib MMC',
+                'type': 'Birdəfəlik müqavilə',
+                'created': '2019-09-02',
+                'end_date': '2020-09-02',
+                'sales_name': 'Veli Veliyev',
+                'status': 'Bitir',
+                'executor': 'Ferid ',
+                'annex_count': 4,
 
-        serializer = self.serializer_class(data=request.data, context={'request': request})
+            },
+             {
+                'id': 3,
+                'contract_id': 345,
+                'company_name': 'MC Donalds',
+                'type': 'Ikidefelik müqavilə',
+                'created': '2019-09-02',
+                'end_date': '2020-09-02',
+                'sales_name': 'Eli Eliyev',
+                'status': 'Bitirmir',
+                'executor': 'Saleh',
+                'annex_count': 0,
 
-        if serializer.is_valid(raise_exception=True):
-            user = serializer.validated_data.get('user')
+            },
+             {
+                'id': 4,
+                'contract_id': 4,
+                'company_name': 'Zeruri MMC',
+                'type': 'UcDefelik müqavilə',
+                'created': '2019-09-02',
+                'end_date': '2020-09-02',
+                'sales_name': 'Yamac Kocavali',
+                'status': 'Bitdi Bitecek',
+                'executor': 'Cumali',
+                'annex_count': 4,
 
-            login(request, user)
+            },
+             {
+                'id': 5,
+                'contract_id': 5,
+                'company_name': 'Labud MMC',
+                'type': 'NDefelik müqavilə',
+                'created': '2019-09-02',
+                'end_date': '2020-09-02',
+                'sales_name': 'Sultan anne',
+                'status': 'Bitede biler bitmiyede biler',
+                'executor': 'Idris babaaag',
+                'annex_count': 19,
 
-            return Response({'user': LoginSerializer(user).data})
-        # else:
-        #     return Response(serializer.errors)
+            },
+             {
+                'id': 6,
+                'contract_id': 6,
+                'company_name': 'Sesverme MMC',
+                'type': 'Elustu müqavilə',
+                'created': '2019-09-02',
+                'end_date': '2020-09-02',
+                'sales_name': 'Alico Veliyev',
+                'status': 'Gelme Tuzak',
+                'executor': 'Akin Kocovali',
+                'annex_count': 3,
 
+            },
+             {
+                'id': 7,
+                'contract_id': 7,
+                'company_name': 'CukurSport MMC',
+                'type': 'cukur evimiz',
+                'created': '2019-09-02',
+                'end_date': '2020-09-02',
+                'sales_name': 'Vartolu',
+                'status': 'Manqal',
+                'executor': 'Azer Kurtulush',
+                'annex_count': 24345,
 
-class LogoutAPIView(APIView):
+            },
+             {
+                'id': 8,
+                'contract_id': 2,
+                'company_name': 'Cayxana MMC',
+                'type': 'spoiler',
+                'created': '2019-09-02',
+                'end_date': '2020-09-02',
+                'sales_name': 'Baykal',
+                'status': 'Yavshak',
+                'executor': 'Meke',
+                'annex_count': 2,
 
-    serializer_class = None
+            },
+             {
+                'id': 9,
+                'contract_id': 9,
+                'company_name': 'Vacib MMC',
+                'type': 'Birdəfəlik müqavilə',
+                'created': '2019-09-02',
+                'end_date': '2020-09-02',
+                'sales_name': 'Veli Veliyev',
+                'status': 'Bitir',
+                'executor': 'Ferid ',
+                'annex_count': 4,
 
-    def post(self, request, *args, **kwargs):
-
-        logout(request)
-        response = Response(status=status.HTTP_204_NO_CONTENT)
-        return response
+            },
+        ]})

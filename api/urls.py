@@ -1,7 +1,4 @@
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter, SimpleRouter
-
-
 
 urlpatterns = [
     path('v1.0/', include(('api.v1.urls', 'api'), namespace='v1')),

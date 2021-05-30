@@ -1,12 +1,11 @@
 from django.db import models
 from django.utils import timezone
 from api.main_models.contract import BaseContract
-from django.utils.translation import gettext as _
+
 
 
 # This is fake pseudo annex just to store supplement for now,
 # because subject to change, will be added PO suppl file itself here, probably
-from api.main_models.managers import AnnexQuerySet
 from api.models import Person
 
 
@@ -16,8 +15,6 @@ class POAgreementSupplements(models.Model):
 
 
 class BaseAnnex(models.Model):
-
-    objects = AnnexQuerySet.as_manager()
 
     contract = models.ForeignKey(BaseContract, on_delete=models.CASCADE, related_name='annex_list')
 

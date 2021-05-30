@@ -2,7 +2,6 @@ import django_filters
 
 from api.filters.contract import filter_qs_field
 from api.main_models.annex import BaseAnnex
-from api.models import Person
 
 
 class AnnexFilterSet(django_filters.rest_framework.FilterSet):

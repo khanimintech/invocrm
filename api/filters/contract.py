@@ -3,8 +3,7 @@ from django.db.models import Q
 from django.utils import timezone
 from datetime import timedelta
 
-from api.main_models.contract import BaseContract, Company, BankAccount, Contact
-from api.models import Person
+from api.main_models.contract import BaseContract, BankAccount, Contact
 
 
 def filter_qs_field(qs, kwargs, value=None):

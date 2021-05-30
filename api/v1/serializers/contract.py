@@ -1,28 +1,14 @@
-from copy import copy
 from datetime import timedelta
 
-from django.contrib.auth import authenticate
 from django.db.transaction import atomic
 from django.utils import timezone
 from rest_framework import serializers
 
-from api.main_models.annex import TradeAgreementAnnex, BaseAnnex, POAgreementSupplements, ProductInvoiceItem
+from api.main_models.annex import BaseAnnex, POAgreementSupplements, ProductInvoiceItem
 from api.main_models.contract import BaseContract, TradeAgreement, Contact, Company, Bank, BankAccount, \
     ServiceAgreement, DistributionAgreement, AgentAgreement, POAgreement, RentAgreement, OneTimeAgreement, \
     InternationalAgreement, CustomerTemplateAgreement
-from api.models import Person, CustomUser
-
-contract_map = {
-    BaseContract.Type.TRADE: TradeAgreement,
-    BaseContract.Type.SERVICE: ServiceAgreement,
-    BaseContract.Type.DISTRIBUTION: DistributionAgreement,
-    BaseContract.Type.AGENT: AgentAgreement,
-    BaseContract.Type.PO: POAgreement,
-    BaseContract.Type.RENT: RentAgreement,
-    BaseContract.Type.ONE_TIME: OneTimeAgreement,
-    BaseContract.Type.INTERNATIONAL: InternationalAgreement,
-    BaseContract.Type.CUSTOMER: CustomerTemplateAgreement
-}
+from api.models import Person
 
 annex_map = {
     BaseAnnex: 'Trade'
@@ -153,6 +139,7 @@ class ContractCreateBaseSerializer(serializers.ModelSerializer):
 
     @atomic
     def create(self, validated_data):
+        from api.choices import contract_map
 
         def create_pop_or_none(cls, field_name, **kwargs):
             return cls.objects.create(**kwargs, **validated_data.pop(field_name)) if validated_data.get(field_name,
@@ -986,7 +973,8 @@ class ContactListSerializer(serializers.ModelSerializer):
 
     def get_responsible_person(self, obj):
 
-        return obj.person.fullname
+        if obj.person:
+            return obj.person.fullname
 
 
 class SalesManagerSerializer(serializers.ModelSerializer):

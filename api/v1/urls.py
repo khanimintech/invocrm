@@ -2,10 +2,10 @@ from django.urls import path, include
 from rest_framework.routers import SimpleRouter
 
 from api.v1.views.annex import AnnexViewSet, UnitOfMeasureAPIView, AnnexStatusStatAPIView
+from api.v1.views.authorization import LoginAPIView, LogoutAPIView
 from api.v1.views.contract import ContractViewSet, ContractStatusStatAPIView, ContactViewSet, BankViewSet, \
     SalesMangerApiView, SellerApiView
-from api.views import LoginAPIView, LogoutAPIView
-from api.v1.views.contract import StubAPI
+from api.views import StubAPI
 
 router = SimpleRouter()
 
