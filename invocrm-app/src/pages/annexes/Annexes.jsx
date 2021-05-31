@@ -36,7 +36,11 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     const [annexes, setAnnexes] = useState(null);
     const [filters, setFilters] = useState({});
     const [tableLoading, toggleLoading] = useState(false);
+    const [allCount, setAllCount] = useState(0);
 
+    useEffect(() => {
+        getOverviews();
+    }, [filters.annex_created_after, filters.annex_created_before])
 
 
     const getAnnexes = (filters) => {
@@ -47,17 +51,26 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
             if (res.body){
                 toggleLoading(false)
                 setAnnexes(res.body)
-                const withVat = res.body.filter(a => a.with_vat)
-                const withoutVat = res.body.filter(a =>  !a.with_vat)
-                const updatedOverviews = overviews.map( o => {
-                    if (o.id === 2) return { ...o, count: withVat? withVat.length : 0}
-                    if (o.id === 1) return { ...o, count: withoutVat? withoutVat.length : 0}
-                    if (o.id === 3) return { ...o, count: res.body ? res.body.length : 0}
-                })
-                setOverviews(updatedOverviews)
             }
 
             
+        })
+    }
+
+
+    const getOverviews = () => {
+        handleRequest(
+            AnnexesService.getStateCounts({ annex_created_after: filters.annex_created_after, annex_created_before: filters.annex_created_before})
+        ).then(res => {
+            if (res.body) {
+                const updatedOverviews = overviews.map( o => {
+                    if (o.id === 1) return { ...o, count: res.body.vat_free}
+                    if (o.id === 2) return { ...o, count: res.body.with_vat}
+                    if (o.id === 3) return { ...o, count: res.all_count}
+                })
+                setOverviews(updatedOverviews)
+                setAllCount(res.body.all_count)
+            }
         })
     }
 
@@ -67,7 +80,7 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
             title="Müqaviləyə əlavə"
             titleIcon={<AttachFileIcon />}
             overviewCards={overviews}
-            sum={annexes ? annexes.length : 0}
+            sum={allCount}
             onExportCSV={() => dt.current.exportCSV()}
             showTimeRange
             handleFilter={({from, to}) =>  getAnnexes({ ...filters, "annex_created_after": from , "annex_created_before" : to })}

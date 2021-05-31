@@ -29,9 +29,17 @@ const getUnits = () =>
         method: 'GET',
     });
 
+
+const getStateCounts = filters =>
+    makeAsyncCall({
+        url: createFilterUrl(`${BACKEND_URL}annex-status-count/`, filters),
+        method: 'GET',
+    });
+
 export const AnnexesService = {
     index: (filters) => index(filters),
     remove: id => remove(id),
     save: values => save(values),
-    getUnits: () => getUnits()
+    getUnits: () => getUnits(),
+    getStateCounts: filters => getStateCounts(filters)
 }
