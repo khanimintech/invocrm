@@ -43,7 +43,7 @@ const InternationalForm = ({ handleSubmit, handleRequest, handleClose, formType,
                         innerRef={form => (formikRef = form)}
                     >
 
-                        {() => (
+                        {({ values, setErrors }) => (
                             <Form>
                                 <Grid container spacing={0} justify="space-between" spacing={5}>
                                     <Grid item md={6} sm={12} xs={12}>
@@ -283,7 +283,7 @@ const InternationalForm = ({ handleSubmit, handleRequest, handleClose, formType,
                                                 )}
                                             </Field>
                                         </Grid>
-                                        <CustomerContacts  readOnly={id} />
+                                        <CustomerContacts  readOnly={id} values={values} setErrors={setErrors}  />
                                     </Grid>
                                     <BankRequisits readOnly={id} banks={banks} />
                                 </Grid>

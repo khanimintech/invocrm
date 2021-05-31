@@ -8,7 +8,13 @@ import Typography from '@material-ui/core/Typography';
 
 
 
-const CustomerContacts = ({ readOnly }) => {
+const CustomerContacts = ({ readOnly , values}) => {
+
+    const {responsible_person, contact} = values || {}; 
+    const {last_name, first_name, position, fathers_name } = responsible_person ||  {};
+    const {mobile, personal_email, web_site, work_email, address} = contact || {};
+
+
     return (
         <>
             <Grid item md={12} className="input-wrapper">
@@ -21,6 +27,12 @@ const CustomerContacts = ({ readOnly }) => {
                 <Grid item md={3} className="input-wrapper">
                     <Field
                         name="responsible_person.first_name"
+                        validate={(val) => {
+                            if (!val)
+                                return  last_name || fathers_name ||  mobile || position || 
+                                    address || work_email || personal_email 
+                                    || web_site ? "Bu sahə mütləqdir" : null
+                        }}
                     >
                         {({ field, form, meta }) => (
                             <Input
@@ -36,6 +48,12 @@ const CustomerContacts = ({ readOnly }) => {
                 <Grid item md={3} className="input-wrapper">
                     <Field
                         name="responsible_person.last_name"
+                        validate={(val) => {
+                            if (!val)
+                                return  first_name || fathers_name || mobile || position || 
+                                    address || work_email || personal_email 
+                                    || web_site ? "Bu sahə mütləqdir" : null
+                        }}
                     >
                         {({ field, form, meta }) => (
                             <Input
@@ -59,6 +77,12 @@ const CustomerContacts = ({ readOnly }) => {
                                 form={form}
                                 meta={meta}
                                 readOnly={readOnly}
+                                onChange={val => {
+                                    form.setFieldValue(field.name, val)
+                                    if (!val){
+                                        form.setErrors({ 'responsible_person.last_name'  :  null})
+                                        form.setErrors({ 'responsible_person.first_name'  :  null})                                    }
+                                }}
                             />
                         )}
                     </Field>
@@ -75,6 +99,12 @@ const CustomerContacts = ({ readOnly }) => {
                             form={form}
                             meta={meta}
                             readOnly={readOnly}
+                            onChange={val => {
+                                form.setFieldValue(field.name, val)
+                                if (!val){
+                                    form.setErrors({ 'responsible_person.last_name'  :  null})
+                                    form.setErrors({ 'responsible_person.first_name'  :  null})                                    }
+                            }}
                         />
                     )}
                 </Field>
@@ -90,6 +120,12 @@ const CustomerContacts = ({ readOnly }) => {
                             form={form}
                             meta={meta}
                             readOnly={readOnly}
+                            onChange={val => {
+                                form.setFieldValue(field.name, val)
+                                if (!val){
+                                    form.setErrors({ 'responsible_person.last_name'  :  null})
+                                    form.setErrors({ 'responsible_person.first_name'  :  null})                                    }
+                            }}
                         />
                     )}
                 </Field>
@@ -105,6 +141,12 @@ const CustomerContacts = ({ readOnly }) => {
                             form={form}
                             meta={meta}
                             readOnly={readOnly}
+                            onChange={val => {
+                                form.setFieldValue(field.name, val)
+                                if (!val){
+                                    form.setErrors({ 'responsible_person.last_name'  :  null})
+                                    form.setErrors({ 'responsible_person.first_name'  :  null})                                    }
+                            }}
                         />
                     )}
                 </Field>
@@ -120,6 +162,12 @@ const CustomerContacts = ({ readOnly }) => {
                             form={form}
                             meta={meta}
                             readOnly={readOnly}
+                            onChange={val => {
+                                form.setFieldValue(field.name, val)
+                                if (!val){
+                                    form.setErrors({ 'responsible_person.last_name'  :  null})
+                                    form.setErrors({ 'responsible_person.first_name'  :  null})                                    }
+                            }}
                         />
                     )}
                 </Field>
@@ -135,6 +183,12 @@ const CustomerContacts = ({ readOnly }) => {
                             form={form}
                             meta={meta}
                             readOnly={readOnly}
+                            onChange={val => {
+                                form.setFieldValue(field.name, val)
+                                if (!val){
+                                    form.setErrors({ 'responsible_person.last_name'  :  null})
+                                    form.setErrors({ 'responsible_person.first_name'  :  null})                                    }
+                            }}
                         />
                     )}
                 </Field>
@@ -150,6 +204,12 @@ const CustomerContacts = ({ readOnly }) => {
                             form={form}
                             meta={meta}
                             readOnly={readOnly}
+                            onChange={val => {
+                                form.setFieldValue(field.name, val)
+                                if (!val){
+                                    form.setErrors({ 'responsible_person.last_name'  :  null})
+                                    form.setErrors({ 'responsible_person.first_name'  :  null})                                    }
+                            }}
                         />
                     )}
                 </Field>

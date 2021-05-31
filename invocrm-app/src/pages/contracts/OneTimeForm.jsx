@@ -52,7 +52,7 @@ const OneTimeForm = ({handleRequest, handleSubmit, handleClose, selectedContract
                         enableReinitialize
                     >
 
-                        {({ values }) => (
+                        {({ values, setErrors }) => (
                             <Form>
                                 <Grid container spacing={0} justify="space-between" spacing={5}>
                                     <Grid item md={6} sm={12} xs={12}>
@@ -83,7 +83,7 @@ const OneTimeForm = ({handleRequest, handleSubmit, handleClose, selectedContract
                                                 contractType === 1 ? <CompnayOneTimeForm salesManagers={salesManagers} readOnly={id}/> : <PhysicalOneTimeForm   salesManagers={salesManagers} readOnly={id} />
                                             }
                                             
-                                        <CustomerContacts  />
+                                        <CustomerContacts values={values} setErrors={setErrors} />
                                     </Grid>
                                     <Grid item md={6}>
                                         <CreateAnnex products={values.products} units={units} readOnly={id} type={1} />

@@ -39,7 +39,7 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                         innerRef={form => (formikRef = form)}
                     >
 
-                        {() => (
+                        {({ values, setErrors }) => (
                             <Form>
                                 <Grid container spacing={0} justify="space-between" spacing={5}>
                                     <Grid item md={6} sm={12} xs={12}>
@@ -191,7 +191,7 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                 )}
                                             </Field>
                                         </Grid>
-                                        <CustomerContacts />
+                                        <CustomerContacts values={values} setErrors={setErrors} />
                                     </Grid>
                                     <BankRequisits hideTin readOnly={id} type={4} banks={banks} />
                                 </Grid>
