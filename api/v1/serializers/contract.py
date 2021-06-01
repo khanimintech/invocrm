@@ -89,6 +89,8 @@ class BankSerializer(serializers.ModelSerializer):
 
 class PersonSerializer(serializers.ModelSerializer):
 
+    position = serializers.CharField(required=False)
+
     class Meta:
 
         model = Person
