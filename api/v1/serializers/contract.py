@@ -545,8 +545,8 @@ class AgentGetSerializer(serializers.ModelSerializer):
                 return cls.objects.filter(id=id).update(**data)
 
         update_if_not_none(Person, instance.executor.id, validated_data.pop('executor', None))
-        update_if_not_none(Bank, instance.company.bank_acc_list.last().bank.id,validated_data.pop('bank', None))
-        update_if_not_none(BankAccount, instance.company.bank_acc_list.last().bank.id, validated_data.pop('bank_account', None))
+        update_if_not_none(Bank, instance.executor.b_acc_list.last().bank.id, validated_data.pop('bank', None))
+        update_if_not_none(BankAccount, instance.executor.b_acc_list.last().bank.id, validated_data.pop('bank_account', None))
 
         responsible_person_data = validated_data.pop('responsible_person', None)
         contact_data = validated_data.pop('contact', None)
@@ -986,7 +986,7 @@ class POGetSerializer(ContractCreateBaseSerializer):
         model = POAgreement
 
         fields = [
-            'po_number', 'sales_manager', 'created', 'due_date', 'company', 'type', 'supplements'
+            'po_number', 'sales_manager', 'created', 'due_date', 'company', 'type', 'supplements', 'id'
         ]
 
     def update(self, instance, validated_data):
