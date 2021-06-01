@@ -205,7 +205,7 @@ class TradeGetSerializer(serializers.ModelSerializer):
 
     company = EntitySerializer()
     executor = PersonUpdateSerializer()
-    responsible_person = PersonUpdateSerializer()
+    responsible_person = PersonUpdateSerializer(required=False)
     contract_no = serializers.CharField()
     bank = serializers.SerializerMethodField()
     contact = serializers.SerializerMethodField()
@@ -302,7 +302,7 @@ class ServiceGetSerializer(serializers.ModelSerializer):
 
     company = EntitySerializer()
     executor = PersonSerializer()
-    responsible_person = PersonSerializer()
+    responsible_person = PersonSerializer(required=False)
     contract_no = serializers.CharField()
     bank = serializers.SerializerMethodField()
     contact = serializers.SerializerMethodField()
@@ -400,7 +400,7 @@ class DistributionGetSerializer(serializers.ModelSerializer):
 
     company = EntitySerializer()
     executor = PersonSerializer()
-    responsible_person = PersonSerializer()
+    responsible_person = PersonSerializer(required=False)
     contract_no = serializers.CharField()
     bank = serializers.SerializerMethodField()
     contact = serializers.SerializerMethodField()
@@ -496,7 +496,7 @@ class AgentCreateSerializer(ContractCreateBaseSerializer):
 class AgentGetSerializer(serializers.ModelSerializer):
 
     executor = PersonSerializer()
-    responsible_person = PersonSerializer()
+    responsible_person = PersonSerializer(required=False)
     contract_no = serializers.CharField()
     bank = serializers.SerializerMethodField()
     contact = serializers.SerializerMethodField()
@@ -591,7 +591,7 @@ class RentGetSerializer(serializers.ModelSerializer):
 
     company = EntitySerializer()
     executor = PersonSerializer()
-    responsible_person = PersonSerializer()
+    responsible_person = PersonSerializer(required=False)
     contract_no = serializers.CharField()
     bank = serializers.SerializerMethodField()
     contact = serializers.SerializerMethodField()
@@ -788,7 +788,7 @@ class InternationalGetSerializer(serializers.ModelSerializer):
 
     company = EntitySerializer()
     executor = PersonSerializer()
-    responsible_person = PersonSerializer()
+    responsible_person = PersonSerializer(required=False)
     contract_no = serializers.CharField()
     bank = serializers.SerializerMethodField()
     contact = serializers.SerializerMethodField()
@@ -885,7 +885,7 @@ class CustomerGetSerializer(serializers.ModelSerializer):
 
     company = EntitySerializer()
     executor = PersonSerializer()
-    responsible_person = PersonSerializer()
+    responsible_person = PersonSerializer(required=False)
     contract_no = serializers.CharField()
     bank = serializers.SerializerMethodField()
     contact = serializers.SerializerMethodField()
