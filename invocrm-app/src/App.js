@@ -127,7 +127,6 @@ const App = ({ history }) => {
                 )}
               </Route>
             ))}
-             <Redirect exact  to="/contracts" />
             </Layout>
           )
           ) : null

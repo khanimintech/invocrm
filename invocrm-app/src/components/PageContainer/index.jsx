@@ -58,7 +58,7 @@ const PageContent = ({overviewCards, title, titleIcon, sum, addIcon, children, o
           </Grid>
       <Grid container spacing={3} justify="space-between" >
           {overviewCards ? overviewCards.map(overview => (
-            <Grid item key={overview.id} lg={Math.round(12/overviewCards.length)} md={Math.round(12/overviewCards.length)}  sm={6} xs={12}>
+            <Grid item key={overview.id} lg={ Math.round(12/overviewCards.length)} md={Math.round(12/overviewCards.length)}  sm={6} xs={12}>
               <OverviewBox  {...overview} />
             </Grid>
           )): null}
