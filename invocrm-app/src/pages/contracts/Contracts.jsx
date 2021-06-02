@@ -65,6 +65,7 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     const [filters, setFilters] = useState({});
     const [tableLoading, toggleLoading] = useState(false);
     const [allCount, setAllCount] = useState(0);
+    const [modalLoading, toggleModalLoading] = useState(false);
 
     const openCreateMenu = Boolean(anchorEl);
 
@@ -124,11 +125,13 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     }
 
     const getContract = contract => {
+        toggleModalLoading(true)
         handleRequest(ContractsService.getItem(contract.id))
         .then(({ body }) => {
             setContractType(body.type);
             toggleShowCreateModal(true);
             setSelectedContract(body)
+            toggleModalLoading(false)
         })
     }
 
@@ -274,11 +277,15 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 formType={contractType}
                 handleRequest={handleRequest}
                 enqueueSnackbar={enqueueSnackbar}
-                reloadData={getContracts}
+                reloadData={() => {
+                    getContracts(filters)
+                    getBanks();
+                }}
                 selectedContract={selectedContract}
                 units={units}
                 salesManagers={salesManagers}
                 banks={banks}
+                modalLoading={modalLoading}
             />{
                 annexModal ? (
                     <ContractAnnexModal

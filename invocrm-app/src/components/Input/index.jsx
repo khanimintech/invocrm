@@ -83,6 +83,7 @@ const Input = ({field, form, meta, label, placeholder, required, defaultValue, s
                 getOptionLabel={option => option.label}
                 renderOption={renderOption}
                 freeSolo
+                value={options ? options.find(o => o.value === field.value ) : null}
                 onChange={(e, option) => {
                     const { setFieldValue } = form;
                     const selectedOption = option ? options.find(o => option.value === o.value) : null;

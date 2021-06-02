@@ -14,85 +14,96 @@ import PhysicalOneTimeForm from './PhysicalOneTimeForm';
 import MenuItem from '@material-ui/core/MenuItem';
 import { parseISO } from 'date-fns'
 
-const OneTimeForm = ({handleRequest, handleSubmit, handleClose, selectedContract, units, salesManagers  }) => {
+const OneTimeForm = ({ handleSubmit, handleClose, selectedContract, units, salesManagers }) => {
     let formikRef = useRef();
-    const {contract_no, annex_count, company_name, 
-        created, due_date, id, sales_manager_id, type ,
+    const { contract_no, company,
+        created, due_date, id, sales_manager, type,
+        executor, final_amount_with_writing, part_acquisition,
+        part_payment, price_offer, price_offer_validity, standard, unpaid_period, unpaid_value,
+        warranty_period, annex
     } = selectedContract || {};
 
-    const [contractType, setContractType ] = useState(1);
-
+    const [contractType, setContractType] = useState(selectedContract ? (selectedContract.company ? 1 : 2) : 1);
 
     return (
-         <>
+        <>
             <DialogContent className="create-contract-wrapper">
-                <DialogContentText>
-                    <Formik
-                        initialValues={{
-                            id,
-                            due_date: due_date? parseISO(due_date) : new Date(),
-                            created: created ? parseISO(created)  : new Date(),
-                            contract_no,
-                            sales_manager: sales_manager_id,
-                            ...( contractType  === 1 ? { company: {
-                                name: company_name,
-                                type,
-                            }} : {} ),
-                            products: [{
+                <Formik
+                    initialValues={{
+                        id,
+                        due_date: due_date ? parseISO(due_date) : new Date(),
+                        created: created ? parseISO(created) : new Date(),
+                        contract_no,
+                        executor,
+                        part_payment,
+                        final_amount_with_writing,
+                        part_acquisition,
+                        price_offer,
+                        standard,
+                        price_offer_validity,
+                        unpaid_period,
+                        unpaid_value,
+                        warranty_period,
+                        sales_manager,
+                        annex: {
+                            ...annex,
+                            products: annex && annex.products ? annex.products : [{
                                 name: "",
                                 quantity: 0,
                                 unit: 0,
                                 price: "",
                                 total: 0,
-                                id: 1,
-                            }]
-                        }}
-                        onSubmit={vals => handleSubmit({ ...vals })}
-                        innerRef={form => (formikRef = form)}
-                        enableReinitialize
-                    >
 
-                        {({ values, setErrors }) => (
-                            <Form>
-                                <Grid container spacing={0} justify="space-between" spacing={5}>
-                                    <Grid item md={6} sm={12} xs={12}>
-                                        <Grid item md={12}>
-                                            <Typography variant="h6" gutterBottom>
-                                                Ümumi məlumatlar
+                                index: 1,
+                            }]
+                        },
+                        ...(contractType === 1 ? { company } : {}),
+
+                    }}
+                    onSubmit={handleSubmit}
+                    innerRef={form => (formikRef = form)}
+                >
+
+                    {({ values, setErrors }) => (
+                        <Form>
+                            <Grid container spacing={0} justify="space-between" spacing={5}>
+                                <Grid item md={6} sm={12} xs={12}>
+                                    <Grid item md={12}>
+                                        <Typography variant="h6" gutterBottom>
+                                            Ümumi məlumatlar
                                             </Typography>
-                                            <TextField
-                                                select
-                                                fullWidth
-                                                label="Növü"
-                                                value={type}
-                                                onChange={e => setContractType(e.target.value)}
-                                                variant="outlined"
-                                                >
-                  
-                                                <MenuItem  value={1}>
-                                                    Hüquqi
+                                        <TextField
+                                            select
+                                            fullWidth
+                                            label="Növü"
+                                            value={contractType}
+                                            onChange={e => setContractType(e.target.value)}
+                                            variant="outlined"
+                                        >
+
+                                            <MenuItem value={1}>
+                                                Hüquqi
                                                 </MenuItem>
-                                                <MenuItem value={2}>
-                                                    Fiziki
+                                            <MenuItem value={2}>
+                                                Fiziki
                                                 </MenuItem>
-               
-                                                </TextField>
-                                        </Grid>
-                                        <Divider />
-                                            {
-                                                contractType === 1 ? <CompnayOneTimeForm salesManagers={salesManagers} readOnly={id}/> : <PhysicalOneTimeForm   salesManagers={salesManagers} readOnly={id} />
-                                            }
-                                            
-                                        <CustomerContacts values={values} setErrors={setErrors} />
+
+                                        </TextField>
                                     </Grid>
-                                    <Grid item md={6}>
-                                        <CreateAnnex products={values.products} units={units} readOnly={id} type={1} />
-                                    </Grid>
+                                    <Divider />
+                                    {
+                                        contractType === 1 ? <CompnayOneTimeForm salesManagers={salesManagers} readOnly={id} /> : <PhysicalOneTimeForm salesManagers={salesManagers} readOnly={id} />
+                                    }
+
+                                    <CustomerContacts values={values} setErrors={setErrors} />
                                 </Grid>
-                            </Form>
-                        )}
-                    </Formik>
-                </DialogContentText>
+                                <Grid item md={6}>
+                                    <CreateAnnex products={values.annex.products} units={units} type={1} productsFieldName="annex.products"/>
+                                </Grid>
+                            </Grid>
+                        </Form>
+                    )}
+                </Formik>
             </DialogContent>
             <CreateFormActions handleClose={handleClose} id={id} handleSave={() => formikRef.submitForm()} />
         </>

@@ -246,7 +246,7 @@ const PhysicalOneTimeForm = ({ salesManagers, readOnly }) => {
             </Grid>
             <Grid item md={12} className="input-wrapper">
                 <Field
-                    name="annex.delivery_terms"
+                    name="annex.acquisition_terms"
                     validate={validateRequired}
                 >
                     {({ field, form, meta }) => (
@@ -263,7 +263,7 @@ const PhysicalOneTimeForm = ({ salesManagers, readOnly }) => {
 
             <Grid item md={12} className="input-wrapper">
                 <Field
-                    name="delivery_terms"
+                    name="annex.delivery_terms"
                     validate={validateRequired}
                 >
                     {({ field, form, meta }) => (

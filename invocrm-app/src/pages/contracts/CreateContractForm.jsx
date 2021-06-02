@@ -8,6 +8,7 @@ import PurchaseForm from './PurchaseForm';
 import InternationalForm from './InternationalForm';
 import AgentForm from './AgentForm';
 import OneTimeForm from './OneTimeForm';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 const formTypes = {
@@ -24,9 +25,9 @@ const formTypes = {
 
 
 
-const CreateContractModal = ({open, formType, handleRequest, handleClose, enqueueSnackbar, reloadData, selectedContract, units, salesManagers, banks  }) => {
+const CreateContractModal = ({open, formType, handleRequest, handleClose, enqueueSnackbar, reloadData, selectedContract, units, salesManagers, banks, modalLoading  }) => {
 
-  const handleSubmit = vals => {
+  const handleSubmit = (vals, formikBag ) => {
     handleRequest(
       ContractsService.save({...vals, type: +formType})
     )
@@ -35,12 +36,17 @@ const CreateContractModal = ({open, formType, handleRequest, handleClose, enqueu
       handleClose();
       enqueueSnackbar("Əməliyyat uğurla tamamlandı.", { variant: "success"});
     })
+    .catch(err => {
+      if (err.statusCode === 400)
+        formikBag.setErrors(err.body)
+    })
   }
 
     return (
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth={formType === '7'  ? "md" :"xl"}>
         <DialogTitle id="form-dialog-title">{formType ?  contractTypes[formType] : ""}</DialogTitle>
-        {  formType ?
+        {  modalLoading ? <div className="spinner-wrapper"><CircularProgress /></div>  : 
+           (formType ?
                React.cloneElement( formTypes[formType], {
                  handleSubmit,
                  handleRequest,
@@ -50,7 +56,7 @@ const CreateContractModal = ({open, formType, handleRequest, handleClose, enqueu
                  salesManagers,
                  banks
                 })
-             : null
+             : null)
            }
       </Dialog>
     )

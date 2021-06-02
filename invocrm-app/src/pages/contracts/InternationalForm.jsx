@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { Formik, Form, Field } from 'formik';
 import Grid from '@material-ui/core/Grid';
 import Input from '../../components/Input';
@@ -14,10 +14,11 @@ import BankRequisits from './BankRequisits';
 import CustomerContacts from './CustomerContacts';
 import { parseISO } from 'date-fns'
 
-const InternationalForm = ({ handleSubmit, handleRequest, handleClose, formType, selectedContract, salesManagers, banks  }) => {
+const InternationalForm = ({ handleSubmit, handleRequest, handleClose, selectedContract, salesManagers, banks  }) => {
     let formikRef = useRef();
-    const {contract_no, annex_count, company_name, 
-        created, due_date, id, sales_manager_id, type ,
+    const {contract_no,  company, 
+        created, due_date, id, sales_manager, type , country, responsible_person, executor,
+        payment_condition, contact, bank, bank_account,
     } = selectedContract || {};
 
 
@@ -33,13 +34,23 @@ const InternationalForm = ({ handleSubmit, handleRequest, handleClose, formType,
                             due_date: due_date? parseISO(due_date) : new Date(),
                             created: created ? parseISO(created)  : new Date(),
                             contract_no,
-                            sales_manager: sales_manager_id,
-                            company: {
-                                name: company_name,
-                                type,
+                            sales_manager,
+                            company,
+                            country,
+                            responsible_person: {
+                                position: responsible_person ? responsible_person.position : "",
+                                first_name: responsible_person ? responsible_person.first_name : "",
+                                last_name: responsible_person ? responsible_person.last_name : "",
+                                fathers_name: responsible_person ? responsible_person.fathers_name : "",
+                                type: responsible_person ? responsible_person.type : "",
                             },
+                            executor,
+                            payment_condition,
+                            contact,
+                            bank,
+                            bank_account
                         }}
-                        onSubmit={vals => handleSubmit({ ...vals })}
+                        onSubmit={handleSubmit}
                         innerRef={form => (formikRef = form)}
                     >
 
@@ -283,9 +294,9 @@ const InternationalForm = ({ handleSubmit, handleRequest, handleClose, formType,
                                                 )}
                                             </Field>
                                         </Grid>
-                                        <CustomerContacts  readOnly={id} values={values} setErrors={setErrors}  />
+                                        <CustomerContacts values={values} setErrors={setErrors}  />
                                     </Grid>
-                                    <BankRequisits readOnly={id} banks={banks} />
+                                    <BankRequisits banks={banks} />
                                 </Grid>
                             </Form>
                         )}

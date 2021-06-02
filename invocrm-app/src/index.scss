@@ -263,3 +263,11 @@ td {
 .MuiSnackbar-root{
     background-color: yellow;
 }
+
+
+.spinner-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+}

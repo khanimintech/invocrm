@@ -16,8 +16,9 @@ import { parseISO } from 'date-fns'
 
 const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType, selectedContract, salesManagers, banks }) => {
     let formikRef = useRef();
-    const {contract_no, annex_count, company_name, 
-        created, due_date, id, sales_manager_id, type ,
+    const {
+        created, due_date, id, sales_manager, type , company,
+        po_number, supplements
     } = selectedContract || {};
 
     
@@ -28,17 +29,14 @@ const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType, sele
             <Formik
                 initialValues={{ 
                     id,
+                    po_number: po_number || "",
                     due_date: due_date? parseISO(due_date) : new Date(),
                     created: created ? parseISO(created)  : new Date(),
-                    contract_no,
-                    sales_manager: sales_manager_id,
-                    company: {
-                        name: company_name,
-                        type,
-                    },
-                    supplements: [{}],
+                    sales_manager: sales_manager,
+                    company,
+                    supplements: supplements || [{}],
                 }}
-                onSubmit={vals => handleSubmit({ ...vals})}
+                onSubmit={handleSubmit}
                 innerRef={form => (formikRef = form)}
                 >
 
@@ -63,7 +61,6 @@ const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType, sele
                                                 field={field}
                                                 form={form}
                                                 meta={meta}
-                                                readOnly={id} 
                                             />
                                         )}
                                     </Field>
@@ -80,7 +77,6 @@ const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType, sele
                                                 field={field}
                                                 form={form}
                                                 meta={meta}
-                                                readOnly={id} 
                                             />
                                         )}
                                     </Field>
@@ -98,7 +94,6 @@ const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType, sele
                                                 meta={meta}
                                                 select
                                                 options={salesManagers}
-                                                readOnly={id} 
                                             />
                                         )}
                                     </Field>
@@ -115,7 +110,6 @@ const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType, sele
                                                 form={form}
                                                 meta={meta}
                                                 date
-                                                readOnly={id} 
                                             />
                                         )}
                                     </Field>
@@ -132,7 +126,6 @@ const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType, sele
                                                 form={form}
                                                 meta={meta}
                                                 date
-                                                readOnly={id} 
                                             />
                                         )}
                                     </Field>
@@ -157,14 +150,13 @@ const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType, sele
                                                                     field={field}
                                                                     form={form}
                                                                     meta={meta}
-                                                                    readOnly={id} 
                                                                 />
                                                                 </>
                                                             )}
                                                         </Field>
                                                     </Grid>
                                                     {
-                                                            id ? null : ( index === values.supplements.length - 1 ? (
+                                                        ( index === values.supplements.length - 1 ? (
                                                                 <Grid item md={1} className="icon-wrapper align-center" >
                                                                     <IconButton   onClick={() => arrayHelpers.push({ supple_no: ''})}  size="small">
                                                                         <ControlPointIcon fontSize="default" color="primary" />

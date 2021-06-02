@@ -57,6 +57,7 @@ const App = ({ history }) => {
             default:
               if (!suppressGlobalErrorToast)
                 enqueueSnackbar("Xəta baş verdi!", { variant: "error", anchorOrigin: {vertical: 'top', horizontal: 'right' }});
+              break;
           }
           reject(response);
         })

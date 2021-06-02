@@ -14,8 +14,9 @@ import { parseISO } from 'date-fns'
 
 const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selectedContract, salesManagers, banks }) => {
     let formikRef = useRef();
-    const {contract_no, responsible_person, executor, 
-        created, due_date, id, sales_manager_id, type , bank, bank_account, 
+    const {contract_no, executor, responsible_person,
+        created, due_date, id, sales_manager , bank, bank_account, contact,
+        territory
     } = selectedContract || {};
 
 
@@ -30,12 +31,21 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                             due_date: due_date? parseISO(due_date) : new Date(),
                             created: created ? parseISO(created)  : new Date(),
                             contract_no,
-                            sales_manager: sales_manager_id,
+                            sales_manager,
                             executor,
-                            responsible_person,
-                            bank, bank_account,
+                            contact,
+                            responsible_person: {
+                                first_name: responsible_person ? responsible_person.first_name : "",
+                                last_name: responsible_person ? responsible_person.last_name : "",
+                                fathers_name: responsible_person ? responsible_person.fathers_name : "",
+                                type: responsible_person ? responsible_person.type : "",
+                                position: responsible_person ? responsible_person.position : null,
+                            },
+                            bank,
+                            bank_account,
+                            territory: territory || ""
                         }}
-                        onSubmit={vals => handleSubmit({ ...vals })}
+                        onSubmit={handleSubmit}
                         innerRef={form => (formikRef = form)}
                     >
 
@@ -60,7 +70,6 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                         field={field}
                                                         form={form}
                                                         meta={meta}
-                                                        readOnly={id}
                                                     />
                                                 )}
                                             </Field>
@@ -80,7 +89,6 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                                 field={field}
                                                                 form={form}
                                                                 meta={meta}
-                                                                readOnly={id}
                                                             />
                                                         )}
                                                     </Field>
@@ -96,7 +104,6 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                                 field={field}
                                                                 form={form}
                                                                 meta={meta}
-                                                                readOnly={id}
                                                             />
                                                         )}
                                                     </Field>
@@ -112,7 +119,6 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                                 field={field}
                                                                 form={form}
                                                                 meta={meta}
-                                                                readOnly={id}
                                                             />
                                                         )}
                                                     </Field>
@@ -132,7 +138,6 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                             field={field}
                                                             form={form}
                                                             meta={meta}
-                                                            readOnly={id}
                                                         />
                                                     )}
                                                 </Field>
@@ -152,7 +157,6 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                         meta={meta}
                                                         select
                                                         options={salesManagers}
-                                                        readOnly={id}
                                                     />
                                                 )}
                                             </Field>
@@ -169,7 +173,6 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                         form={form}
                                                         meta={meta}
                                                         date
-                                                        readOnly={id}
                                                     />
                                                 )}
                                             </Field>
@@ -186,14 +189,13 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                         form={form}
                                                         meta={meta}
                                                         date
-                                                        readOnly={id}
                                                     />
                                                 )}
                                             </Field>
                                         </Grid>
                                         <CustomerContacts values={values} setErrors={setErrors} />
                                     </Grid>
-                                    <BankRequisits hideTin readOnly={id} type={4} banks={banks} />
+                                    <BankRequisits hideTin type={4} banks={banks} />
                                 </Grid>
                             </Form>
                         )}

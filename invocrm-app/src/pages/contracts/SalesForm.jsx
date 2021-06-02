@@ -18,6 +18,7 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
     let formikRef = useRef();
     const {contract_no, company, executor, responsible_person,
         created, due_date, id, sales_manager, type , bank, bank_account, contact,
+        subject_of_distribution, territory
     } = selectedContract || {};
 
 
@@ -38,19 +39,22 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                 address: company ? company.address : "",
                                 tin: company ? company.tin : null,
                             },
-                            executor: {
-                                first_name: executor ? executor.first_name : "",
-                                last_name: executor ? executor.last_name : "",
-                                fathers_name: executor ? executor.fathers_name : ""
-                            },
+                            executor,
                             contact,
-                            responsible_person,
+                            responsible_person: {
+                                first_name: responsible_person ? responsible_person.first_name : "",
+                                last_name: responsible_person ? responsible_person.last_name : "",
+                                fathers_name: responsible_person ? responsible_person.fathers_name : "",
+                                type: responsible_person ? responsible_person.type : "",
+                                position: responsible_person ? responsible_person.position : "",
+                            },
                             bank,
-                            bank_account
+                            bank_account,
+                            subject_of_distribution: subject_of_distribution || "",
+                            territory: territory || ""
                         }}
-                        onSubmit={vals => handleSubmit({ ...vals })}
+                        onSubmit={handleSubmit}
                         innerRef={form => (formikRef = form)}
-                        enableReinitialize
                     >
 
                         {({ values, setErrors }) => (
@@ -74,7 +78,6 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                         field={field}
                                                         form={form}
                                                         meta={meta}
-                                                        readOnly={id}
                                                     />
                                                 )}
                                             </Field>
@@ -93,7 +96,6 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                         form={form}
                                                         meta={meta}
                                                         select
-                                                        readOnly={id}
                                                         options={[
                                                             {label: "Alqı-satqı", value: 1},
                                                             {label: "Xidmət", value: 2},
@@ -121,7 +123,6 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                                 field={field}
                                                                 form={form}
                                                                 meta={meta}
-                                                                readOnly={id}
                                                             />
                                                         )}
                                                     </Field>
@@ -140,7 +141,6 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                                 meta={meta}
                                                                 select
                                                                 options={companyTypes}
-                                                                readOnly={id}
                                                             />
                                                         )}
                                                     </Field>
@@ -160,7 +160,6 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                                         field={field}
                                                                         form={form}
                                                                         meta={meta}
-                                                                        readOnly={id}
                                                                     />
                                                                 )}
                                                             </Field>
@@ -176,7 +175,6 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                                         field={field}
                                                                         form={form}
                                                                         meta={meta}
-                                                                        readOnly={id}
                                                                     />
                                                                 )}
                                                             </Field>
@@ -197,7 +195,6 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                                     field={field}
                                                                     form={form}
                                                                     meta={meta}
-                                                                    readOnly={id}
                                                                 />
                                                             )}
                                                         </Field>
@@ -217,7 +214,6 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                                     field={field}
                                                                     form={form}
                                                                     meta={meta}
-                                                                    readOnly={id}
                                                                 />
                                                             )}
                                                         </Field>
@@ -232,7 +228,6 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                                     label="Direktor soyadı"
                                                                     field={field}
                                                                     form={form}
-                                                                    readOnly={id}
                                                                     meta={meta}
                                                                 />
                                                             )}
@@ -249,7 +244,6 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                                     field={field}
                                                                     form={form}
                                                                     meta={meta}
-                                                                    readOnly={id}
                                                                 />
                                                             )}
                                                         </Field>
@@ -270,7 +264,6 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                         meta={meta}
                                                         select
                                                         options={salesManagers}
-                                                        readOnly={id}
                                                     />
                                                 )}
                                             </Field>
@@ -287,7 +280,6 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                         form={form}
                                                         meta={meta}
                                                         date
-                                                        readOnly={id}
                                                     />
                                                 )}
                                             </Field>
@@ -304,14 +296,13 @@ const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                         form={form}
                                                         meta={meta}
                                                         date
-                                                        readOnly={id}
                                                     />
                                                 )}
                                             </Field>
                                         </Grid>
-                                        <CustomerContacts readOnly={id} values={values} setErrors={setErrors} />
+                                        <CustomerContacts values={values} setErrors={setErrors} />
                                     </Grid>
-                                    <BankRequisits  readOnly={id} banks={banks} />
+                                    <BankRequisits  banks={banks} />
                                 </Grid>
                             </Form>
                         )}

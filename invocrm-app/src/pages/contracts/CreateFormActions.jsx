@@ -15,13 +15,10 @@ const CreateFormActions = ({ handleClose, handleSave, id  }) => {
                 </Button>
             )
         }
-        {
-            id ? null : (
             <Button onClick={handleSave} color="primary">
                 Yadda saxla
             </Button>
-            )
-        }
+
     </DialogActions>
     )
 }

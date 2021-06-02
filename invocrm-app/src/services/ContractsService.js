@@ -29,8 +29,8 @@ const getSellers = () =>
 
 const save = values =>
     makeAsyncCall({
-        url: `${BACKEND_URL}contracts/`,
-        method: 'POST',
+        url: `${BACKEND_URL}contracts/${values.id ? values.id + "/" : ""}`,
+        method: values.id ? "PUT" : 'POST',
         body: JSON.stringify(values)
     });
 

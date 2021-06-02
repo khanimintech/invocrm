@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 
 const columns ={
     1:  [
-        { header: "№", field: "id", type: "text", readOnly: true },
+        { header: "№", field: "index", type: "text", readOnly: true },
         { header: "Məhsul adı", field: "name", type: "text" },
         { header: "Miqdarı", field: "quantity", type: "number" },
         { header: "Ö.V", field: "unit", type: "select" },
@@ -45,24 +45,25 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName  }) =>
 
     const arrayFieldName = productsFieldName || "products";
     const bodyTemplate = (row, col, arrayHelpers, products, index) => {
-        if (col.field === "id" || col.field === "total")
+        if (col.field === "index" )
+            return <span>{products[index][col.field] || index  +1}</span>
+        if ( col.field === "total")
             return <span>{products[index][col.field]}</span>
         return (
             <Field
-                name={col.field}
                 validate={validateRequired}
                 name={`${arrayFieldName}[${index}].${col.field}`}
+                key={`${arrayFieldName}[${index}].${col.field}`}
             >
-                {({ field, form, meta }) => (
-                    <Input
-                        field={field}
+                {({ field, form, meta }) => {
+                    return <Input
+                        field={{ ...field, value: products[index][col.field]}}
                         form={form}
                         meta={meta}
                         type={col.type}
-                        readOnly={col.readOnly}
+                        readOnly={col.readOnly === true }
                         size="small"
                         required
-                        readOnly={readOnly}
                         select={col.field === "unit"}
                         options={units ? units.map(unit => ({ label: unit.name, value: unit.id })) : []}
                         onChange={val => {
@@ -80,7 +81,7 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName  }) =>
                             else form.setFieldValue(field.name, val)
                         }}
                     />
-                )}
+    }}
             </Field>
         )
     }
@@ -89,7 +90,7 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName  }) =>
         <>
             <FieldArray
                 validate={validateRequired}
-                name={arrayFieldName}
+                name={`${arrayFieldName}`}
                 render={arrayHelpers => (
                     <div>
                         <Field
@@ -114,7 +115,7 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName  }) =>
                         >
                             <thead className="p-datatable-thead">
                                 {
-                                    columns[type || 1].map(col => <th>{col.header}</th>)
+                                    columns[type || 1].map(col => <th key={col.header}>{col.header}</th>)
                                 }
                                 {
                                     products.length === 1 || readOnly ? null : (
@@ -131,7 +132,7 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName  }) =>
 
                                 {
                                     products.map((product, index) => (
-                                        <tr>
+                                        <tr key={product.id}>
                                             {  columns[type || "sales"].map(col => (
                                                 <td>
                                                     {bodyTemplate(product, col, arrayHelpers, products, index)}
@@ -166,7 +167,7 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName  }) =>
                                             unit: 0,
                                             price: "",
                                             total: 0,
-                                            id: products[products.length - 1].id + 1,
+                                            index: products[products.length - 1].id + 1,
                                         })}
                                     >
                                         Yenisin əlavə et
