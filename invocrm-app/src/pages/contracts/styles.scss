@@ -71,6 +71,13 @@
         &>div {
             display: flex;
             align-items: center;
+            span {
+                max-width: 165px;
+                display: inline-block;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+            }
         }
         svg {
             color: $color-blue;
