@@ -66,7 +66,7 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     const [tableLoading, toggleLoading] = useState(false);
     const [allCount, setAllCount] = useState(0);
     const [modalLoading, toggleModalLoading] = useState(false);
-
+    const [selectedContractForAttachment, setSelectedContractForAttachment] = useState();
     const openCreateMenu = Boolean(anchorEl);
 
     useEffect(() => {
@@ -232,7 +232,8 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
 
 
     const handleAttachmentClick = (contract) => {
-
+        setSelectedContractForAttachment(contract)
+        toggleAttachmentsSidebar(true);
     }
 
 
@@ -305,7 +306,14 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                     />
                 ) : null
             }
-            <Attachments open={attachmentsSidebar} setOpen={toggleAttachmentsSidebar} />
+            <Attachments
+                open={attachmentsSidebar}
+                setOpen={toggleAttachmentsSidebar} 
+                contract={selectedContractForAttachment}
+                handleOpenContractClick={() => getContract(selectedContractForAttachment) }
+                handleRequest={handleRequest}
+                enqueueSnackbar={enqueueSnackbar}
+            />
         </PageContent>
     )
 }

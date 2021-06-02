@@ -54,6 +54,14 @@ const getStateCounts = filters =>
         method: 'GET',
     });
 
+const getAttachments = id => 
+    makeAsyncCall({
+        url: `${BACKEND_URL}attahments/${id}`,
+        method: 'GET',
+    });
+
+const uploadAttachment = (id, file) => Promise.resolve({ statusCode: 200, body: file});
+
 export const ContractsService = {
     index: (filters) => index(filters),
     getItem: id => getItem(id),
@@ -62,5 +70,7 @@ export const ContractsService = {
     getSellers: () => getSellers(),
     save: values => save(values),
     createAnnex: vals => createAnnex(vals),
-    getStateCounts: filters => getStateCounts(filters)
+    getStateCounts: filters => getStateCounts(filters),
+    getAttachments: id => getAttachments(id),
+    uploadAttachment: (id, file) => uploadAttachment(id, file)
 }
