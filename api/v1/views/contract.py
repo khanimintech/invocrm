@@ -7,7 +7,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from api.choices import contract_map, contract_create_serializer, contract_get_serializer
+from api.choices import CONTRACT_CHOICE, CREATE_SERIALIZER_CHOICE, GET_SERIALIZER_CHOICE, UPDATE_SERIALIZER_CHOICE
 from api.filters.contract import ContractFilterSet, BankFilterSet, ContactFilterSet, StatFilterSet
 
 from api.main_models.contract import BaseContract, BankAccount, Contact
@@ -57,7 +57,7 @@ class ContractViewSet(ModelViewSet):
 
         if self.action == 'retrieve':
 
-            return getattr(instance, contract_map[instance.type].__name__.lower())
+            return getattr(instance, CONTRACT_CHOICE[instance.type].__name__.lower())
 
         return instance
 
@@ -67,13 +67,19 @@ class ContractViewSet(ModelViewSet):
 
             contract_type = self.request.data.get('type', None)
 
-            return contract_create_serializer[contract_type]
+            return CREATE_SERIALIZER_CHOICE[contract_type]
 
-        if self.action in ('retrieve', 'update'):
+        elif self.action == 'retrieve':
 
             contract_type = self.get_object().type
 
-            return contract_get_serializer[contract_type]
+            return GET_SERIALIZER_CHOICE[contract_type]
+
+        elif self.action == 'update':
+
+            contract_type = self.get_object().type
+
+            return UPDATE_SERIALIZER_CHOICE[contract_type]
 
         return super().get_serializer_class()
 

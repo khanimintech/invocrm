@@ -4,9 +4,9 @@ from django.utils import timezone
 
 from rest_framework.reverse import reverse
 
-from api.main_models.annex import UnitOfMeasure, BaseAnnex
+from api.main_models.annex import UnitOfMeasure, BaseAnnex, ProductInvoiceItem
 from api.main_models.contract import BaseContract, TradeAgreement, Company, Bank, BankAccount, ServiceAgreement, \
-    Contact, DistributionAgreement, AgentAgreement
+    Contact, DistributionAgreement, AgentAgreement, OneTimeAgreement
 from api.models import Person
 
 
@@ -93,87 +93,99 @@ class TestContractViewSet:
 
         assert response.status_code == 200, response.json()
 
-    def test_contract_update(self, apiclient, admin_user, sales_manager):
+    def test_trade_edit(self, apiclient, admin_user, sales_manager, responsible_person, executor, company):
 
         t = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
-                                          type=BaseContract.Type.TRADE, contract_no='123')
-
-        annex = BaseAnnex.objects.create(contract=t, annex_date=timezone.now(),
-                                         note='122', payment_terms='122', delivery_terms='111', acquisition_terms='133',
-                                         seller=sales_manager, sales_manager=sales_manager, annex_no=1)
-
-        annex2 = BaseAnnex.objects.create(contract=t, annex_date=timezone.now(),
-                                          note='1', payment_terms='1', delivery_terms='1', acquisition_terms='1',
-                                          seller=sales_manager, sales_manager=sales_manager, annex_no=2)
-
-        company = Company.objects.create(type=Company.MMC, name='company_name',
-                                         address='company_address', tin='12345')
-
-        t = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
-                                          type=BaseContract.Type.TRADE, contract_no='123', company=company, executor=sales_manager)
+                                          type=BaseContract.Type.SERVICE, contract_no='1234', company=company,
+                                          executor=executor, responsible_person=responsible_person)
 
         bank = Bank.objects.create(name='bank_name', code='123', tin='1234')
 
-        b_acc = BankAccount.objects.create(account='123', bank=bank, address='address', city='city',
-                                           swift_no='swift_123', correspondent_account='cor_123', company_owner=company)
+        BankAccount.objects.create(account='123', bank=bank, address='address', city='city1',
+                                   swift_no='swift_123', correspondent_account='cor_123', company_owner=company)
 
-        d = AgentAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
-                                  type=BaseContract.Type.TRADE, contract_no='123', company=company, territory='asdf')
-
-        TradeAgreement.objects.filter(id=t.id).update(contract_no='eeee')
         admin_user.plant_name = 'plant'
         admin_user.save()
         apiclient.force_login(admin_user)
-        response = apiclient.put(reverse('api:v1:contracts-detail', args=[t.id]), data={
 
-                                      'contract_no': 123,
-                                      'type': BaseContract.Type.TRADE,
-                                      'sales_manager': sales_manager.id,
-                                      'due_date': timezone.now(),
-                                      'company': {
-                                          'name': 'My_company',
-                                          'type': Company.MMC,
-                                          'tin': '1234567890',
-                                          'address': 'My_address'
-                                      },
-                                      'executor': {
-                                          'type': Person.TYPE.SELLER,
+        response = apiclient.put(reverse('api:v1:contracts-detail', args=[t.id]),
+                                 data={
+                                     'contract_no': '123',
+                                     'type': BaseContract.Type.TRADE,
+                                     'sales_manager': sales_manager.id,
+                                     'due_date': timezone.now(),
+                                     'company': {
+                                         'name': 'My_company',
+                                         'type': Company.ASC,
+                                         'tin': '1234567890',
+                                         'address': 'My_address',
+                                     },
+                                     'executor': {
+                                          'first_name': 'First1',
+                                          'last_name': 'Last1',
+                                          'fathers_name': 'Father1',
+                                     },
+                                     'responsible_person': {
                                           'first_name': 'First',
                                           'last_name': 'Last',
                                           'fathers_name': 'Father',
-                                      },
-                                      'responsible_person': {
-                                          'type': Person.TYPE.CONTACT,
-                                          'first_name': 'First',
-                                          'last_name': 'Last',
-                                          'fathers_name': 'Father',
-                                      },
-                                      'contact': {
-                                          'mobile': '1234567890',
-                                          'address': 'My_address',
-                                          'work_email': 'My_work_email@email.fake',
-                                          'personal_email': 'My_personal_email@email.fake'
+                                     },
+                                     'contact': {
+                                        'mobile': '1234567890',
+                                        'address': 'My_address',
+                                        'work_email': 'My_work_email@email.fake',
+                                        'personal_email': 'My_personal_email@email.fake'
 
-                                      },
-                                      'bank': {
-                                          'name': 'My_bank',
-                                          'code': '1234567890',
-                                          'tin': '1234567890'
-                                      },
-                                      'bank_account': {
-                                          'default': True,
-                                          'account': 'My_account',
-                                          'swift_no': '1234567890',
-                                          'correspondent_account': 'My_correspondent_account',
-                                          'city': 'city',
-                                          'address': 'address'
-                                      }
+                                     },
+                                     'bank_account': {
+                                        'account': 'My_account',
+                                        'swift_no': '1234567890',
+                                        'correspondent_account': 'My_correspondent_account',
+                                        'city': 'city',
+                                        'address': 'address',
+                                     },
+                                     'bank': {
+                                        'name': 'My_bank',
+                                        'code': '1234567890',
+                                        'tin': '1234567890'
+                                     }
 
                                   },
-                                  format='json'
-                                  )
+                                 format='json'
+                                 )
 
         assert response.status_code == 200, response.json()
+
+        t.refresh_from_db()
+
+        assert t.contract_no == '123'
+        assert t.company.name == 'My_company'
+        assert t.company.type == Company.ASC
+        assert t.company.tin == '1234567890'
+        assert t.company.address == 'My_address'
+
+        assert t.executor.first_name == 'First1'
+        assert t.executor.last_name == 'Last1'
+        assert t.executor.fathers_name == 'Father1'
+
+        assert t.responsible_person.first_name == 'First'
+        assert t.responsible_person.last_name == 'Last'
+        assert t.responsible_person.fathers_name == 'Father'
+
+        assert t.responsible_person.contact.mobile == '1234567890'
+        assert t.responsible_person.contact.address == 'My_address'
+        assert t.responsible_person.contact.work_email == 'My_work_email@email.fake'
+        assert t.responsible_person.contact.personal_email == 'My_personal_email@email.fake'
+
+        assert t.company.bank_acc_list.last().account == 'My_account'
+        assert t.company.bank_acc_list.last().swift_no == '1234567890'
+        assert t.company.bank_acc_list.last().correspondent_account == 'My_correspondent_account'
+        assert t.company.bank_acc_list.last().city == 'city'
+        assert t.company.bank_acc_list.last().address == 'address'
+
+        assert t.company.bank_acc_list.last().bank.name == 'My_bank'
+        assert t.company.bank_acc_list.last().bank.code == '1234567890'
+        assert t.company.bank_acc_list.last().bank.tin == '1234567890'
 
     def test_contract_destroy(self, apiclient, admin_user, sales_manager):
 
@@ -369,7 +381,7 @@ class TestContractViewSet:
         assert bank.code == '1234567890'
         assert bank.tin == '1234567890'
 
-    def test_bm_create(self, apiclient, admin_user, sales_manager):
+    def test_one_time_create(self, apiclient, admin_user, sales_manager):
 
         admin_user.plant_name = 'plant'
         admin_user.save()
@@ -452,6 +464,112 @@ class TestContractViewSet:
                                   )
 
         assert response.status_code == 201, response.json()
+
+    def test_one_time_edit(self, apiclient, admin_user, sales_manager):
+
+        seller = Person.objects.create(
+            type=Person.TYPE.SELLER,
+            first_name='First11',
+            last_name='Last11',
+            fathers_name='Father111',
+        )
+
+        unit = UnitOfMeasure.objects.create(name='asdf')
+        company = Company.objects.create(type=Company.MMC, name='company_name',
+                                         address='company_address', tin='12345')
+        contact = Contact.objects.create(mobile='12345', address='my_address',
+                                         personal_email='personal_email@email.email', web_site='my_site.site')
+        executor = Person.objects.create(
+            type=Person.TYPE.SELLER,
+            first_name='First112',
+            last_name='Last112',
+            fathers_name='Father1112',
+            contact=contact
+        )
+
+        contract = OneTimeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager,
+                                                   due_date=timezone.now(), type=BaseContract.Type.ONE_TIME,
+                                                   final_amount_with_writing='1', price_offer='1', warranty_period='1',
+                                                   price_offer_validity='1', unpaid_period='1', unpaid_value='1',
+                                                   part_payment='1', part_acquisition='1', standard='1', company=company,
+                                                   executor=executor)
+
+        annex = BaseAnnex.objects.create(contract=contract, request_no='1223', annex_date=timezone.now(),
+                                         note='122', payment_terms='122', delivery_terms='111', acquisition_terms='133',
+                                         seller=sales_manager, sales_manager=sales_manager, annex_no=1)
+
+        p1 = ProductInvoiceItem.objects.create(name='ww', annex=annex, unit=unit, quantity=1, price=1, total=2)
+        p2 = ProductInvoiceItem.objects.create(name='ww', annex=annex, unit=unit, quantity=1, price=1, total=2)
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+
+        response = apiclient.put(reverse('api:v1:contracts-detail', args=[contract.id]), data={
+
+            "annex": {
+                "request_no": "huquqi",
+                "payment_terms": "huquqi",
+                "delivery_terms": "huquqi",
+                "acquisition_terms": None,
+                "seller": {
+                    'id': seller.id,
+                    "first_name": "huquqi",
+                    "last_name": "huquqi",
+                    "fathers_name": "huquqi",
+                    "tin": None,
+                    "position": "huquqi"},
+                "products": [{"name": "huquqi", "unit": unit.id, "quantity": 1, "price": 2, "total": 2, "id": p1.id},
+                             {"name": "huquqi", "unit": unit.id, "quantity": 1, "price": 1, "total": 1, "id": p2.id}]},
+
+            "id": contract.id,
+            "due_date": timezone.now(),
+            "created": timezone.now(),
+            "executor": {
+                'id': executor.id,
+                "first_name": "huquqi",
+                "last_name": "huquqi",
+                "fathers_name": "huquqi",
+                "position": None,
+                "contact":{
+                    'id': contact.id,
+                    "mobile": "huquqi",
+                    "address": None,
+                    "work_email": None,
+                    "personal_email": "huquqi",
+                    "web_site": None},
+                "type": 0,
+                "tin": None,
+            },
+            "part_payment":"huquqi",
+            "final_amount_with_writing": "huquqi",
+            "part_acquisition": "huquqi",
+            "price_offer": "huquqi",
+            "standard": "huquqi",
+            "price_offer_validity": "huquqi",
+            "unpaid_period": "huquqi",
+            "unpaid_value": "huquqi",
+            "warranty_period": "huquqi",
+            "sales_manager": sales_manager.id,
+            "company":{
+                "id":company.id,
+                "type":None,
+                "name":"huquqi",
+                "address":None,
+                "tin":"huquqi",
+                "email":None},
+            "type": BaseContract.Type.ONE_TIME
+        }
+,
+                                  format='json'
+                                  )
+
+        assert response.status_code == 200, response.json()
+
+        p1.refresh_from_db()
+        p2.refresh_from_db()
+        assert p1.name == 'huquqi'
+        assert p2.name == 'huquqi'
 
 
 class TestContactViewSet:

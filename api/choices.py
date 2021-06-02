@@ -5,10 +5,11 @@ from api.v1.serializers.contract import TradeCreateSerializer, ServiceCreateSeri
     DistributionCreateSerializer, AgentCreateSerializer, POCreateSerializer, RentCreateSerializer, \
     OneTimeCreateSerializer, InternationalCreateSerializer, CustomerCreateSerializer, TradeGetSerializer, \
     ServiceGetSerializer, DistributionGetSerializer, AgentGetSerializer, POGetSerializer, RentGetSerializer, \
-    OneTimeGetSerializer, InternationalGetSerializer, CustomerGetSerializer
+    OneTimeGetSerializer, InternationalGetSerializer, CustomerGetSerializer, TradeUpdateSerializer, \
+    ServiceUpdateSerializer, DistributionUpdateSerializer, AgentUpdateSerializer, POUpdateSerializer, \
+    RentUpdateSerializer, OneTimeUpdateSerializer, InternationalUpdateSerializer, CustomerUpdateSerializer
 
-
-contract_create_serializer = {
+CREATE_SERIALIZER_CHOICE = {
     BaseContract.Type.TRADE: TradeCreateSerializer,
     BaseContract.Type.SERVICE: ServiceCreateSerializer,
     BaseContract.Type.DISTRIBUTION: DistributionCreateSerializer,
@@ -21,7 +22,7 @@ contract_create_serializer = {
 }
 
 
-contract_get_serializer = {
+GET_SERIALIZER_CHOICE = {
     BaseContract.Type.TRADE: TradeGetSerializer,
     BaseContract.Type.SERVICE: ServiceGetSerializer,
     BaseContract.Type.DISTRIBUTION: DistributionGetSerializer,
@@ -33,8 +34,20 @@ contract_get_serializer = {
     BaseContract.Type.CUSTOMER: CustomerGetSerializer
 }
 
+UPDATE_SERIALIZER_CHOICE = {
+    BaseContract.Type.TRADE: TradeUpdateSerializer,
+    BaseContract.Type.SERVICE: ServiceUpdateSerializer,
+    BaseContract.Type.DISTRIBUTION: DistributionUpdateSerializer,
+    BaseContract.Type.AGENT: AgentUpdateSerializer,
+    BaseContract.Type.PO: POUpdateSerializer,
+    BaseContract.Type.RENT: RentUpdateSerializer,
+    BaseContract.Type.ONE_TIME: OneTimeUpdateSerializer,
+    BaseContract.Type.INTERNATIONAL: InternationalUpdateSerializer,
+    BaseContract.Type.CUSTOMER: CustomerUpdateSerializer
+}
 
-contract_map = {
+
+CONTRACT_CHOICE = {
     BaseContract.Type.TRADE: TradeAgreement,
     BaseContract.Type.SERVICE: ServiceAgreement,
     BaseContract.Type.DISTRIBUTION: DistributionAgreement,
