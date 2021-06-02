@@ -14,7 +14,7 @@ const Files = ({ files }) => {
     return (
         files.map( file => (
             <div className="file-row">
-                <div>
+                <div  className="clickable-column" onClick={() => window.open(file.url, "_blank")}>
                     <DescriptionIcon />
                     <span>{file.name}</span>
                 </div>
