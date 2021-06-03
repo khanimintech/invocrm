@@ -86,8 +86,8 @@ class ContactSerializer(serializers.ModelSerializer):
 
 class PersonUpdateSerializer(serializers.ModelSerializer):
 
-    position = serializers.CharField(required=False)
-    tin = serializers.CharField(required=False)
+    position = serializers.CharField(required=False, allow_null=True)
+    tin = serializers.CharField(required=False, allow_null=True)
 
     class Meta:
         model = Person
@@ -385,10 +385,10 @@ class TradeUpdateSerializer(serializers.ModelSerializer):
 
     company = CompanyUpdateSerializer()
     executor = PersonUpdateSerializer()
-    responsible_person = PersonUpdateSerializer(required=False)
-    bank = BankSerializer(required=False)
-    bank_account = BankAccountSerializer(required=False)
-    contact = ContactUpdateSerializer(required=False)
+    responsible_person = PersonUpdateSerializer(required=False, allow_null=True)
+    bank = BankSerializer(required=False, allow_null=True)
+    bank_account = BankAccountSerializer(required=False, allow_null=True)
+    contact = ContactUpdateSerializer(required=False, allow_null=True)
 
     class Meta:
         model = TradeAgreement
@@ -466,10 +466,10 @@ class ServiceUpdateSerializer(serializers.ModelSerializer):
 
     company = CompanyUpdateSerializer()
     executor = PersonUpdateSerializer()
-    responsible_person = PersonUpdateSerializer(required=False)
-    bank = BankSerializer(required=False)
-    bank_account = BankAccountSerializer(required=False)
-    contact = ContactUpdateSerializer(required=False)
+    responsible_person = PersonUpdateSerializer(required=False, allow_null=True)
+    bank = BankSerializer(required=False, allow_null=True)
+    bank_account = BankAccountSerializer(required=False, allow_null=True)
+    contact = ContactUpdateSerializer(required=False, allow_null=True)
 
     class Meta:
         model = ServiceAgreement
@@ -549,10 +549,10 @@ class DistributionUpdateSerializer(serializers.ModelSerializer):
 
     company = CompanyUpdateSerializer()
     executor = PersonUpdateSerializer()
-    responsible_person = PersonUpdateSerializer(required=False)
-    bank = BankSerializer(required=False)
-    bank_account = BankAccountSerializer(required=False)
-    contact = ContactUpdateSerializer(required=False)
+    responsible_person = PersonUpdateSerializer(required=False, allow_null=True)
+    bank = BankSerializer(required=False, allow_null=True)
+    bank_account = BankAccountSerializer(required=False, allow_null=True)
+    contact = ContactUpdateSerializer(required=False, allow_null=True)
 
     class Meta:
         model = DistributionAgreement
@@ -629,10 +629,10 @@ class AgentGetSerializer(serializers.ModelSerializer):
 class AgentUpdateSerializer(serializers.ModelSerializer):
 
     executor = PersonUpdateSerializer()
-    responsible_person = PersonUpdateSerializer(required=False)
-    bank = BankSerializer(required=False)
-    bank_account = BankAccountSerializer(required=False)
-    contact = ContactUpdateSerializer(required=False)
+    responsible_person = PersonUpdateSerializer(required=False, allow_null=True)
+    bank = BankSerializer(required=False, allow_null=True)
+    bank_account = BankAccountSerializer(required=False, allow_null=True)
+    contact = ContactUpdateSerializer(required=False, allow_null=True)
 
     class Meta:
         model = AgentAgreement
@@ -739,10 +739,10 @@ class RentUpdateSerializer(serializers.ModelSerializer):
 
     company = CompanyUpdateSerializer()
     executor = PersonUpdateSerializer()
-    responsible_person = PersonUpdateSerializer(required=False)
-    bank = BankSerializer(required=False)
-    bank_account = BankAccountSerializer(required=False)
-    contact = ContactUpdateSerializer(required=False)
+    responsible_person = PersonUpdateSerializer(required=False, allow_null=True)
+    bank = BankSerializer(required=False, allow_null=True)
+    bank_account = BankAccountSerializer(required=False, allow_null=True)
+    contact = ContactUpdateSerializer(required=False, allow_null=True)
 
     class Meta:
         model = RentAgreement
@@ -902,10 +902,10 @@ class InternationalUpdateSerializer(serializers.ModelSerializer):
 
     company = CompanyUpdateSerializer()
     executor = PersonUpdateSerializer()
-    responsible_person = PersonUpdateSerializer(required=False)
-    bank = BankSerializer(required=False)
-    bank_account = BankAccountSerializer(required=False)
-    contact = ContactUpdateSerializer(required=False)
+    responsible_person = PersonUpdateSerializer(required=False, allow_null=True)
+    bank = BankSerializer(required=False, allow_null=True)
+    bank_account = BankAccountSerializer(required=False, allow_null=True)
+    contact = ContactUpdateSerializer(required=False, allow_null=True)
 
     class Meta:
         model = InternationalAgreement
@@ -983,10 +983,10 @@ class CustomerUpdateSerializer(serializers.ModelSerializer):
 
     company = CompanyUpdateSerializer()
     executor = PersonUpdateSerializer()
-    responsible_person = PersonUpdateSerializer(required=False)
-    bank = BankSerializer(required=False)
-    bank_account = BankAccountSerializer(required=False)
-    contact = ContactUpdateSerializer(required=False)
+    responsible_person = PersonUpdateSerializer(required=False, allow_null=True)
+    bank = BankSerializer(required=False, allow_null=True)
+    bank_account = BankAccountSerializer(required=False, allow_null=True)
+    contact = ContactUpdateSerializer(required=False, allow_null=True)
 
     class Meta:
         model = CustomerTemplateAgreement

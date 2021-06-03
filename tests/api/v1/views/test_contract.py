@@ -416,18 +416,6 @@ class TestContractViewSet:
                                           'fathers_name': 'Father',
                                           'position': 'asdf'
                                       },
-                                      'responsible_person': {
-                                          'first_name': 'First',
-                                          'last_name': 'Last',
-                                          'fathers_name': 'Father',
-                                      },
-                                      'contact': {
-                                          'mobile': '1234567890',
-                                          'address': 'My_address',
-                                          'work_email': 'My_work_email@email.fake',
-                                          'personal_email': 'My_personal_email@email.fake'
-
-                                      },
                                       'annex': {
                                           'request_no': 'asdf',
                                           'payment_terms':'asdf',
