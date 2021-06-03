@@ -39,7 +39,7 @@ const columns = [
     { field: 'due_date', header: "Bitmə Tarixi", filter: true },
     { field: 'sales_manager', header: "Satış Meneceri", filter: true },
     { field: 'status', header: 'Status', filter: true },
-    { field: 'annex_count', header: "Elave sayi", filter: false, add: true },
+    { field: 'annex_count', header: "Elavə sayi", filter: false, add: true },
 ];
 
 

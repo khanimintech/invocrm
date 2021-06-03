@@ -87,6 +87,34 @@ const PageContent = ({ overviewCards, title, titleIcon, sum, addIcon, children,
         });
     }
 
+	const exportPdf = () => {
+        import('jspdf').then(jsPDF => {
+            import('jspdf-autotable').then(() => {
+                const doc = new jsPDF.default(0, 0);
+				doc.setFont('Courier');
+				let excelData = data.map(row => {
+					let formatedRow = {};
+					columns.forEach(col => {
+						const { field, header } = col;
+						if (field === "created" || field === "due_date" || field === "annex_date"){
+							formatedRow[header] = formatDateString(row[field]);
+						}
+						else if (field === "status"){
+							formatedRow[header] = contractStatuses.find(s => s.value === row[field]) ? contractStatuses.find(s => s.value === row[field]).label : "-"
+						}
+						else if (field === "type")
+							formatedRow[header] = contractTypes[field]
+						else formatedRow[header] = row[field] || ""
+					})
+					return formatedRow
+				})
+
+                doc.autoTable(columns.map(col => ({ dataKey: col.field, title: col.header})), excelData);
+                doc.save(`${title}.pdf`);
+            })
+        })
+    }
+
 
 	return (
 		<>
@@ -131,7 +159,7 @@ const PageContent = ({ overviewCards, title, titleIcon, sum, addIcon, children,
 							</Tooltip>
               					&nbsp;&nbsp;
               					<Tooltip title="PDF formatında yüklə" placement="top"  >
-								<IconButton onClick={() => console.log('-')} className="pdf-icon" >
+								<IconButton onClick={exportPdf} className="pdf-icon" >
 									<PictureAsPdfIcon />
 								</IconButton>
 							</Tooltip>
