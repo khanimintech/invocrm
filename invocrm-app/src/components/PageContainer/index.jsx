@@ -7,11 +7,12 @@ import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
 import OverviewBox from "./OverviewBox";
 import { Calendar } from 'primereact/calendar';
 import { format } from 'date-fns'
-import 'jspdf-autotable'
-
-import './styles.scss';
-import { formatDateString } from "../../utils";
 import { contractStatuses, contractTypes } from "../../constants";
+import { formatDateString } from "../../utils";
+import 'jspdf-autotable'
+import FileSaver from 'file-saver';
+import { jsPDF } from "jspdf";
+import './styles.scss';
 
 
 
@@ -77,42 +78,36 @@ const PageContent = ({ overviewCards, title, titleIcon, sum, addIcon, children,
     }
 
     const saveAsExcelFile = (buffer, fileName) => {
-        import('file-saver').then(FileSaver => {
             let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
             let EXCEL_EXTENSION = '.xlsx';
             const data = new Blob([buffer], {
                 type: EXCEL_TYPE
             });
             FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
-        });
     }
 
 	const exportPdf = () => {
-        import('jspdf').then(jsPDF => {
-            import('jspdf-autotable').then(() => {
-                const doc = new jsPDF.default(0, 0);
-				doc.setFont('Courier');
-				let excelData = data.map(row => {
-					let formatedRow = {};
-					columns.forEach(col => {
-						const { field, header } = col;
-						if (field === "created" || field === "due_date" || field === "annex_date"){
-							formatedRow[header] = formatDateString(row[field]);
-						}
-						else if (field === "status"){
-							formatedRow[header] = contractStatuses.find(s => s.value === row[field]) ? contractStatuses.find(s => s.value === row[field]).label : "-"
-						}
-						else if (field === "type")
-							formatedRow[header] = contractTypes[field]
-						else formatedRow[header] = row[field] || ""
-					})
-					return formatedRow
-				})
+		const doc = new jsPDF.default(0, 0);
+		doc.setFont('Courier');
+		let excelData = data.map(row => {
+			let formatedRow = {};
+			columns.forEach(col => {
+				const { field, header } = col;
+				if (field === "created" || field === "due_date" || field === "annex_date"){
+					formatedRow[header] = formatDateString(row[field]);
+				}
+				else if (field === "status"){
+					formatedRow[header] = contractStatuses.find(s => s.value === row[field]) ? contractStatuses.find(s => s.value === row[field]).label : "-"
+				}
+				else if (field === "type")
+					formatedRow[header] = contractTypes[field]
+				else formatedRow[header] = row[field] || ""
+			})
+			return formatedRow
+		})
 
-                doc.autoTable(columns.map(col => ({ dataKey: col.field, title: col.header})), excelData);
-                doc.save(`${title}.pdf`);
-            })
-        })
+		doc.autoTable(columns.map(col => ({ dataKey: col.field, title: col.header})), excelData);
+		doc.save(`${title}.pdf`);
     }
 
 
