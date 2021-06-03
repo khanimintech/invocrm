@@ -12,6 +12,8 @@ import { formatDateString } from "../../utils";
 import 'jspdf-autotable'
 import FileSaver from 'file-saver';
 import { jsPDF } from "jspdf";
+import xlsx from 'xlsx';
+
 import './styles.scss';
 
 
@@ -45,7 +47,6 @@ const PageContent = ({ overviewCards, title, titleIcon, sum, addIcon, children,
 
 	
 	const exportExcel = () => {
-        import('xlsx').then(xlsx => {
 			try {
 				let excelData = data.map(row => {
 					let formatedRow = {};
@@ -72,9 +73,6 @@ const PageContent = ({ overviewCards, title, titleIcon, sum, addIcon, children,
 				console.error("Something went wrong")
 				console.log(e)
 			}
-			
-           
-        });
     }
 
     const saveAsExcelFile = (buffer, fileName) => {
