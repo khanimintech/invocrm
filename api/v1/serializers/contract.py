@@ -401,7 +401,7 @@ class TradeUpdateSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance, validated_data = custom_update(instance, validated_data)
 
-        return super().update(instance, validated_data)
+        return super().update(instance.tradeagreement, validated_data)
 
 
 class ServiceCreateSerializer(ContractCreateBaseSerializer):
@@ -483,7 +483,7 @@ class ServiceUpdateSerializer(serializers.ModelSerializer):
 
         instance, validated_data = custom_update(instance, validated_data)
 
-        return super().update(instance, validated_data)
+        return super().update(instance.serviceagreement, validated_data)
 
 
 class DistributionCreateSerializer(ContractCreateBaseSerializer):
@@ -567,7 +567,7 @@ class DistributionUpdateSerializer(serializers.ModelSerializer):
 
         instance, validated_data = custom_update(instance, validated_data)
 
-        return super().update(instance, validated_data)
+        return super().update(instance.aistributionagreement, validated_data)
 
 
 class AgentCreateSerializer(ContractCreateBaseSerializer):
@@ -676,7 +676,7 @@ class AgentUpdateSerializer(serializers.ModelSerializer):
 
             validated_data['responsible_person'] = rp
 
-        return super().update(instance, validated_data)
+        return super().update(instance.agentagreement, validated_data)
 
 
 class RentCreateSerializer(ContractCreateBaseSerializer):
@@ -756,7 +756,7 @@ class RentUpdateSerializer(serializers.ModelSerializer):
 
         instance, validated_data = custom_update(instance, validated_data)
 
-        return super().update(instance, validated_data)
+        return super().update(instance.rentagreement, validated_data)
 
 
 class OneTimeCreateSerializer(ContractCreateBaseSerializer):
@@ -837,7 +837,7 @@ class OneTimeUpdateSerializer(serializers.ModelSerializer):
 
         [ProductInvoiceItem.objects.filter(id=p.pop('id')).update(annex=instance.annex_list.last(), **p) for p in products_data]
 
-        return super().update(instance, validated_data)
+        return super().update(instance.onetimeagreement, validated_data)
 
 
 class InternationalCreateSerializer(ContractCreateBaseSerializer):
@@ -920,7 +920,7 @@ class InternationalUpdateSerializer(serializers.ModelSerializer):
 
         instance, validated_data = custom_update(instance, validated_data)
 
-        return super().update(instance, validated_data)
+        return super().update(instance.internationalagreement, validated_data)
 
 
 class CustomerCreateSerializer(ContractCreateBaseSerializer):
@@ -1000,7 +1000,7 @@ class CustomerUpdateSerializer(serializers.ModelSerializer):
 
         instance, validated_data = custom_update(instance, validated_data)
 
-        return super().update(instance, validated_data)
+        return super().update(instance.customertemplateagreement, validated_data)
 
 
 class POCreateSerializer(ContractCreateBaseSerializer):
@@ -1030,7 +1030,7 @@ class POGetSerializer(ContractCreateBaseSerializer):
 
 class POUpdateSerializer(serializers.ModelSerializer):
 
-    supplements = SupplementsUpdateSerializer(many=True)
+    supplements = SupplementsUpdateSerializer(many=True, required=False)
     company = CompanyUpdateSerializer()
 
     class Meta:
@@ -1051,9 +1051,9 @@ class POUpdateSerializer(serializers.ModelSerializer):
 
         supplements_data = validated_data.pop('supplements')
 
-        [POAgreementSupplements.objects.filter(id=s.pop('id')).update(agreement=instance, **s) for s in supplements_data]
+        [POAgreementSupplements.objects.filter(id=s.pop('id')).update(**s) for s in supplements_data]
 
-        return super().update(instance, validated_data)
+        return super().update(instance.poagreement, validated_data)
 
 
 class BankListSerializer(serializers.ModelSerializer):

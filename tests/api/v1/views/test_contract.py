@@ -4,9 +4,9 @@ from django.utils import timezone
 
 from rest_framework.reverse import reverse
 
-from api.main_models.annex import UnitOfMeasure, BaseAnnex, ProductInvoiceItem
+from api.main_models.annex import UnitOfMeasure, BaseAnnex, ProductInvoiceItem, POAgreementSupplements
 from api.main_models.contract import BaseContract, TradeAgreement, Company, Bank, BankAccount, ServiceAgreement, \
-    Contact, DistributionAgreement, AgentAgreement, OneTimeAgreement
+    Contact, DistributionAgreement, AgentAgreement, OneTimeAgreement, POAgreement
 from api.models import Person
 
 
@@ -186,6 +186,46 @@ class TestContractViewSet:
         assert t.company.bank_acc_list.last().bank.name == 'My_bank'
         assert t.company.bank_acc_list.last().bank.code == '1234567890'
         assert t.company.bank_acc_list.last().bank.tin == '1234567890'
+
+    def test_po_edit(self, apiclient, admin_user, sales_manager, company):
+
+        po = POAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                        type=BaseContract.Type.PO, contract_no='1234', company=company, po_number='2')
+        s1 = POAgreementSupplements.objects.create(supplement_no='123', agreement=po)
+        s2 = POAgreementSupplements.objects.create(supplement_no='1234', agreement=po)
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        apiclient.force_login(admin_user)
+        response = apiclient.put(reverse('api:v1:contracts-detail', args=[po.id]),
+                                 data={
+                                     'id': po.id,
+                                     'po_number': "5656565655",
+                                     'due_date': "2021-05-24T09:16:56.522Z",
+                                     'created': "2021-05-24T09:16:56.522Z",
+                                     'company': {'id': company.id,
+                                                 'type': None,
+                                                 'name': "qw",
+                                                 'address': None,
+                                                 'tin': None,
+                                                 'email': None},
+                                     'sales_manager': sales_manager.id,
+                                     'supplements': [{'supplement_no': "003", 'id': s1.id},
+                                                     {'supplement_no': "323", 'id': s2.id}],
+                                     'type': BaseContract.Type.PO
+                                 },
+                                 format='json'
+                                 )
+        assert response.status_code == 200, response.json()
+
+        s1.refresh_from_db()
+        s2.refresh_from_db()
+        po.refresh_from_db()
+
+        assert s1.supplement_no == '003'
+        assert s2.supplement_no == '323'
+        assert po.po_number == '5656565655'
+        assert po.company.name == 'qw'
 
     def test_contract_destroy(self, apiclient, admin_user, sales_manager):
 
@@ -558,6 +598,10 @@ class TestContractViewSet:
         p2.refresh_from_db()
         assert p1.name == 'huquqi'
         assert p2.name == 'huquqi'
+
+        contract.refresh_from_db()
+
+        assert contract.final_amount_with_writing == 'huquqi'
 
 
 class TestContactViewSet:
