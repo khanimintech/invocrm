@@ -86,8 +86,8 @@ class ContactSerializer(serializers.ModelSerializer):
 
 class PersonUpdateSerializer(serializers.ModelSerializer):
 
-    position = serializers.CharField(required=False, allow_null=True)
-    tin = serializers.CharField(required=False, allow_null=True)
+    position = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    tin = serializers.CharField(required=False, allow_null=True, allow_blank=True)
 
     class Meta:
         model = Person

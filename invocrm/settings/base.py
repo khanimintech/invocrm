@@ -52,7 +52,7 @@ MIDDLEWARE = [
     'invocrm.middleware.force_login_middleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'invocrm.urls'
