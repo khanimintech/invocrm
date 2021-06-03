@@ -1018,7 +1018,7 @@ class POCreateSerializer(ContractCreateBaseSerializer):
 class POGetSerializer(ContractCreateBaseSerializer):
 
     supplements = SupplementsSerializer(many=True)
-    company = EntitySerializer
+    company = EntitySerializer()
 
     class Meta:
         model = POAgreement
