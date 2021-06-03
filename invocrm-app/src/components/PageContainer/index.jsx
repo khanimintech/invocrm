@@ -14,6 +14,7 @@ import FileSaver from 'file-saver';
 import { jsPDF } from "jspdf";
 import xlsx from 'xlsx';
 
+
 import './styles.scss';
 
 
@@ -52,15 +53,23 @@ const PageContent = ({ overviewCards, title, titleIcon, sum, addIcon, children,
 					let formatedRow = {};
 					columns.forEach(col => {
 						const { field, header } = col;
-						if (field === "created" || field === "due_date" || field === "annex_date"){
-							formatedRow[header] = formatDateString(row[field]);
+						switch (field){
+							case "created":
+							case "due_date":
+							case "annex_date":
+								formatedRow[header] = formatDateString(row[field])
+								break;
+							case "status":
+								formatedRow[header] = contractStatuses.find(s => s.value === row[field]) ? contractStatuses.find(s => s.value === row[field]).label : "-"
+								break;
+							case  "type" :
+							case "contract_type":
+								formatedRow[header] = contractTypes[row[field]];
+								break;
+							default:
+								formatedRow[header] = row[field] || ""
+								break;
 						}
-						else if (field === "status"){
-							formatedRow[header] = contractStatuses.find(s => s.value === row[field]) ? contractStatuses.find(s => s.value === row[field]).label : "-"
-						}
-						else if (field === "type")
-							formatedRow[header] = contractTypes[field]
-						else formatedRow[header] = row[field] || ""
 					})
 					return formatedRow
 				})
@@ -85,21 +94,30 @@ const PageContent = ({ overviewCards, title, titleIcon, sum, addIcon, children,
     }
 
 	const exportPdf = () => {
-		const doc = new jsPDF.default(0, 0);
+		const doc = new jsPDF(0, 0);
 		doc.setFont('Courier');
 		let excelData = data.map(row => {
 			let formatedRow = {};
 			columns.forEach(col => {
 				const { field, header } = col;
-				if (field === "created" || field === "due_date" || field === "annex_date"){
-					formatedRow[header] = formatDateString(row[field]);
+				switch (field){
+					case "created":
+					case "due_date":
+					case "annex_date":
+						formatedRow[header] = formatDateString(row[field])
+						break;
+					case "status":
+						formatedRow[header] = contractStatuses.find(s => s.value === row[field]) ? contractStatuses.find(s => s.value === row[field]).label : "-"
+						break;
+					case  "type" :
+					case "contract_type":
+						console.log(contractTypes[field])
+						formatedRow[header] = contractTypes[field];
+						break;
+					default:
+						formatedRow[header] = row[field] || ""
+						break;
 				}
-				else if (field === "status"){
-					formatedRow[header] = contractStatuses.find(s => s.value === row[field]) ? contractStatuses.find(s => s.value === row[field]).label : "-"
-				}
-				else if (field === "type")
-					formatedRow[header] = contractTypes[field]
-				else formatedRow[header] = row[field] || ""
 			})
 			return formatedRow
 		})
