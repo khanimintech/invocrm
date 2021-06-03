@@ -567,7 +567,7 @@ class DistributionUpdateSerializer(serializers.ModelSerializer):
 
         instance, validated_data = custom_update(instance, validated_data)
 
-        return super().update(instance.aistributionagreement, validated_data)
+        return super().update(instance.distributionagreement, validated_data)
 
 
 class AgentCreateSerializer(ContractCreateBaseSerializer):
