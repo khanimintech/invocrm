@@ -39,6 +39,8 @@ const Contacts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
             titleIcon={<ContactPhoneIcon />}
             onExportCSV={() => dt.current.exportCSV()}
             sum={contacts ? contacts.length : 0}
+            data={contacts}
+            columns={columns}
         >
              <ExtendedTable
                 data={contacts}

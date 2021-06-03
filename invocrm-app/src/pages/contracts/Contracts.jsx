@@ -13,7 +13,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import ExtendedTable from '../../components/ExtendedTable';
 import { contractTypes, ITEM_HEIGHT } from '../../constants';
-import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import CreateContractModal from './CreateContractForm';
 import { contractStatuses } from '../../constants';
@@ -154,24 +153,6 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
 
     const deleteContract = (contract) =>  handleRequest(ContractsService.remove(contract.id));
 
-    const exportPDF = () => {
-        const el = document.getElementsByClassName("p-datatable-wrapper")[0].cloneNode(true);
-        html2canvas(el)
-        .then((canvas) => {
-            let img = new Image();
-            img.src = canvas.toDataURL('image/png');
-            img.onload = function () {
-              let pdf = new jsPDF({
-                orientation: "landscape",
-                unit: "in",
-                format: [8, 4]
-              });
-              pdf.addImage(img, 0, 0, pdf.internal.pageSize.width, pdf.internal.pageSize.height);
-              pdf.save('contracts.pdf');
-            };
-        })
-    }
-
     const handleOpenContractModal =  contractType => {
         setContractType(contractType);
         toggleShowCreateModal(true);
@@ -245,7 +226,8 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
             sum={allCount}
             onExportCSV={() => dt.current.exportCSV()}
             addIcon={addIcon}
-            onExportPDF={exportPDF}
+            data={contracts}
+            columns={columns}
             showTimeRange
             handleFilter={({from, to}) =>  {
                 setFilters({ ...filters, "contract_created_after": from , "contract_created_before" : to })

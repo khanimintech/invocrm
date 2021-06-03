@@ -56,3 +56,8 @@ export const createFilterUrl = (url, filters) => {
       })
   return filterUrl;
 }
+
+
+export  const formatDateString = value => {
+  return value ? format(parseISO(value), "MM.dd.yyyy") : "-"
+}

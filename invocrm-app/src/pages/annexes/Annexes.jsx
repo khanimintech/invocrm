@@ -83,6 +83,8 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
             onExportCSV={() => dt.current.exportCSV()}
             showTimeRange
             handleFilter={({from, to}) =>  getAnnexes({ ...filters, "annex_created_after": from , "annex_created_before" : to })}
+            data={annexes}
+            columns={columns}
         >
              <ExtendedTable
                 headerTitle="Müqaviləyə əlavələrin siyahısı"

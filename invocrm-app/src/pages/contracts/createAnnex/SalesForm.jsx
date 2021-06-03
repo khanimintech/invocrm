@@ -8,9 +8,6 @@ import Typography from '@material-ui/core/Typography';
 import { validateRequired } from '../../../utils';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-// import CreateFormActions from './CreateFormActions';
-// import CustomerContacts from './CustomerContacts';
-// import { contractTypes, companyTypes } from './../../../constants';
 import { format, parseISO } from 'date-fns'
 import { contractTypes } from '../../../constants';
 import CreateFormActions from '../CreateFormActions';
