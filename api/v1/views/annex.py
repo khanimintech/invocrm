@@ -1,10 +1,11 @@
+from django.db.models import IntegerField, Subquery, OuterRef, Count
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from api.filters.annex import AnnexFilterSet
-from api.main_models.annex import BaseAnnex, UnitOfMeasure
+from api.main_models.annex import BaseAnnex, UnitOfMeasure, ProductInvoiceItem
 from api.main_models.contract import BaseContract
 from api.v1.serializers.annex import AnnexSerializer, AnnexCreateSerializer, UnitSerializer, AgentAnnexCreateSerializer, \
     RentAnnexCreateSerializer
@@ -14,13 +15,13 @@ class AnnexViewSet(ModelViewSet):
 
     queryset = BaseAnnex.objects.all()
     serializer_class = AnnexSerializer
-    filter_backends = (DjangoFilterBackend, )
+    filter_backends = (DjangoFilterBackend,)
     filterset_class = AnnexFilterSet
 
     def get_queryset(self):
 
         queryset = self.queryset
-        return queryset.filter(contract__plant_name=self.request.user.plant_name)
+        return queryset.filter(contract__plant_name=self.request.user.plant_name).a_invoice_sum()
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -45,7 +46,7 @@ class AnnexViewSet(ModelViewSet):
 
 class AnnexStatusStatAPIView(ListAPIView):
 
-    queryset = BaseAnnex.objects.all()
+    queryset = BaseAnnex.objects.all().a_invoice_sum()
     filter_backends = (DjangoFilterBackend,)
     filterset_class = AnnexFilterSet
 
@@ -59,8 +60,8 @@ class AnnexStatusStatAPIView(ListAPIView):
 
         response = {
             'all_count': qs.count(),
-            'with_vat': qs.filter(with_vat=True).count(),
-            'vat_free': qs.filter(with_vat=False).count(),
+            'with_vat': sum(qs.filter(with_vat=True).values_list('sum_with_invoice', flat=True)),
+            'vat_free': sum(qs.filter(with_vat=False).values_list('sum_no_invoice', flat=True)),
 
         }
 
