@@ -13,19 +13,30 @@ import 'jspdf-autotable'
 import FileSaver from 'file-saver';
 import { jsPDF } from "jspdf";
 import xlsx from 'xlsx';
-
-
+import PrintIcon from '@material-ui/icons/Print';
+import html2canvas from "html2canvas";
 import './styles.scss';
+import { CircularProgress } from "@material-ui/core";
 
 
 
 
-const PageContent = ({ overviewCards, title, titleIcon, sum, addIcon, children,
- showTimeRange, handleFilter, data, columns
+
+const PageContent = ({ 
+	overviewCards, title, titleIcon, sum, addIcon, children,
+ showTimeRange, handleFilter, data, columns, table
 }) => {
 	const [from, setFrom] = useState();
 	const [to, setTo] = useState();
+	const [pdfLoading, togglePdfLoading] = useState(false);
+
 	const firstRender = useRef(true);
+
+	const options = {
+		orientation: 'landscape',
+		unit: 'in',
+		format: [4,2]
+	};
 
 	useEffect(() => {
 		firstRender.current = false;
@@ -94,37 +105,55 @@ const PageContent = ({ overviewCards, title, titleIcon, sum, addIcon, children,
     }
 
 	const exportPdf = () => {
-		const doc = new jsPDF(0, 0);
-		doc.setFont('Courier');
-		let excelData = data.map(row => {
-			let formatedRow = {};
-			columns.forEach(col => {
-				const { field, header } = col;
-				switch (field){
-					case "created":
-					case "due_date":
-					case "annex_date":
-						formatedRow[header] = formatDateString(row[field])
-						break;
-					case "status":
-						formatedRow[header] = contractStatuses.find(s => s.value === row[field]) ? contractStatuses.find(s => s.value === row[field]).label : "-"
-						break;
-					case  "type" :
-					case "contract_type":
-						console.log(contractTypes[field])
-						formatedRow[header] = contractTypes[field];
-						break;
-					default:
-						formatedRow[header] = row[field] || ""
-						break;
-				}
+		togglePdfLoading(true)
+		const table = document.getElementsByClassName("p-datatable-wrapper")[0]
+		window.scrollTo(0,0)
+		html2canvas(table, {
+			ignoreElements : el => {
+			if (el.classList.contains("p-filter-column") 
+				|| el.classList.contains("p-sortable-column-icon") 
+				|| el.classList.contains("table-actions-row") 
+				|| el.classList.contains("actions-th"))
+				return true
+			else return false
+		},
+		letterRendering: 1,
+		allowTaint: false,
+		useCORS: true,
+		onclone: doc => {
+			Array.from(doc.getElementsByClassName("status")).forEach(statusEl => {
+				statusEl.className = ""
 			})
-			return formatedRow
-		})
-
-		doc.autoTable(columns.map(col => ({ dataKey: col.field, title: col.header})), excelData);
-		doc.save(`${title}.pdf`);
+			Array.from(doc.getElementsByClassName("clickable-column")).forEach(statusEl => {
+				statusEl.className = ""
+			})
+		}
+	})
+		  .then((canvas) => {
+			const imgData = canvas.toDataURL('image/png');
+			const pdf = new jsPDF({
+				orientation: 'p',
+				unit: 'px',
+				format: 'b0',
+				putOnlyUsedFonts:true,
+				backgroundColor: "#ffffff",
+				pagesplit: true,
+			});
+			  pdf.addImage(imgData, 'JPEG', 40, 20);
+			togglePdfLoading(false)
+			// pdf.autoPrint({variant: 'non-conform'});
+			 pdf.save(`${title}.pdf`);
+		  })
+		;
+	
     }
+
+	const  printDocument = ()  => {
+		var doc = new jsPDF();
+		doc.text(10, 10, 'This is a test');
+		doc.autoPrint({variant: 'non-conform'});
+	}
+
 
 
 	return (
@@ -169,9 +198,17 @@ const PageContent = ({ overviewCards, title, titleIcon, sum, addIcon, children,
 								</IconButton>
 							</Tooltip>
               					&nbsp;&nbsp;
-              					<Tooltip title="PDF formatında yüklə" placement="top"  >
-								<IconButton onClick={exportPdf} className="pdf-icon" >
-									<PictureAsPdfIcon />
+              					<Tooltip title={pdfLoading ? "PDF generasiya olunur..." : "PDF formatında yüklə"} placement="top"  >
+									<IconButton onClick={pdfLoading ? null : exportPdf} className="pdf-icon" >
+										{pdfLoading ? <CircularProgress size="small" /> :  <PictureAsPdfIcon /> }	
+										</IconButton>
+										
+									
+							</Tooltip>
+							&nbsp;&nbsp;
+              				<Tooltip title="Çap et" placement="top"  >
+								<IconButton onClick={printDocument} className="pdf-icon" >
+									<PrintIcon color="secondary" />
 								</IconButton>
 							</Tooltip>
 						</Grid>

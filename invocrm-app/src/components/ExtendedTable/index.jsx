@@ -22,6 +22,7 @@ import { contractTypes, contractStatuses } from '../../constants';
 import { format, parseISO } from 'date-fns';
 import { InputText } from 'primereact/inputtext';
 
+
 const ExtendedTable = ({
     data, columns,
     statuses, elRef, actions, headerTitle, onDelete,
@@ -160,7 +161,7 @@ const ExtendedTable = ({
         return (
             <React.Fragment>
                 <span className="p-column-title">Status</span>
-                <Chip label={status.label} className={`status-${status.value}`} />
+                <Chip label={status.label} className={`status status-${status.value}`} />
             </React.Fragment>
         );
     }
@@ -260,7 +261,7 @@ const ExtendedTable = ({
 
 
     return (
-        <Grid item xs={12} className="datatable-filter">
+        <Grid item xs={12} className="datatable-filter" id="pdf-table" >
             <DataTable
                 ref={elRef}
                 value={data}
@@ -272,6 +273,7 @@ const ExtendedTable = ({
                 {columnComponents}
                 <Column header={"Əmaliyyatlar"}
                     body={actionsBodyTemplate}
+                    className="actions-th"
                 />
             </DataTable>
             <Dialog

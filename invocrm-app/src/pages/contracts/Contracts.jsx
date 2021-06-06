@@ -49,7 +49,7 @@ const columns = [
 const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
 
     let dt = useRef(null);
-    
+    let dtW = useRef(null);
     const [overviews, setOverviews] = useState(initialOverviews);
     const [contracts, setContracts] = useState(null);
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -233,6 +233,12 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
             handleFilter={({from, to}) =>  {
                 setFilters({ ...filters, "contract_created_after": from , "contract_created_before" : to })
             }}
+            table={ <ExtendedTable
+                data={contracts}
+                columns={columns}
+                statuses={contractStatuses}
+
+            />}
         >
             <ExtendedTable
                 headerTitle="Müqavilələrin siyahısı"
