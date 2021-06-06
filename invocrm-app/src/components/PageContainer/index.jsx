@@ -17,14 +17,29 @@ import PrintIcon from '@material-ui/icons/Print';
 import html2canvas from "html2canvas";
 import './styles.scss';
 import { CircularProgress } from "@material-ui/core";
+import ExtendedTable from "../ExtendedTable";
 
 
 
+
+class ComponentToPrint extends React.Component {
+	render({data, columns, elRef}) {
+	  return (
+		<ExtendedTable
+                data={data}
+                columns={columns}
+                statuses={contractStatuses}
+				elRef={elRef}
+
+            />
+	  );
+	}
+  }
 
 
 const PageContent = ({ 
 	overviewCards, title, titleIcon, sum, addIcon, children,
- showTimeRange, handleFilter, data, columns, table
+ showTimeRange, handleFilter, data, columns
 }) => {
 	const [from, setFrom] = useState();
 	const [to, setTo] = useState();
@@ -127,13 +142,21 @@ const PageContent = ({
 			Array.from(doc.getElementsByClassName("clickable-column")).forEach(statusEl => {
 				statusEl.className = ""
 			})
-		}
+			document.getElementsByClassName("p-datatable")[0].getElementsByClassName.maxHeight= "400px";
+			document.getElementsByClassName("p-datatable")[0].getElementsByClassName.overflow= "auto";
+		},
+		scrollX: -window.scrollX,
+        scrollY: -window.scrollY,
+        windowWidth: document.documentElement.offsetWidth,
+        windowHeight: document.documentElement.offsetHeight
 	})
 		  .then((canvas) => {
 			const imgData = canvas.toDataURL('image/png');
+		
+
 			const pdf = new jsPDF({
 				orientation: 'p',
-				unit: 'px',
+				unit: 'ex',
 				format: 'b0',
 				putOnlyUsedFonts:true,
 				backgroundColor: "#ffffff",
@@ -149,9 +172,16 @@ const PageContent = ({
     }
 
 	const  printDocument = ()  => {
-		var doc = new jsPDF();
-		doc.text(10, 10, 'This is a test');
-		doc.autoPrint({variant: 'non-conform'});
+		const content = document.getElementsByClassName("p-datatable-wrapper")[0].cloneNode(true);
+		Array.from(content.getElementsByClassName("p-filter-column")).forEach(el => {
+			el.remove();
+		})
+		const pri = document.getElementById("ifmcontentstoprint").contentWindow;
+		pri.document.open();
+		pri.document.write(content.innerHTML);
+		pri.document.close();
+		pri.focus();
+		pri.print();
 	}
 
 
@@ -207,9 +237,10 @@ const PageContent = ({
 							</Tooltip>
 							&nbsp;&nbsp;
               				<Tooltip title="Çap et" placement="top"  >
-								<IconButton onClick={printDocument} className="pdf-icon" >
+							 <IconButton onClick={printDocument} className="pdf-icon" >
 									<PrintIcon color="secondary" />
-								</IconButton>
+									</IconButton>
+								
 							</Tooltip>
 						</Grid>
 					</Grid>

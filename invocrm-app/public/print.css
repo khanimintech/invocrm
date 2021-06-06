@@ -1,0 +1,10 @@
+@media print {
+
+.p-datatable table{
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+    border-color: grey;
+}
+  
+  }
