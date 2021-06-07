@@ -105,7 +105,7 @@ class SupplementsSerializer(serializers.ModelSerializer):
 
 class SupplementsUpdateSerializer(serializers.ModelSerializer):
 
-    id = serializers.IntegerField()
+    id = serializers.IntegerField(required=False)
 
     class Meta:
 
@@ -154,7 +154,7 @@ class OneTimeProductSerializer(serializers.ModelSerializer):
 
 class OneTimeUpdateProductSerializer(serializers.ModelSerializer):
 
-    id = serializers.IntegerField()
+    id = serializers.IntegerField(required=False)
 
     class Meta:
 
@@ -838,7 +838,15 @@ class OneTimeUpdateSerializer(serializers.ModelSerializer):
         update_if_not_none(Person, instance.annex_list.last().seller.id, seller_data)
         update_if_not_none(BaseAnnex, instance.executor.id, annex_data)
 
-        [ProductInvoiceItem.objects.filter(id=p.pop('id')).update(annex=instance.annex_list.last(), **p) for p in products_data]
+        for p in products_data:
+
+            if p.get('id', None):
+
+                ProductInvoiceItem.objects.filter(id=p.pop('id')).update(annex=instance.annex_list.last(), **p)
+
+            else:
+
+                ProductInvoiceItem.objects.create(annex=instance.annex_list.last(), **p)
 
         return super().update(instance.onetimeagreement, validated_data)
 
@@ -1054,7 +1062,14 @@ class POUpdateSerializer(serializers.ModelSerializer):
 
         supplements_data = validated_data.pop('supplements')
 
-        [POAgreementSupplements.objects.filter(id=s.pop('id')).update(**s) for s in supplements_data]
+        for s in supplements_data:
+
+            if s.get('id', None):
+
+                POAgreementSupplements.objects.filter(id=s.pop('id')).update(**s)
+
+            else:
+                POAgreementSupplements.objects.create(agreement=instance.poagreement, **s)
 
         return super().update(instance.poagreement, validated_data)
 

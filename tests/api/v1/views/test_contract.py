@@ -211,7 +211,8 @@ class TestContractViewSet:
                                                  'email': None},
                                      'sales_manager': sales_manager.id,
                                      'supplements': [{'supplement_no': "003", 'id': s1.id},
-                                                     {'supplement_no': "323", 'id': s2.id}],
+                                                     {'supplement_no': "323", 'id': s2.id},
+                                                     {'supplement_no': "423"}],
                                      'type': BaseContract.Type.PO
                                  },
                                  format='json'
@@ -549,7 +550,8 @@ class TestContractViewSet:
                     "tin": None,
                     "position": "huquqi"},
                 "products": [{"name": "huquqi", "unit": unit.id, "quantity": 1, "price": 2, "total": 2, "id": p1.id},
-                             {"name": "huquqi", "unit": unit.id, "quantity": 1, "price": 1, "total": 1, "id": p2.id}]},
+                             {"name": "huquqi", "unit": unit.id, "quantity": 1, "price": 1, "total": 1, "id": p2.id},
+                             {"name": "huquqi", "unit": unit.id, "quantity": 1, "price": 1, "total": 1}]},
 
             "id": contract.id,
             "due_date": timezone.now(),
@@ -603,6 +605,7 @@ class TestContractViewSet:
         contract.refresh_from_db()
 
         assert contract.final_amount_with_writing == 'huquqi'
+        assert ProductInvoiceItem.objects.all().count() == 3
 
 
 class TestContactViewSet:
