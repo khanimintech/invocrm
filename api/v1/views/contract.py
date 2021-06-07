@@ -137,7 +137,7 @@ class BankViewSet(ModelViewSet):
 
         return queryset.filter(
             Q(company_owner__basecontract__plant_name=self.request.user.plant_name) |
-            Q(personal_owner__agreement__plant_name=self.request.user.plant_name)
+            Q(personal_owner__contract__plant_name=self.request.user.plant_name)
         )
 
 
