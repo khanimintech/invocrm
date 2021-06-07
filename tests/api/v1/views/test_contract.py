@@ -272,6 +272,7 @@ class TestContractViewSet:
         admin_user.plant_name = 'plant'
         admin_user.save()
         apiclient.force_login(admin_user)
+
         response = apiclient.post(reverse('api:v1:contracts-list'),
                                   data={
                                       'contract_no': 123,

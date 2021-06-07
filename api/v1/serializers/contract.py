@@ -281,8 +281,6 @@ class ContractCreateBaseSerializer(serializers.ModelSerializer):
         user = self.context.get('user')
 
         annex_data = validated_data.pop('annex', None)
-        products_data = validated_data.pop('products', None)
-        seller_data = validated_data.pop('seller', None)
 
         supplements_data = validated_data.pop('supplements', None)
 
@@ -305,6 +303,9 @@ class ContractCreateBaseSerializer(serializers.ModelSerializer):
                                                                        executor=executor, **validated_data)
 
         if contract.type == BaseContract.Type.ONE_TIME and annex_data:
+
+            products_data = annex_data.pop('products', None)
+            seller_data = annex_data.pop('seller', None)
 
             seller = Person.objects.create(type=Person.TYPE.SELLER, **seller_data)
 
