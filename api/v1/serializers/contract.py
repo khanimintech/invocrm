@@ -144,15 +144,6 @@ class BankAccountSerializer(serializers.ModelSerializer):
         fields = ['default', 'account', 'swift_no', 'correspondent_account', 'city', 'address', 'id']
 
 
-class OneTimeAnnexSerializer(serializers.ModelSerializer):
-
-    class Meta:
-
-        model = BaseAnnex
-
-        fields = ['request_no', 'payment_terms', 'delivery_terms', 'acquisition_terms']
-
-
 class OneTimeProductSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -201,6 +192,17 @@ class OneTimeUpdateAnnexSerializer(serializers.ModelSerializer):
 
     class Meta:
 
+        model = BaseAnnex
+
+        fields = ['request_no', 'payment_terms', 'delivery_terms', 'acquisition_terms', 'seller', 'products']
+
+
+class OneTimeAnnexSerializer(serializers.ModelSerializer):
+
+    seller = PersonSerializer()
+    products = OneTimeProductSerializer(many=True)
+
+    class Meta:
         model = BaseAnnex
 
         fields = ['request_no', 'payment_terms', 'delivery_terms', 'acquisition_terms', 'seller', 'products']
@@ -299,8 +301,8 @@ class ContractCreateBaseSerializer(serializers.ModelSerializer):
         create_pop_or_none(BankAccount, 'bank_account', **{'company_owner': company, 'personal_owner': executor, 'bank': bank})
 
         contract = CONTRACT_CHOICE[validated_data['type']].objects.create(plant_name=user.plant_name, company=company,
-                                                                       responsible_person=responsible_person,
-                                                                       executor=executor, **validated_data)
+                                                                          responsible_person=responsible_person,
+                                                                          executor=executor, **validated_data)
 
         if contract.type == BaseContract.Type.ONE_TIME and annex_data:
 

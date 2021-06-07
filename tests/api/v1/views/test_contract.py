@@ -451,34 +451,34 @@ class TestContractViewSet:
                                           'mobile': '1234567890',
                                           'personal_email': 'My_personal_email@email.fake'
                                       },
-                                      'seller': {
-                                          'first_name': 'First',
-                                          'last_name': 'Last',
-                                          'fathers_name': 'Father',
-                                          'position': 'asdf'
-                                      },
                                       'annex': {
                                           'request_no': 'asdf',
                                           'payment_terms':'asdf',
                                           'delivery_terms': 'asdf',
                                           'acquisition_terms': 'asdf',
-                                      },
-                                      'products': [
-                                          {
-                                              'name': 'asdf',
-                                              'unit': unit.id,
-                                              'quantity': 1,
-                                              'price': 1,
-                                              'total': 2
+                                          'seller': {
+                                              'first_name': 'First',
+                                              'last_name': 'Last',
+                                              'fathers_name': 'Father',
+                                              'position': 'asdf'
                                           },
-                                          {
-                                              'name': 'asdf',
-                                              'unit': unit.id,
-                                              'quantity': 1,
-                                              'price': 1,
-                                              'total': 2
-                                          }
-                                      ],
+                                          'products': [
+                                              {
+                                                  'name': 'asdf',
+                                                  'unit': unit.id,
+                                                  'quantity': 1,
+                                                  'price': 1,
+                                                  'total': 2
+                                              },
+                                              {
+                                                  'name': 'asdf',
+                                                  'unit': unit.id,
+                                                  'quantity': 1,
+                                                  'price': 1,
+                                                  'total': 2
+                                              }
+                                          ]
+                                      },
                                       'price_offer': 'asdf',
                                       'price_offer_validity': 'asdf',
                                       'warranty_period': 'asdf',
