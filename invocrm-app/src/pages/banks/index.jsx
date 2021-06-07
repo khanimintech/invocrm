@@ -10,8 +10,6 @@ const columns = [
     { field: 'account', header: 'Hesab №' , filter: true },
     { field: 'company_name', header: 'Şirkət' , filter: true },
     { field: 'name', header: 'Bank adı', filter: true  },
-    // { field: 'address', header: 'Yerləşdiyi yer', filter: true  },
-    // { field: 'city', header: 'Şəhər', filter: true  },
     { field: 'swift_no', header: "SWIFT" , filter: true },
     { field: 'code', header: "Bank kodu" , filter: true },
     { field: 'tin', header: "Bank VÖEN", filter: true  },
@@ -19,7 +17,7 @@ const columns = [
 ];
 
 
-const Banks = ({ handleRequest, user, loading, enqueueSnackbar }) => {
+const Banks = ({ handleRequest, loading, enqueueSnackbar }) => {
     let dt = useRef(null);
     const [banks, setBanks] = useState(null);
     const [filters, setFilters] = useState({});

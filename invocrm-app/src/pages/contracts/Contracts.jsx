@@ -13,7 +13,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import ExtendedTable from '../../components/ExtendedTable';
 import { contractTypes, ITEM_HEIGHT } from '../../constants';
-import html2canvas from 'html2canvas';
 import CreateContractModal from './CreateContractForm';
 import { contractStatuses } from '../../constants';
 import ContractAnnexModal from './ContractAnnexModal';

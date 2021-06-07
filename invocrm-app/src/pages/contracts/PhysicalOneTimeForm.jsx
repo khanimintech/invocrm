@@ -1,17 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Formik, Form, Field } from 'formik';
+import React from 'react';
+import { Field } from 'formik';
 import Grid from '@material-ui/core/Grid';
 import Input from '../../components/Input';
-import { ContractsService } from '../../services/ContractsService';
-import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
 import { validateRequired } from '../../utils';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import CreateFormActions from './CreateFormActions';
-import { companyTypes } from '../../constants';
-import BankRequisits from './BankRequisits';
-import CustomerContacts from './CustomerContacts';
 
 
 const PhysicalOneTimeForm = ({ salesManagers, readOnly }) => {

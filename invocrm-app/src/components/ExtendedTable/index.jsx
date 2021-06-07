@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect } from 'react';
 import { Dropdown } from 'primereact/dropdown';
 import { Calendar } from 'primereact/calendar';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
@@ -27,7 +27,7 @@ const ExtendedTable = ({
     data, columns,
     statuses, elRef, actions, headerTitle, onDelete,
     enqueueSnackbar, getData,
-    getItem, addItem, onAttachmentClick, showTimeRange,
+    getItem, addItem, onAttachmentClick,
     filters, setFilters ,
     tableLoading
 }) => {

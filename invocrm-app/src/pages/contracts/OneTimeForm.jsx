@@ -4,7 +4,6 @@ import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import CreateFormActions from './CreateFormActions';
 import CustomerContacts from './CustomerContacts';
 import CompnayOneTimeForm from './CompanyOneTimeForm';

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-
-import './styles.scss'
+import { Formik, Form, Field } from 'formik';
 import { LoginService } from '../../services/LoginService';
 import { withRouter } from 'react-router-dom';
+
+import './styles.scss'
 
 
 const Login = ({ setUser, history, handleRequest, enqueueSnackbar }) => {

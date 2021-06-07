@@ -135,6 +135,7 @@ const PageContent = ({
 		letterRendering: 1,
 		allowTaint: false,
 		useCORS: true,
+
 		onclone: doc => {
 			Array.from(doc.getElementsByClassName("status")).forEach(statusEl => {
 				statusEl.className = ""
@@ -145,29 +146,31 @@ const PageContent = ({
 			document.getElementsByClassName("p-datatable")[0].getElementsByClassName.maxHeight= "400px";
 			document.getElementsByClassName("p-datatable")[0].getElementsByClassName.overflow= "auto";
 		},
-		scrollX: -window.scrollX,
-        scrollY: -window.scrollY,
-        windowWidth: document.documentElement.offsetWidth,
-        windowHeight: document.documentElement.offsetHeight
+	
+
 	})
 		  .then((canvas) => {
 			const imgData = canvas.toDataURL('image/png');
-		
-
-			const pdf = new jsPDF({
-				orientation: 'p',
-				unit: 'ex',
-				format: 'b0',
-				putOnlyUsedFonts:true,
-				backgroundColor: "#ffffff",
-				pagesplit: true,
-			});
-			  pdf.addImage(imgData, 'JPEG', 40, 20);
+			const imgWidth = 190;
+			const pageHeight = 290;
+			const imgHeight = (canvas.height * imgWidth) / canvas.width;
+			let heightLeft = imgHeight;
+			const pdf = new jsPDF('pt', 'mm');
+			let position = 0;
+			pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight + 25);
+			heightLeft -= pageHeight;
+			while (heightLeft >= 0) {
+				position = heightLeft - imgHeight;
+				pdf.addPage();
+				pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight + 25);
+				heightLeft -= pageHeight;
+			}
 			togglePdfLoading(false)
-			// pdf.autoPrint({variant: 'non-conform'});
 			 pdf.save(`${title}.pdf`);
 		  })
 		;
+
+
 	
     }
 

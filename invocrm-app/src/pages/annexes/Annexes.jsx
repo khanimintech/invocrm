@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import PageContent from '../../components/PageContainer';
 import PriorityHighIcon from '@material-ui/icons/PriorityHigh';
 import AccessAlarmIcon from '@material-ui/icons/AccessAlarm';
-import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import { AnnexesService } from '../../services/AnnexesService';
 import ExtendedTable from '../../components/ExtendedTable';

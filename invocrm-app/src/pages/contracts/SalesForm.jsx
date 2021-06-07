@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { Formik, Form, Field } from 'formik';
 import Grid from '@material-ui/core/Grid';
 import Input from '../../components/Input';
-import { ContractsService } from '../../services/ContractsService';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import { validateRequired } from '../../utils';
