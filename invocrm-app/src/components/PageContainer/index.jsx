@@ -172,16 +172,32 @@ const PageContent = ({
     }
 
 	const  printDocument = ()  => {
-		const content = document.getElementsByClassName("p-datatable-wrapper")[0].cloneNode(true);
-		Array.from(content.getElementsByClassName("p-filter-column")).forEach(el => {
-			el.remove();
-		})
-		const pri = document.getElementById("ifmcontentstoprint").contentWindow;
-		pri.document.open();
-		pri.document.write(content.innerHTML);
-		pri.document.close();
-		pri.focus();
-		pri.print();
+		const el = document.getElementById("pdf-table").cloneNode(true)
+		Array.from(el.getElementsByClassName("p-filter-column")).forEach(f => f.remove())
+		el.getElementsByClassName("p-datatable-header")[0].remove()
+		el.getElementsByClassName("actions-th")[0].remove()
+		var win = window.open();
+		win.document.write(`
+			<html>
+				<body>
+					<style> 
+						table {
+							width: 100%;
+							border-collapse: collapse;
+						}
+						.p-datatable-tbody .p-column-title, .actions-th, button{ 
+							display: none;
+						} 
+						td, th {
+							border: 1px solid #ddd;
+							padding: 8px;
+						}
+					</style>
+				${el.outerHTML}
+			</body>
+		</html>`);
+		win.document.close();
+		win.print();
 	}
 
 
