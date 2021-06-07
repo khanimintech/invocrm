@@ -232,12 +232,6 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
             handleFilter={({from, to}) =>  {
                 setFilters({ ...filters, "contract_created_after": from , "contract_created_before" : to })
             }}
-            table={ <ExtendedTable
-                data={contracts}
-                columns={columns}
-                statuses={contractStatuses}
-
-            />}
         >
             <ExtendedTable
                 headerTitle="Müqavilələrin siyahısı"

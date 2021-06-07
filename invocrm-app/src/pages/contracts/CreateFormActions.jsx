@@ -2,7 +2,7 @@ import React from 'react';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 
-const CreateFormActions = ({ handleClose, handleSave, id  }) => {
+const CreateFormActions = ({ handleClose, handleSave, id, disabled  }) => {
     return (<DialogActions>
         {
             id ? (
@@ -15,7 +15,7 @@ const CreateFormActions = ({ handleClose, handleSave, id  }) => {
                 </Button>
             )
         }
-            <Button onClick={handleSave} color="primary">
+            <Button onClick={handleSave} color="primary" disabled={disabled}>
                 Yadda saxla
             </Button>
 

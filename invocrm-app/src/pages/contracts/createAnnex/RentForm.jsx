@@ -15,7 +15,7 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 
 
-const RentForm = ({ handleSubmit, contract, sellers, handleClose, units }) => {
+const RentForm = ({ handleSubmit, contract, handleClose, units }) => {
     let formikRef = useRef();
     return (
         <>
@@ -65,7 +65,7 @@ const RentForm = ({ handleSubmit, contract, sellers, handleClose, units }) => {
                                                 <Typography variant="subtitle1" gutterBottom>
                                                     {`Şirkət: ${contract.company_name}`}
                                                 </Typography>
-                                
+
                                                 <FieldArray
                                                     validate={validateRequired}
                                                     name="rent_conditions"

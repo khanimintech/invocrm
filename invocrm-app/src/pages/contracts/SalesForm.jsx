@@ -13,10 +13,10 @@ import BankRequisits from './BankRequisits';
 import CustomerContacts from './CustomerContacts';
 import { parseISO } from 'date-fns';
 
-const SalesForm = ({ handleSubmit, handleRequest, handleClose, formType, selectedContract, salesManagers, banks }) => {
+const SalesForm = ({ handleSubmit, handleClose, formType, selectedContract, salesManagers, banks }) => {
     let formikRef = useRef();
     const {contract_no, company, executor, responsible_person,
-        created, due_date, id, sales_manager, type , bank, bank_account, contact,
+        created, due_date, id, sales_manager , bank, bank_account, contact,
         subject_of_distribution, territory
     } = selectedContract || {};
 

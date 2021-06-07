@@ -3,8 +3,12 @@ import PageContent from '../../components/PageContainer';
 import ExtendedTable from '../../components/ExtendedTable';
 import ContactPhoneIcon from '@material-ui/icons/ContactPhone';
 import { ContactsService } from '../../services/ContactsService';
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
 
 import "./styles.scss";
+import CreateContactModal from './CreateContactModal';
 
 
 const columns = [
@@ -21,7 +25,7 @@ const Contacts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     let dt = useRef(null);
     const [contacts, setContacts] = useState(null);
     const [filters, setFilters] = useState({});
-
+    const [createModal, toggleCreateModal] = useState(false);
 
     const getContacts = (filters) => {
         return handleRequest(
@@ -30,6 +34,19 @@ const Contacts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
             setContacts(res.body)
         })
     }
+
+    const addIcon = (
+        <Tooltip title="Kontakt yarat" placement="top-end">
+            <IconButton
+                aria-label="kontakt"
+                onClick={() => toggleCreateModal(true)}
+                className="add-icon"
+            >
+                <AddBoxIcon />
+            </IconButton>
+        </Tooltip>
+    )
+
 
 
     return (
@@ -40,6 +57,7 @@ const Contacts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
             sum={contacts ? contacts.length : 0}
             data={contacts}
             columns={columns}
+            addIcon={addIcon}
         >
              <ExtendedTable
                 data={contacts}
@@ -53,7 +71,16 @@ const Contacts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 filters={filters}
                 setFilters={setFilters}
             />
-
+            {
+                createModal ? (
+                    <CreateContactModal
+                        open={true}
+                        handleClose={() => toggleCreateModal(false)}
+                        handleRequest={handleRequest}
+                        reloadData={getContacts}
+                    />
+                ) : null
+            }
 
         </PageContent>
     )
