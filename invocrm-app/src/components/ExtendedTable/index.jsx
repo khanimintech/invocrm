@@ -69,7 +69,7 @@ const ExtendedTable = ({
         onDelete(selectedRow)
             .then(() => {
                 toggleLoading(false)
-                getData();
+                getData(filters);
                 toggleShowDeleteModal(false)
                 setSelectedRow();
                 enqueueSnackbar("Uğurla silinmişdir .", { variant: "success" }) // this row will be moved to handleRequest
