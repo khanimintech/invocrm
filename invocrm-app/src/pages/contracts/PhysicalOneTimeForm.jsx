@@ -62,7 +62,7 @@ const PhysicalOneTimeForm = ({ salesManagers, id }) => {
             <Grid item md={12} className="input-wrapper">
                 <Field
                     validate={validateRequired}
-                    name="executor_contact.mobile"
+                    name={!id ? "executor_contact.mobile" : "executor.contact.mobile"}
                 >
                     {({ field, form, meta }) => (
                         <Input
@@ -77,7 +77,7 @@ const PhysicalOneTimeForm = ({ salesManagers, id }) => {
             <Grid item md={12} className="input-wrapper">
                 <Field
                     validate={validateRequired}
-                    name="executor_contact.personal_email"
+                    name={!id ? "executor_contact.personal_email" : "executor.contact.personal_email"}
                 >
                     {({ field, form, meta }) => (
                         <Input
@@ -111,7 +111,7 @@ const PhysicalOneTimeForm = ({ salesManagers, id }) => {
                         </Grid>
                         <Grid item md={3} className="input-wrapper">
                             <Field
-                                name="annex.last_name"
+                                name="annex.seller.last_name"
                                 validate={validateRequired}
                             >
                                 {({ field, form, meta }) => (
@@ -168,7 +168,6 @@ const PhysicalOneTimeForm = ({ salesManagers, id }) => {
                             field={field}
                             form={form}
                             meta={meta}
-                            readOnly={id}
                         />
                     )}
                 </Field>
@@ -210,7 +209,7 @@ const PhysicalOneTimeForm = ({ salesManagers, id }) => {
             </Grid>
             <Grid item md={12} className="input-wrapper">
                 <Field
-                    name="payment_terms"
+                    name="annex.payment_terms"
                     validate={validateRequired}
                 >
                     {({ field, form, meta }) => (

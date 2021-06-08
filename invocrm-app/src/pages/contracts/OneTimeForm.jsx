@@ -47,7 +47,7 @@ const OneTimeForm = ({ handleSubmit, handleClose, selectedContract, units, sales
                         sales_manager,
                         annex: {
                             ...annex,
-                            products: annex && annex.products ? annex.products : [{
+                            products: annex && annex.products && annex.products.length ? annex.products : [{
                                 name: "",
                                 quantity: 0,
                                 unit: 0,

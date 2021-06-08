@@ -187,7 +187,7 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName , tota
                                             unit: 0,
                                             price: "",
                                             total: 0,
-                                            index: +products[products.length - 1].id + 1,
+                                            index: +products[products.length - 1].index + 1,
                                         })}
                                     >
                                         Yenisin əlavə et
