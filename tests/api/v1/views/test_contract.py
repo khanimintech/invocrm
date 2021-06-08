@@ -727,6 +727,36 @@ class TestContactViewSet:
         assert payload[1]['personal_email'] == 'personal_email@email.email1'
         assert payload[1]['web_site'] == 'my_site.site1'
 
+    def test_contact_create(self, apiclient, admin_user):
+
+        apiclient.force_login(admin_user)
+        response = apiclient.post(reverse('api:v1:contacts-list'),
+                                  data={
+                                      'mobile': "1234",
+                                      'address': "address",
+                                      'work_email': "w_email",
+                                      'personal_email': "p_email",
+                                      'web_site': "w_site",
+                                      'responsible_person': {'first_name': "name",
+                                                             'last_name': "",
+                                                             'fathers_name': "",
+                                                             'position': ""}
+                                  },
+                                  format='json'
+                                  )
+
+        assert response.status_code == 201, response.json()
+        assert Contact.objects.all().count() == 1
+
+        contact = Contact.objects.first()
+
+        assert contact.person.first_name == 'name'
+        assert contact.mobile == '1234'
+        assert contact.address == 'address'
+        assert contact.work_email == 'w_email'
+        assert contact.personal_email == 'p_email'
+        assert contact.web_site == 'w_site'
+
 
 class TestBankViewSet:
 

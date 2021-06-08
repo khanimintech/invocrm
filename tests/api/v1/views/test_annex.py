@@ -223,19 +223,18 @@ class TestAnnexStatusStatAPIView:
 
         annex2 = BaseAnnex.objects.create(contract=contract, request_no='123', annex_date=timezone.now(),
                                           note='1', payment_terms='1', delivery_terms='1', acquisition_terms='1',
-                                          seller=sales_manager, sales_manager=sales_manager, annex_no=2, with_vat=True)
+                                          seller=sales_manager, sales_manager=sales_manager, annex_no=2, with_vat=True,
+                                          total=5)
 
         unit = UnitOfMeasure.objects.create(name='w')
         ProductInvoiceItem.objects.create(name='ww', annex=annex, unit=unit, quantity=1, price=1, total=2)
         ProductInvoiceItem.objects.create(name='ww', annex=annex, unit=unit, quantity=1, price=1, total=2)
         ProductInvoiceItem.objects.create(name='ww', annex=annex2, unit=unit, quantity=1, price=1, total=2)
 
-
         apiclient.force_login(admin_user)
         response = apiclient.get(reverse('api:v1:annex-status-count'))
 
         assert response.status_code == 200
-        print(response.json())
         assert response.json()['all_count'] == 2
-        assert response.json()['with_vat'] == 2 * 1.18
+        assert response.json()['with_vat'] == 5.9
         assert response.json()['vat_free'] == 4

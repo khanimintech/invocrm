@@ -15,7 +15,7 @@ from api.main_models.attachment import ContractAttachment, AnnexAttachment
 from api.main_models.contract import BaseContract, BankAccount, Contact
 from api.models import Person
 from api.v1.serializers.contract import ContractListSerializer, BankListSerializer, ContactListSerializer, \
-    SalesManagerSerializer, SellerSerializer, BaseContractAttachmentSerializer
+    SalesManagerSerializer, SellerSerializer, BaseContractAttachmentSerializer, ContactCreateSerializer
 
 
 def filter_status_count(qs, status):
@@ -175,6 +175,14 @@ class ContactViewSet(ModelViewSet):
         queryset = self.queryset
 
         return queryset.filter(person__agreement__plant_name=self.request.user.plant_name)
+
+    def get_serializer_class(self):
+
+        if self.action == 'create':
+
+            return ContactCreateSerializer
+
+        return super().get_serializer_class()
 
 
 class SalesMangerApiView(ListAPIView):

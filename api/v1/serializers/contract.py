@@ -5,7 +5,6 @@ from django.utils import timezone
 from rest_framework import serializers
 
 from api.main_models.annex import BaseAnnex, POAgreementSupplements, ProductInvoiceItem
-from api.main_models.attachment import ContractAttachment, AnnexAttachment
 from api.main_models.contract import BaseContract, TradeAgreement, Contact, Company, Bank, BankAccount, \
     ServiceAgreement, DistributionAgreement, AgentAgreement, POAgreement, RentAgreement, OneTimeAgreement, \
     InternationalAgreement, CustomerTemplateAgreement
@@ -75,6 +74,14 @@ class PersonSerializer(serializers.ModelSerializer):
 
         model = Person
         fields = ['first_name', 'last_name', 'fathers_name', 'tin', 'position', 'id']
+
+
+class ContactPersonSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Person
+        fields = ['first_name', 'last_name', 'fathers_name', 'position']
 
 
 class ContactSerializer(serializers.ModelSerializer):
@@ -183,7 +190,7 @@ class OneTimeAnnexGetSerializer(serializers.ModelSerializer):
 
         model = BaseAnnex
 
-        fields = ['request_no', 'payment_terms', 'delivery_terms', 'acquisition_terms', 'seller', 'products']
+        fields = ['request_no', 'payment_terms', 'delivery_terms', 'acquisition_terms', 'seller', 'products', 'total']
 
 
 class OneTimeUpdateAnnexSerializer(serializers.ModelSerializer):
@@ -201,12 +208,12 @@ class OneTimeUpdateAnnexSerializer(serializers.ModelSerializer):
 class OneTimeAnnexSerializer(serializers.ModelSerializer):
 
     seller = PersonSerializer()
-    products = OneTimeProductSerializer(many=True)
+    products = OneTimeProductSerializer(many=True, required=False)
 
     class Meta:
         model = BaseAnnex
 
-        fields = ['request_no', 'payment_terms', 'delivery_terms', 'acquisition_terms', 'seller', 'products']
+        fields = ['request_no', 'payment_terms', 'delivery_terms', 'acquisition_terms', 'seller', 'products', 'total']
 
 
 class ContractListSerializer(serializers.ModelSerializer):
@@ -1142,6 +1149,25 @@ class ContactListSerializer(serializers.ModelSerializer):
         if obj.person.agreement and obj.person.agreement.company:
 
             return obj.person.agreement.company.name
+
+
+class ContactCreateSerializer(serializers.ModelSerializer):
+
+    responsible_person = ContactPersonSerializer(required=False)
+
+    class Meta:
+
+        model = Contact
+        fields = ['address', 'mobile', 'personal_email', 'web_site', 'work_email', 'responsible_person']
+
+    def create(self, validated_data):
+
+        responsible_person = validated_data.pop('responsible_person', None)
+
+        contact = super().create(validated_data)
+        Person.objects.create(type=Person.TYPE.CONTACT, contact=contact, **responsible_person)
+
+        return contact
 
 
 class SalesManagerSerializer(serializers.ModelSerializer):
