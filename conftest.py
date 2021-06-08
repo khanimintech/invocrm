@@ -1,8 +1,9 @@
 import pytest
+from django.utils import timezone
 from rest_framework.test import APIClient
 
 
-from api.main_models.contract import Contact, Company
+from api.main_models.contract import Contact, Company, TradeAgreement, BaseContract, Bank, BankAccount
 from api.models import Person
 
 
@@ -14,6 +15,13 @@ def PASSWORD():
 @pytest.fixture
 def apiclient(db):
     return APIClient(format='json')
+
+
+@pytest.fixture()
+def admin_user(admin_user):
+    admin_user.plant_name = 'plant'
+    admin_user.save()
+    return admin_user
 
 
 @pytest.fixture
@@ -67,3 +75,17 @@ def executor(db):
 @pytest.fixture
 def company(db):
     return Company.objects.create(type=Company.MMC, name='company_name', address='company_address', tin='12345')
+
+
+@pytest.fixture
+def trade_aggrement_base(db, company, sales_manager, responsible_person, executor):
+    t = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
+                                      type=BaseContract.Type.SERVICE, contract_no='1234', company=company,
+                                      executor=executor, responsible_person=responsible_person)
+
+    bank = Bank.objects.create(name='bank_name', code='123', tin='1234')
+
+    BankAccount.objects.create(account='123', bank=bank, address='address', city='city1',
+                               swift_no='swift_123', correspondent_account='cor_123', company_owner=company)
+    return t.basecontract_ptr
+

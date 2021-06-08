@@ -1,10 +1,12 @@
 from datetime import timedelta
 
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils import timezone
 
 from rest_framework.reverse import reverse
 
 from api.main_models.annex import UnitOfMeasure, BaseAnnex, ProductInvoiceItem, POAgreementSupplements
+from api.main_models.attachment import ContractAttachment, AnnexAttachment
 from api.main_models.contract import BaseContract, TradeAgreement, Company, Bank, BankAccount, ServiceAgreement, \
     Contact, DistributionAgreement, AgentAgreement, OneTimeAgreement, POAgreement
 from api.models import Person
@@ -25,8 +27,7 @@ def test_login(apiclient, admin_user, PASSWORD):
 def test_logout(apiclient, admin_user, PASSWORD):
 
     admin_user.is_active = True
-    admin_user.save()
-    admin_user.plant_name = 'plant'
+
     admin_user.save()
 
     response = apiclient.post(reverse('api:v1:login'), data={
@@ -52,12 +53,90 @@ class TestContractViewSet:
         TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
                                       type=BaseContract.Type.TRADE, contract_no='123')
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
+
         apiclient.force_login(admin_user)
         response = apiclient.get(reverse('api:v1:contracts-list'))
 
         assert response.status_code == 200
+
+    def test_contract_attachment_upload(self, apiclient, admin_user, trade_aggrement_base):
+
+        apiclient.force_login(admin_user)
+        response = apiclient.post(reverse('api:v1:contracts-upload', args=(trade_aggrement_base.id, 'contract')),
+                                    data={'attachment': SimpleUploadedFile("agreement.pdf", b"content")},
+                                  format='multipart'
+                                  )
+        assert response.status_code == 204, response.content
+        assert ContractAttachment.objects.count() == 1
+        assert ContractAttachment.objects.first().contract_id == trade_aggrement_base.id
+        assert ContractAttachment.objects.first().attachment.name.startswith('agreement')
+
+    def test_contract_attachment_annex_upload(self, apiclient, admin_user, trade_aggrement_base):
+
+        apiclient.force_login(admin_user)
+        response = apiclient.post(reverse('api:v1:contracts-upload', args=(trade_aggrement_base.id, 'annex')),
+                                    data={'attachment': SimpleUploadedFile("agreement.pdf", b"content")},
+                                  format='multipart'
+                                  )
+        assert response.status_code == 204, response.content
+        assert AnnexAttachment.objects.count() == 1
+        assert AnnexAttachment.objects.first().contract_id == trade_aggrement_base.id
+        assert AnnexAttachment.objects.first().attachment.name.startswith('agreement')
+
+    def test_contract_attachment_upload_wrong(self, apiclient, admin_user, trade_aggrement_base):
+        apiclient.force_login(admin_user)
+        response = apiclient.post(reverse('api:v1:contracts-upload', args=(trade_aggrement_base.id, 'contract')),
+                                  data={'attachment': 'lorem'},
+                                  format='multipart'
+                                  )
+        assert response.status_code == 400, response.content
+        assert ContractAttachment.objects.count() == 0
+
+    def test_contract_attachments_list(self, apiclient, admin_user, trade_aggrement_base):
+        apiclient.force_login(admin_user)
+
+        ContractAttachment.objects.create(
+            contract=trade_aggrement_base,
+            attachment=SimpleUploadedFile("agreement.pdf", b"content")
+        )
+
+        AnnexAttachment.objects.create(
+            contract=trade_aggrement_base,
+            attachment=SimpleUploadedFile("annex.pdf", b"content")
+        )
+
+
+        response = apiclient.get(reverse('api:v1:contracts-attachments', args=(trade_aggrement_base.id,)))
+
+        assert response.status_code == 200
+        payload = response.json()
+        assert payload['contracts'] and len(payload['contracts']) == 1, payload
+        attachment = payload['contracts'][0]
+        assert 'agreement' in attachment['name']
+        assert 'agreement' in attachment['url']
+
+        assert payload['annexes'] and len(payload['annexes']) == 1
+        annex = payload['annexes'][0]
+        assert 'annex' in annex['name']
+        assert 'annex' in annex['url']
+
+    def test_contract_attachments_list_only_annex(self, apiclient, admin_user, trade_aggrement_base):
+        apiclient.force_login(admin_user)
+
+        AnnexAttachment.objects.create(
+            contract=trade_aggrement_base,
+            attachment=SimpleUploadedFile("annex.pdf", b"content")
+        )
+
+        response = apiclient.get(reverse('api:v1:contracts-attachments', args=(trade_aggrement_base.id,)))
+
+        assert response.status_code == 200
+        payload = response.json()
+        assert not payload['contracts']
+        assert payload['annexes'] and len(payload['annexes']) == 1
+        annex = payload['annexes'][0]
+        assert 'annex' in annex['name']
+
 
     def test_contract_detail_ok(self, apiclient, admin_user, sales_manager):
 
@@ -86,8 +165,7 @@ class TestContractViewSet:
         d = AgentAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
                                   type=BaseContract.Type.TRADE, contract_no='123', company=company, territory='asdf')
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
+
         apiclient.force_login(admin_user)
         response = apiclient.get(reverse('api:v1:contracts-detail', args=[t.id]))
 
@@ -104,8 +182,7 @@ class TestContractViewSet:
         BankAccount.objects.create(account='123', bank=bank, address='address', city='city1',
                                    swift_no='swift_123', correspondent_account='cor_123', company_owner=company)
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
+
         apiclient.force_login(admin_user)
 
         response = apiclient.put(reverse('api:v1:contracts-detail', args=[t.id]),
@@ -194,8 +271,7 @@ class TestContractViewSet:
         s1 = POAgreementSupplements.objects.create(supplement_no='123', agreement=po)
         s2 = POAgreementSupplements.objects.create(supplement_no='1234', agreement=po)
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
+
         apiclient.force_login(admin_user)
         response = apiclient.put(reverse('api:v1:contracts-detail', args=[po.id]),
                                  data={
@@ -233,8 +309,7 @@ class TestContractViewSet:
         t = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager,
                                           type=BaseContract.Type.TRADE, contract_no='123')
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
+
         apiclient.force_login(admin_user)
         response = apiclient.delete(reverse('api:v1:contracts-detail', args=[t.id]))
 
@@ -247,8 +322,7 @@ class TestContractViewSet:
 
     def test_po_create(self, apiclient, admin_user, sales_manager):
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
+
         apiclient.force_login(admin_user)
         response = apiclient.post(reverse('api:v1:contracts-list'),
                                   data={
@@ -270,8 +344,7 @@ class TestContractViewSet:
 
     def test_agent_create(self, apiclient, admin_user, sales_manager):
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
+
         apiclient.force_login(admin_user)
 
         response = apiclient.post(reverse('api:v1:contracts-list'),
@@ -321,8 +394,7 @@ class TestContractViewSet:
 
     def test_trade_create(self, apiclient, admin_user, sales_manager):
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
+
         apiclient.force_login(admin_user)
         response = apiclient.post(reverse('api:v1:contracts-list'),
                                   data={
@@ -425,8 +497,7 @@ class TestContractViewSet:
 
     def test_one_time_create(self, apiclient, admin_user, sales_manager):
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
+
         apiclient.force_login(admin_user)
 
         unit = UnitOfMeasure.objects.create(name='asdf')
@@ -531,8 +602,7 @@ class TestContractViewSet:
         p1 = ProductInvoiceItem.objects.create(name='ww', annex=annex, unit=unit, quantity=1, price=1, total=2)
         p2 = ProductInvoiceItem.objects.create(name='ww', annex=annex, unit=unit, quantity=1, price=1, total=2)
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
+
         apiclient.force_login(admin_user)
 
         response = apiclient.put(reverse('api:v1:contracts-detail', args=[contract.id]), data={
@@ -636,8 +706,6 @@ class TestContactViewSet:
         TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
                                       type=BaseContract.Type.TRADE, company=company, responsible_person=rp1)
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
         apiclient.force_login(admin_user)
         response = apiclient.get(reverse('api:v1:contacts-list'))
 
@@ -678,8 +746,6 @@ class TestBankViewSet:
         BankAccount.objects.create(account='1234', bank=bank1, address='address1', city='city1',
                                    swift_no='swift_1234', correspondent_account='cor_1234', company_owner=company)
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
         apiclient.force_login(admin_user)
         response = apiclient.get(reverse('api:v1:banks-list'))
 
@@ -715,8 +781,6 @@ class TestSalesMangerApiView:
             fathers_name='Father1'
         )
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
         apiclient.force_login(admin_user)
         response = apiclient.get(reverse('api:v1:sales-managers'))
 
@@ -740,8 +804,6 @@ class TestContractFilterSet:
         TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
                                       type=BaseContract.Type.TRADE, contract_no='12')
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
         apiclient.force_login(admin_user)
         response = apiclient.get(reverse('api:v1:contracts-list') + '?contract_no=123')
 
@@ -758,8 +820,6 @@ class TestContractFilterSet:
                                       type=BaseContract.Type.TRADE, contract_no='12',
                                       status=BaseContract.Status.APPROVED)
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
         apiclient.force_login(admin_user)
         response = apiclient.get(reverse('api:v1:contracts-list') + f'?status={BaseContract.Status.APPROVED}')
 
@@ -774,8 +834,6 @@ class TestContractFilterSet:
         ServiceAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
                                         type=BaseContract.Type.SERVICE, contract_no='12')
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
         apiclient.force_login(admin_user)
         response = apiclient.get(reverse('api:v1:contracts-list') + f'?type={BaseContract.Type.TRADE}')
 
@@ -790,8 +848,6 @@ class TestContractFilterSet:
         ServiceAgreement.objects.create(plant_name='plant', due_date=timezone.now(),
                                         type=BaseContract.Type.SERVICE, contract_no='12')
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
         apiclient.force_login(admin_user)
         response = apiclient.get(reverse('api:v1:contracts-list') + f'?sales_manager={sales_manager.first_name}')
 
@@ -808,8 +864,7 @@ class TestContractFilterSet:
         ServiceAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
                                         type=BaseContract.Type.SERVICE, contract_no='12')
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
+
         apiclient.force_login(admin_user)
         response = apiclient.get(reverse('api:v1:contracts-list') + '?company_name=company_name')
 
@@ -829,8 +884,6 @@ class TestContractFilterSet:
                                       type=BaseContract.Type.TRADE, contract_no='12',
                                       status=BaseContract.Status.APPROVED)
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
         apiclient.force_login(admin_user)
         today = timezone.now().strftime('%Y-%m-%d')
 
@@ -864,8 +917,6 @@ class TestContractFilterSet:
         yesterday = yesterday.strftime('%Y-%m-%d')
         tomorrow = tomorrow.strftime('%Y-%m-%d')
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
         apiclient.force_login(admin_user)
 
         response = apiclient.get(reverse('api:v1:contracts-list') +
@@ -892,8 +943,6 @@ class TestContractFilterSet:
                                            type=BaseContract.Type.TRADE, contract_no='12',
                                            status=BaseContract.Status.APPROVED)
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
         apiclient.force_login(admin_user)
         response = apiclient.get(reverse('api:v1:contracts-list') + f'?status={3}')
 
@@ -937,8 +986,6 @@ class TestContractStatusStatAPIView:
                                       type=BaseContract.Type.TRADE, contract_no='12',
                                       status=BaseContract.Status.IN_PROCESS)
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
         apiclient.force_login(admin_user)
         response = apiclient.get(reverse('api:v1:status-count'))
 
@@ -978,8 +1025,6 @@ class TestContactFilterSet:
         TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
                                       type=BaseContract.Type.TRADE, company=company, responsible_person=rp1)
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
         apiclient.force_login(admin_user)
         response = apiclient.get(reverse('api:v1:contacts-list') + '?responsible_person=first1')
 

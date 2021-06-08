@@ -2,6 +2,7 @@ from datetime import timedelta
 from django.db.models import Q
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
@@ -9,11 +10,12 @@ from rest_framework.viewsets import ModelViewSet
 
 from api.choices import CONTRACT_CHOICE, CREATE_SERIALIZER_CHOICE, GET_SERIALIZER_CHOICE, UPDATE_SERIALIZER_CHOICE
 from api.filters.contract import ContractFilterSet, BankFilterSet, ContactFilterSet, StatFilterSet
+from api.main_models.attachment import ContractAttachment, AnnexAttachment
 
 from api.main_models.contract import BaseContract, BankAccount, Contact
 from api.models import Person
 from api.v1.serializers.contract import ContractListSerializer, BankListSerializer, ContactListSerializer, \
-    SalesManagerSerializer, SellerSerializer
+    SalesManagerSerializer, SellerSerializer, BaseContractAttachmentSerializer
 
 
 def filter_status_count(qs, status):
@@ -38,8 +40,10 @@ class ContractViewSet(ModelViewSet):
 
     queryset = BaseContract.objects.all()
     serializer_class = ContractListSerializer
+
     filter_backends = (DjangoFilterBackend,)
     filterset_class = ContractFilterSet
+
 
     def get_queryset(self):
         queryset = self.queryset
@@ -82,6 +86,24 @@ class ContractViewSet(ModelViewSet):
             return UPDATE_SERIALIZER_CHOICE[contract_type]
 
         return super().get_serializer_class()
+
+    @action(detail=True, methods=['POST'], url_path='upload/(?P<type>contract|annex)', url_name='upload')
+    def upload(self, *args, **kwargs):
+        if not self.request.FILES.get('attachment'):
+            return Response({
+                "message": "Provide valid 'attachment' key with 'type' query param"
+            }, status=400)
+        file_data = self.request.FILES.get('attachment')
+
+        AttachmentModel = ContractAttachment if kwargs.get('type') == 'contract' else AnnexAttachment
+        AttachmentModel.objects.create(attachment=file_data, contract=self.get_object())
+
+        return Response(status=204)
+
+    @action(detail=True, methods=['GET'], serializer_class=BaseContractAttachmentSerializer)
+    def attachments(self, *args, **kwargs):
+
+        return self.retrieve(self.request, *args, **kwargs)
 
     def create(self, request, *args, **kwargs):
         if not request.data.get('type'):

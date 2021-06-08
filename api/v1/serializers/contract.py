@@ -5,6 +5,7 @@ from django.utils import timezone
 from rest_framework import serializers
 
 from api.main_models.annex import BaseAnnex, POAgreementSupplements, ProductInvoiceItem
+from api.main_models.attachment import ContractAttachment, AnnexAttachment
 from api.main_models.contract import BaseContract, TradeAgreement, Contact, Company, Bank, BankAccount, \
     ServiceAgreement, DistributionAgreement, AgentAgreement, POAgreement, RentAgreement, OneTimeAgreement, \
     InternationalAgreement, CustomerTemplateAgreement
@@ -261,6 +262,28 @@ class ContractListSerializer(serializers.ModelSerializer):
                 return EXPIRES
 
         return obj.status
+
+
+class AttachmentSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    url = serializers.SerializerMethodField()
+
+    name = serializers.CharField(source='attachment.name')
+    created = serializers.DateTimeField()
+
+    def get_url(self, obj):
+        return self.context['request'].build_absolute_uri(obj.attachment.url)
+    class Meta:
+        fields = ('id', 'name', 'created', 'url')
+
+
+class BaseContractAttachmentSerializer(serializers.ModelSerializer):
+    contracts = AttachmentSerializer(source='attachments', many=True)
+    annexes = AttachmentSerializer(source='annex_attachments', many=True)
+
+    class Meta:
+        model = BaseContract
+        fields = ('contracts', 'annexes')
 
 
 class ContractCreateBaseSerializer(serializers.ModelSerializer):

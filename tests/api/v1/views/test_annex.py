@@ -26,8 +26,7 @@ class TestAnnexViewSet:
         ProductInvoiceItem.objects.create(name='ww', annex=annex, unit=unit, quantity=1, price=1, total=2)
         ProductInvoiceItem.objects.create(name='ww', annex=annex2, unit=unit, quantity=1, price=1, total=2)
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
+
         apiclient.force_login(admin_user)
         response = apiclient.get(reverse('api:v1:annexes-list'))
 
@@ -63,8 +62,7 @@ class TestAnnexViewSet:
 
         unit = UnitOfMeasure.objects.create(name='KQ')
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
+
         apiclient.force_login(admin_user)
         response = apiclient.post(reverse('api:v1:annexes-list'),
                                   data={
@@ -119,8 +117,6 @@ class TestAnnexViewSet:
         contract = AgentAgreement.objects.create(plant_name='plant', sales_manager=sales_manager,
                                                  due_date=timezone.now(), type=BaseContract.Type.AGENT, territory='Baku')
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
         apiclient.force_login(admin_user)
         response = apiclient.post(reverse('api:v1:annexes-list'),
                                   data={
@@ -157,8 +153,6 @@ class TestAnnexViewSet:
                                                  due_date=timezone.now(), type=BaseContract.Type.RENT)
         unit = UnitOfMeasure.objects.create(name='KQ')
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
         apiclient.force_login(admin_user)
         response = apiclient.post(reverse('api:v1:annexes-list'),
                                   data={
@@ -207,8 +201,7 @@ class TestUnitOfMeasureAPIView:
         UnitOfMeasure.objects.create(name='KQ')
         UnitOfMeasure.objects.create(name='Metr')
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
+
         apiclient.force_login(admin_user)
 
         response = apiclient.get(reverse('api:v1:units'))
@@ -237,8 +230,7 @@ class TestAnnexStatusStatAPIView:
         ProductInvoiceItem.objects.create(name='ww', annex=annex, unit=unit, quantity=1, price=1, total=2)
         ProductInvoiceItem.objects.create(name='ww', annex=annex2, unit=unit, quantity=1, price=1, total=2)
 
-        admin_user.plant_name = 'plant'
-        admin_user.save()
+
         apiclient.force_login(admin_user)
         response = apiclient.get(reverse('api:v1:annex-status-count'))
 
