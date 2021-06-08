@@ -803,7 +803,7 @@ class OneTimeGetSerializer(ContractCreateBaseSerializer):
 
 class OneTimeUpdateSerializer(serializers.ModelSerializer):
 
-    company = CompanyUpdateSerializer()
+    company = CompanyUpdateSerializer(required=False)
     executor = OneTimePersonSerializer()
     annex = OneTimeUpdateAnnexSerializer(required=False)
 
