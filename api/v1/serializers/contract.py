@@ -845,8 +845,8 @@ class OneTimeUpdateSerializer(serializers.ModelSerializer):
         def update_if_not_none(cls, id, data):
             if data:
                 return cls.objects.filter(id=id).update(**data)
-
-        update_if_not_none(Company, instance.company.id, validated_data.pop('company', None))
+        if instance.company:
+            update_if_not_none(Company, instance.company.id, validated_data.pop('company', None))
 
         executor_data = validated_data.pop('executor', None)
         executor_contact_data = executor_data.pop('contact', None)
