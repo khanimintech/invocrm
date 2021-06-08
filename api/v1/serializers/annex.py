@@ -54,18 +54,18 @@ class ProductsCreateSerializer(serializers.ModelSerializer):
 
 class AnnexCreateSerializer(serializers.ModelSerializer):
 
-    products = ProductsCreateSerializer(many=True)
+    products = ProductsCreateSerializer(many=True, required=False)
 
     class Meta:
 
         model = BaseAnnex
 
         fields = ['contract', 'request_no', 'annex_date', 'payment_terms', 'delivery_terms',
-                  'acquisition_terms', 'created', 'seller', 'sales_manager', 'products', 'with_vat']
+                  'acquisition_terms', 'created', 'seller', 'sales_manager', 'products', 'with_vat', 'total']
 
     def create(self, validated_data):
 
-        products = validated_data.pop('products')
+        products = validated_data.pop('products', None)
 
         annex = super().create(validated_data)
 
