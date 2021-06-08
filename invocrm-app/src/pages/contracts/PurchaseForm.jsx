@@ -157,7 +157,7 @@ const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType, sele
                                                     {
                                                         ( index === values.supplements.length - 1 ? (
                                                                 <Grid item md={1} className="icon-wrapper align-center" >
-                                                                    <IconButton   onClick={() => arrayHelpers.push({ supple_no: ''})}  size="small">
+                                                                    <IconButton   onClick={() => arrayHelpers.push({ supplement_no: ''})}  size="small">
                                                                         <ControlPointIcon fontSize="default" color="primary" />
                                                                     </IconButton>
                                                                 </Grid>

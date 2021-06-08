@@ -43,7 +43,7 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                             },
                             bank,
                             bank_account,
-                            territory: territory || ""
+                            territory: territory,
                         }}
                         onSubmit={handleSubmit}
                         innerRef={form => (formikRef = form)}

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import Grid from '@material-ui/core/Grid';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
-import GetAppIcon from '@material-ui/icons/GetApp';
 import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
 import OverviewBox from "./OverviewBox";
 import { Calendar } from 'primereact/calendar';
@@ -18,7 +17,7 @@ import html2canvas from "html2canvas";
 import './styles.scss';
 import { CircularProgress } from "@material-ui/core";
 import ExtendedTable from "../ExtendedTable";
-
+import GridOnIcon from '@material-ui/icons/GridOn';
 
 
 
@@ -243,7 +242,7 @@ const PageContent = ({
 							{addIcon}
 							<Tooltip title="Excel formatında yüklə" placement="top"  >
 								<IconButton onClick={exportExcel} className="csv-icon">
-									<GetAppIcon />
+									<GridOnIcon />
 								</IconButton>
 							</Tooltip>
               					&nbsp;&nbsp;

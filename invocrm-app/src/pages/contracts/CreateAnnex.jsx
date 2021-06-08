@@ -46,7 +46,7 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName  }) =>
     const arrayFieldName = productsFieldName || "products";
     const bodyTemplate = (row, col, arrayHelpers, products, index) => {
         if (col.field === "index" )
-            return <span>{products[index][col.field] || index  +1}</span>
+            return <span>{products[index][col.field] ? products[index][col.field] : +index  +1}</span>
         if ( col.field === "total")
             return <span>{products[index][col.field]}</span>
         return (
@@ -167,7 +167,7 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName  }) =>
                                             unit: 0,
                                             price: "",
                                             total: 0,
-                                            index: products[products.length - 1].id + 1,
+                                            index: +products[products.length - 1].id + 1,
                                         })}
                                     >
                                         Yenisin əlavə et

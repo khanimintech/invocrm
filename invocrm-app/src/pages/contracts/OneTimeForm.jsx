@@ -18,7 +18,7 @@ const OneTimeForm = ({ handleSubmit, handleClose, selectedContract, units, sales
     const { contract_no, company,
         created, due_date, id, sales_manager, type,
         executor, final_amount_with_writing, part_acquisition,
-        part_payment, price_offer, price_offer_validity, standard, unpaid_period, unpaid_value,
+        part_payment, price_offer, price_offer_validity, standard, unpaid_period, unpaid_value, executor_contact,
         warranty_period, annex
     } = selectedContract || {};
 
@@ -34,6 +34,7 @@ const OneTimeForm = ({ handleSubmit, handleClose, selectedContract, units, sales
                         created: created ? parseISO(created) : new Date(),
                         contract_no,
                         executor,
+                        ...(id ? {} : {executor_contact}),
                         part_payment,
                         final_amount_with_writing,
                         part_acquisition,
@@ -91,10 +92,8 @@ const OneTimeForm = ({ handleSubmit, handleClose, selectedContract, units, sales
                                     </Grid>
                                     <Divider />
                                     {
-                                        contractType === 1 ? <CompnayOneTimeForm salesManagers={salesManagers} readOnly={id} /> : <PhysicalOneTimeForm salesManagers={salesManagers} readOnly={id} />
+                                        contractType === 1 ? <CompnayOneTimeForm salesManagers={salesManagers} id={id} /> : <PhysicalOneTimeForm salesManagers={salesManagers} id={id} />
                                     }
-
-                                    <CustomerContacts values={values} setErrors={setErrors} />
                                 </Grid>
                                 <Grid item md={6}>
                                     <CreateAnnex products={values.annex.products} units={units} type={1} productsFieldName="annex.products"/>

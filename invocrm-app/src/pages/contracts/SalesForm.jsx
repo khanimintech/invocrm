@@ -17,7 +17,7 @@ const SalesForm = ({ handleSubmit, handleClose, formType, selectedContract, sale
     let formikRef = useRef();
     const {contract_no, company, executor, responsible_person,
         created, due_date, id, sales_manager , bank, bank_account, contact,
-        subject_of_distribution, territory
+        subject_of_distribution, territory, custom_contract_type,executor_contact
     } = selectedContract || {};
 
 
@@ -39,7 +39,9 @@ const SalesForm = ({ handleSubmit, handleClose, formType, selectedContract, sale
                                 tin: company ? company.tin : null,
                             },
                             executor,
+                            executor_contact,
                             contact,
+                            custom_contract_type,
                             responsible_person: {
                                 first_name: responsible_person ? responsible_person.first_name : "",
                                 last_name: responsible_person ? responsible_person.last_name : "",

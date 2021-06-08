@@ -43,7 +43,7 @@ const CreateContractModal = ({open, formType, handleRequest, handleClose, enqueu
   }
 
     return (
-        <Dialog open={open} onClose={handleClose} fullWidth maxWidth={formType === '7'  ? "md" :"xl"}>
+        <Dialog open={open} onClose={handleClose} fullWidth maxWidth={+formType === 7  ? "md" :"xl"}>
         <DialogTitle id="form-dialog-title">{formType ?  contractTypes[formType] : ""}</DialogTitle>
         {  modalLoading ? <div className="spinner-wrapper"><CircularProgress /></div>  : 
            (formType ?
