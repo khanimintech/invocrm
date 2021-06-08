@@ -104,3 +104,26 @@
         }
     }
 }
+
+.annex-wat-total-row {
+    &>div {
+        // display: flex;
+        // justify-content: space-between;
+        .MuiFormControl-root {
+            width: 50%;
+            margin-bottom: 10px;
+        }
+        .MuiFormControlLabel-root{
+            margin: 0;
+        }
+        .annex-total-row{
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            span {
+                font-weight: 500;
+                margin-left: 5px;
+            }
+        }
+    }
+}

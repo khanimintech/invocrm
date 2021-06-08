@@ -38,7 +38,7 @@ const columns ={
     ]
 }
 
-const CreateAnnex = ({ products, units, readOnly, type, productsFieldName  }) => {
+const CreateAnnex = ({ products, units, readOnly, type, productsFieldName , total }) => {
 
     const [withVat, setWithVat] = useState(false);
 
@@ -51,7 +51,7 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName  }) =>
             return <span>{products[index][col.field]}</span>
         return (
             <Field
-                validate={validateRequired}
+                validate={total ? null : validateRequired}
                 name={`${arrayFieldName}[${index}].${col.field}`}
                 key={`${arrayFieldName}[${index}].${col.field}`}
             >
@@ -92,24 +92,44 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName  }) =>
                 validate={validateRequired}
                 name={`${arrayFieldName}`}
                 render={arrayHelpers => (
-                    <div>
-                        <Field
-                            name="with_vat"
-                        >
-                            {({ field, form, meta }) => (
-                                <Input
-                                    label="ƏDV"
-                                    field={field}
-                                    form={form}
-                                    meta={meta}
-                                    checkbox
-                                    onChange={ checked => {
-                                        form.setFieldValue(field.name, checked)
-                                        setWithVat(checked)
-                                    }}
-                                />
-                            )}
-                        </Field>
+                    <div className="annex-wat-total-row">
+                        <div>
+                            <Field
+                                name="with_vat"
+                            >
+                                {({ field, form, meta }) => (
+                                    <Input
+                                        label="ƏDV"
+                                        field={field}
+                                        form={form}
+                                        meta={meta}
+                                        checkbox
+                                        onChange={ checked => {
+                                            form.setFieldValue(field.name, checked)
+                                            setWithVat(checked)
+                                        }}
+                                    />
+                                )}
+                            </Field>
+                            <Field
+                                name="annex.total"
+                            >
+                                {({ field, form, meta }) => (
+                                    <div className="annex-total-row">
+                                        <Input
+                                            label="Ümumi qiymət (manual)"
+                                            field={field}
+                                            form={form}
+                                            meta={meta}
+                                            size="small"
+                                            type="number"
+                                        />
+                                        <span>{`ƏDV-li:  ${+total +(withVat  ? +total*  0.18:0)}₼`}</span>
+                                    </div>
+                                )}
+                            </Field>
+
+                        </div>
                         <table
                             className="p-datatable p-datatable-responsive p-datatable-gridlines product-table"
                         >

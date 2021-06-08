@@ -96,7 +96,7 @@ const OneTimeForm = ({ handleSubmit, handleClose, selectedContract, units, sales
                                     }
                                 </Grid>
                                 <Grid item md={6}>
-                                    <CreateAnnex products={values.annex.products} units={units} type={1} productsFieldName="annex.products"/>
+                                    <CreateAnnex products={values.annex.products} units={units} type={1} productsFieldName="annex.products" total={values.annex.total} />
                                 </Grid>
                             </Grid>
                         </Form>
