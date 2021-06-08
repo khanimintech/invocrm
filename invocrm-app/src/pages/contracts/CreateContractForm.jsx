@@ -28,8 +28,11 @@ const formTypes = {
 const CreateContractModal = ({open, formType, handleRequest, handleClose, enqueueSnackbar, reloadData, selectedContract, units, salesManagers, banks, modalLoading  }) => {
 
   const handleSubmit = (vals, formikBag ) => {
+    const values = {...vals, type: +formType};
+    if (formType === 6 && values.id)
+      delete values.annex.request_no 
     handleRequest(
-      ContractsService.save({...vals, type: +formType})
+      ContractsService.save(values)
     )
     .then(() => {
       reloadData()

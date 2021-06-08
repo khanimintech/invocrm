@@ -5,7 +5,7 @@ import Input from '../../components/Input';
 import { validateRequired } from '../../utils';
 
 
-const PhysicalOneTimeForm = ({ salesManagers }) => {
+const PhysicalOneTimeForm = ({ salesManagers, id }) => {
     return (
         <>
             <Grid item md={12} >
@@ -168,6 +168,7 @@ const PhysicalOneTimeForm = ({ salesManagers }) => {
                             field={field}
                             form={form}
                             meta={meta}
+                            readOnly={id}
                         />
                     )}
                 </Field>

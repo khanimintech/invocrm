@@ -199,6 +199,7 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
                             field={field}
                             form={form}
                             meta={meta}
+                            readOnly={id}
                         />
                     )}
                 </Field>
