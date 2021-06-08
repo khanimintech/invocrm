@@ -189,7 +189,7 @@ class OneTimeAnnexGetSerializer(serializers.ModelSerializer):
 class OneTimeUpdateAnnexSerializer(serializers.ModelSerializer):
 
     seller = PersonSerializer()
-    products = OneTimeUpdateProductSerializer(many=True)
+    products = OneTimeUpdateProductSerializer(many=True, required=False)
 
     class Meta:
 
