@@ -18,7 +18,7 @@ class BaseAnnex(models.Model):
     contract = models.ForeignKey(BaseContract, on_delete=models.CASCADE, related_name='annex_list')
 
     annex_no = models.IntegerField(default=1)
-    request_no = models.CharField(max_length=256, unique=True, null=True, blank=True)
+    request_no = models.CharField(max_length=256, null=True, blank=True)
 
     annex_date = models.DateTimeField(null=True, blank=True)
     note = models.TextField(null=True, blank=True)
@@ -38,21 +38,6 @@ class BaseAnnex(models.Model):
         self.annex_no = self.contract.annex_list.latest('created').annex_no + 1 if self.contract.annex_list.exists() else 1
 
         super(BaseAnnex, self).save(**kwargs)
-
-
-class TradeAgreementAnnex(BaseAnnex):
-
-
-    @property
-    def annex_total_price(self):  # TODO fix
-        """
-        Returns last revision product's (total, total_with_vat) tuple
-        :return:
-        """
-        total = 0
-        for product in self.current_revision.products.all():
-            total += product.product_quantity * product.unit_price
-        return total, round(total + (total * 18 / 100), 3)
 
 
 class UnitOfMeasure(models.Model):
