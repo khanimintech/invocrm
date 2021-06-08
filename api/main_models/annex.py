@@ -33,6 +33,8 @@ class BaseAnnex(models.Model):
 
     with_vat = models.BooleanField(default=False)
 
+    total = models.IntegerField(null=True, blank=True)
+
     def save(self, **kwargs):
 
         self.annex_no = self.contract.annex_list.latest('created').annex_no + 1 if self.contract.annex_list.exists() else 1

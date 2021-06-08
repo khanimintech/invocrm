@@ -859,7 +859,7 @@ class OneTimeUpdateSerializer(serializers.ModelSerializer):
         products_data = annex_data.pop('products')
 
         update_if_not_none(Person, instance.annex_list.last().seller.id, seller_data)
-        update_if_not_none(BaseAnnex, instance.executor.id, annex_data)
+        update_if_not_none(BaseAnnex, instance.annex_list.last().id, annex_data)
 
         for p in products_data:
 
