@@ -8,7 +8,14 @@ from api.models import CustomUser, Person
 admin.site.register(CustomUser)
 admin.site.register(Person)
 admin.site.register(TradeAgreement)
-admin.site.register(BaseContract)
+
+
+class BaseContractAdmin(admin.ModelAdmin):
+    def has_add_permission(self, request, obj=None):
+        return False
+
+admin.site.register(BaseContract, BaseContractAdmin)
+
 admin.site.register(Contact)
 admin.site.register(Bank)
 admin.site.register(BankAccount)

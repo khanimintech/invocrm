@@ -57,6 +57,10 @@ class BaseContract(models.Model):
         else:
             return False
 
+    def __str__(self):
+
+        return self.get_type_display() + ' ' + str(self.contract_no)
+
     def save(self, **kwargs):
 
         if issubclass(type(self), BaseContract) and self.pk is None:
