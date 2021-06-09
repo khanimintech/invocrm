@@ -729,6 +729,9 @@ class TestContactViewSet:
 
     def test_contact_create(self, apiclient, admin_user):
 
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+
         apiclient.force_login(admin_user)
         response = apiclient.post(reverse('api:v1:contacts-list'),
                                   data={
@@ -751,11 +754,13 @@ class TestContactViewSet:
         contact = Contact.objects.first()
 
         assert contact.person.first_name == 'name'
+
         assert contact.mobile == '1234'
         assert contact.address == 'address'
         assert contact.work_email == 'w_email'
         assert contact.personal_email == 'p_email'
         assert contact.web_site == 'w_site'
+        assert contact.plant_name == 'plant'
 
 
 class TestBankViewSet:

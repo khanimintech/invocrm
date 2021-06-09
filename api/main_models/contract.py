@@ -148,6 +148,7 @@ class Contact(models.Model):
     work_email = models.CharField(max_length=50, null=True, blank=True)
     personal_email = models.CharField(max_length=50, null=True, blank=True)
     web_site = models.CharField(max_length=100, null=True, blank=True)
+    plant_name = models.CharField(max_length=100, null=True, blank=True)
 
 
 class Company(models.Model):

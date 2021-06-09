@@ -46,6 +46,7 @@ class ContractViewSet(ModelViewSet):
 
 
     def get_queryset(self):
+
         queryset = self.queryset
         return queryset.filter(plant_name=self.request.user.plant_name)
 
@@ -174,7 +175,8 @@ class ContactViewSet(ModelViewSet):
 
         queryset = self.queryset
 
-        return queryset.filter(person__agreement__plant_name=self.request.user.plant_name)
+        return queryset.filter(Q(person__agreement__plant_name=self.request.user.plant_name) |
+                               Q(plant_name=self.request.user.plant_name))
 
     def get_serializer_class(self):
 
@@ -183,6 +185,10 @@ class ContactViewSet(ModelViewSet):
             return ContactCreateSerializer
 
         return super().get_serializer_class()
+
+    def perform_create(self, serializer):
+
+        serializer.save(plant_name=self.request.user.plant_name)
 
 
 class SalesMangerApiView(ListAPIView):
