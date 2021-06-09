@@ -47,7 +47,6 @@ const Banks = ({ handleRequest, loading, enqueueSnackbar }) => {
                 loading={loading}
                 columns={columns}
                 elRef={dt}
-                actions={{edit: true}}
                 headerTitle="Rekvizitləri siyahısı"
                 enqueueSnackbar={enqueueSnackbar}
                 getData={getBanks}

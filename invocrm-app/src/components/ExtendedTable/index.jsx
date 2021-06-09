@@ -271,10 +271,15 @@ const ExtendedTable = ({
                 globalFilter={globalFilter}
                 emptyMessage="Heç bir məlumat tapılmadı.">
                 {columnComponents}
-                <Column header={"Əmaliyyatlar"}
-                    body={actionsBodyTemplate}
-                    className="actions-th"
-                />
+                {
+                    actions ? (
+                        <Column header={"Əmaliyyatlar"}
+                        body={actionsBodyTemplate}
+                        className="actions-th"
+                    />
+                    ) : null
+                }
+              
             </DataTable>
             <Dialog
                 open={showDeleteModal}

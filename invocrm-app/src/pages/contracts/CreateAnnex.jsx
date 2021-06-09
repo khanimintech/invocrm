@@ -95,7 +95,7 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName , tota
                     <div className="annex-wat-total-row">
                         <div>
                             <Field
-                                name="with_vat"
+                                name="annex.with_vat"
                             >
                                 {({ field, form, meta }) => (
                                     <Input
