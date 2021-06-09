@@ -190,7 +190,8 @@ class OneTimeAnnexGetSerializer(serializers.ModelSerializer):
 
         model = BaseAnnex
 
-        fields = ['request_no', 'payment_terms', 'delivery_terms', 'acquisition_terms', 'seller', 'products', 'total']
+        fields = ['request_no', 'payment_terms', 'delivery_terms', 'acquisition_terms', 'seller', 'products', 'total',
+                  'with_vat']
 
 
 class OneTimeUpdateAnnexSerializer(serializers.ModelSerializer):
