@@ -28,8 +28,12 @@ const formTypes = {
 const CreateContractModal = ({open, formType, handleRequest, handleClose, enqueueSnackbar, reloadData, selectedContract, units, salesManagers, banks, modalLoading  }) => {
 
   const handleSubmit = (vals, formikBag ) => {
+    let values;
+    if (+formType === 6)
+      values = {...vals, type: +formType, annex: { ...vals.annex, products: (+formType === 6 && vals.annex.total && !vals.annex.products[0].name) ? [] : vals.annex.products} }
+    else values = {...vals, type: +formType};
     handleRequest(
-      ContractsService.save({...vals, type: +formType, annex: { ...vals.annex, products: (+formType === 6 && vals.annex.total && !vals.annex.products[0].name) ? [] : vals.annex.products} })
+      ContractsService.save(values)
     )
     .then(() => {
       reloadData()

@@ -91,7 +91,7 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 loading={loading}
                 columns={columns}
                 elRef={dt}
-                actions={{edit: true, delete: true}}
+                actions={{edit: true }}
                 enqueueSnackbar={enqueueSnackbar}
                 getData={getAnnexes}
                 filters={filters}

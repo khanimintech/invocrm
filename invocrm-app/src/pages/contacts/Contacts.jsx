@@ -64,7 +64,7 @@ const Contacts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 loading={loading}
                 columns={columns}
                 elRef={dt}
-                actions={{edit: true, delete: true}}
+                actions={{edit: true}}
                 headerTitle="Əlaqələrin siyahısı"
                 enqueueSnackbar={enqueueSnackbar}
                 getData={getContacts}
