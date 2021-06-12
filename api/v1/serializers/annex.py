@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from api.main_models.annex import BaseAnnex, ProductInvoiceItem, UnitOfMeasure, AgentInvoiceItem, RentConditions, \
     RentItems
+from api.main_models.contract import BaseContract
 
 
 class AnnexSerializer(serializers.ModelSerializer):
@@ -31,14 +32,19 @@ class AnnexSerializer(serializers.ModelSerializer):
         if obj.total is not None:
             return obj.total
 
+        if obj.contract.type == BaseContract.Type.RENT:
+            return sum(filter(None, obj.rent_items.values_list('total', flat=True)))
+
         return obj.sum_no_invoice
 
     def get_sum_with_invoice(self, obj):
 
-        if obj.total is not None:
+        if obj.total is not None and obj.with_vat is True:
             return obj.total * 1.18
 
         if obj.with_vat is True:
+            if obj.contract.type == BaseContract.Type.RENT:
+                return sum(filter(None, obj.rent_items.values_list('total', flat=True))) * 1.18
             return obj.sum_with_invoice
 
         return 0
