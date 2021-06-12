@@ -52,7 +52,7 @@ class TestAnnexViewSet:
         assert payload[1]['sales_manager'] == sales_manager.id
         assert payload[1]['payment_terms'] == '1'
         assert payload[1]['contract_type'] == annex2.contract.type
-        assert payload[1]['sum_no_invoice'] == 0
+        assert payload[1]['sum_no_invoice'] == 2
         assert payload[1]['sum_with_invoice'] == 2 * 1.18
 
     def test_annex_create(self, apiclient, admin_user, sales_manager):

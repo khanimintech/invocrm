@@ -244,7 +244,9 @@ class ContractListSerializer(serializers.ModelSerializer):
     def get_company_name(self, obj):
 
         if obj._is_individual_contract:
-            return obj.executor.fullname
+            if obj.executor:
+                return obj.executor.fullname
+            return None
 
         return obj.company.name
 
