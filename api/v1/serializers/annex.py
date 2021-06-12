@@ -28,12 +28,10 @@ class AnnexSerializer(serializers.ModelSerializer):
 
     def get_sum_no_invoice(self, obj):
 
-        if obj.total is not  None:
+        if obj.total is not None:
             return obj.total
 
-        if obj.with_vat is False:
-            return obj.sum_no_invoice
-        return 0
+        return obj.sum_no_invoice
 
     def get_sum_with_invoice(self, obj):
 
