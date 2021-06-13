@@ -29,7 +29,7 @@ const ExtendedTable = ({
     enqueueSnackbar, getData,
     getItem, addItem, onAttachmentClick,
     filters, setFilters ,
-    tableLoading
+    tableLoading, getStateCounts
 }) => {
 
     const [globalFilter, setGlobalFilter] = useState();
@@ -70,6 +70,7 @@ const ExtendedTable = ({
             .then(() => {
                 toggleLoading(false)
                 getData(filters);
+                getStateCounts();
                 toggleShowDeleteModal(false)
                 setSelectedRow();
                 enqueueSnackbar("Uğurla silinmişdir .", { variant: "success" }) // this row will be moved to handleRequest

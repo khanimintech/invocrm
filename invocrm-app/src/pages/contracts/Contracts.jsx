@@ -249,6 +249,7 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 filters={filters}
                 setFilters={setFilters}
                 tableLoading={tableLoading}
+                getStateCounts={getOverviews}
             />
             <CreateContractModal
                 open={showCreateModal}
@@ -263,6 +264,7 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 reloadData={() => {
                     getContracts(filters)
                     getBanks();
+                    getOverviews();
                 }}
                 selectedContract={selectedContract}
                 units={units}
