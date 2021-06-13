@@ -47,8 +47,7 @@ class ContractViewSet(ModelViewSet):
 
     def get_queryset(self):
 
-        if not self.request.user.plant_name:
-            return Response(status=status.HTTP_403_FORBIDDEN)
+
 
         queryset = self.queryset
         return queryset.filter(plant_name=self.request.user.plant_name)
@@ -131,8 +130,7 @@ class ContractStatusStatAPIView(ListAPIView):
 
     def get_queryset(self):
 
-        if not self.request.user.plant_name:
-            return Response(status=status.HTTP_403_FORBIDDEN)
+
 
         queryset = self.queryset
         return queryset.filter(plant_name=self.request.user.plant_name)
@@ -163,8 +161,7 @@ class BankViewSet(ModelViewSet):
 
     def get_queryset(self):
 
-        if not self.request.user.plant_name:
-            return Response(status=status.HTTP_403_FORBIDDEN)
+
 
         queryset = self.queryset
 
@@ -183,8 +180,7 @@ class ContactViewSet(ModelViewSet):
 
     def get_queryset(self):
 
-        if not self.request.user.plant_name:
-            return Response(status=status.HTTP_403_FORBIDDEN)
+
 
         queryset = self.queryset
 
