@@ -180,8 +180,6 @@ class ContactViewSet(ModelViewSet):
 
     def get_queryset(self):
 
-
-
         queryset = self.queryset
 
         return queryset.filter(Q(person__agreement__plant_name=self.request.user.plant_name) |
