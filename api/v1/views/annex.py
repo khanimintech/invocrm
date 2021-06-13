@@ -1,5 +1,6 @@
 from django.db.models import IntegerField, Subquery, OuterRef, Count
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -19,6 +20,9 @@ class AnnexViewSet(ModelViewSet):
     filterset_class = AnnexFilterSet
 
     def get_queryset(self):
+
+        if not self.request.user.plant_name:
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
         queryset = self.queryset
         return queryset.filter(contract__plant_name=self.request.user.plant_name).a_invoice_sum()
@@ -51,6 +55,10 @@ class AnnexStatusStatAPIView(ListAPIView):
     filterset_class = AnnexFilterSet
 
     def get_queryset(self):
+
+        if not self.request.user.plant_name:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
         queryset = self.queryset
         return queryset.filter(contract__plant_name=self.request.user.plant_name)
 

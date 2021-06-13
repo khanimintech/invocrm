@@ -2,6 +2,7 @@ from datetime import timedelta
 from django.db.models import Q
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import ListAPIView
@@ -44,8 +45,10 @@ class ContractViewSet(ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_class = ContractFilterSet
 
-
     def get_queryset(self):
+
+        if not self.request.user.plant_name:
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
         queryset = self.queryset
         return queryset.filter(plant_name=self.request.user.plant_name)
@@ -127,6 +130,10 @@ class ContractStatusStatAPIView(ListAPIView):
     filterset_class = StatFilterSet
 
     def get_queryset(self):
+
+        if not self.request.user.plant_name:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
         queryset = self.queryset
         return queryset.filter(plant_name=self.request.user.plant_name)
 
@@ -156,6 +163,9 @@ class BankViewSet(ModelViewSet):
 
     def get_queryset(self):
 
+        if not self.request.user.plant_name:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
         queryset = self.queryset
 
         return queryset.filter(
@@ -172,6 +182,9 @@ class ContactViewSet(ModelViewSet):
     filterset_class = ContactFilterSet
 
     def get_queryset(self):
+
+        if not self.request.user.plant_name:
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
         queryset = self.queryset
 
