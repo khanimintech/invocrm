@@ -15,7 +15,7 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 
 
-const RentForm = ({ handleSubmit, contract, handleClose, units }) => {
+const RentForm = ({ handleSubmit, contract, handleClose, units, salesManagers }) => {
     let formikRef = useRef();
     return (
         <>
@@ -112,30 +112,53 @@ const RentForm = ({ handleSubmit, contract, handleClose, units }) => {
                                                     )}
                                                 />
                                             </Grid>
-                                            <Grid item md={6} sm={12} className="input-wrapper">
-                                                <Field
-                                                    name="created"
-                                                    validate={validateRequired}
-                                                >
-                                                    {({ field, form, meta }) => (
-                                                        <Input
-                                                            label="Yaradılma tarixi"
-                                                            field={field}
-                                                            form={form}
-                                                            meta={meta}
-                                                            date
-                                                        />
-                                                    )}
-                                                </Field>
+                                            <Grid item md={6}>
+                                                <Grid container spacing={0}>
+                                                    <Grid item md={12} sm={12} >
+                                                            <Field
+                                                                name="created"
+                                                                validate={validateRequired}
+                                                            >
+                                                                {({ field, form, meta }) => (
+                                                                    <Input
+                                                                        label="Yaradılma tarixi"
+                                                                        field={field}
+                                                                        form={form}
+                                                                        meta={meta}
+                                                                        date
+                                                                    />
+                                                                )}
+                                                            </Field>
+
+                                                        </Grid>
+                                                        <Grid item md={12} className="input-wrapper">
+                                                        <Field
+                                                            name="sales_manager"
+                                                            validate={validateRequired}
+                                                        >
+                                                            {({ field, form, meta }) => (
+                                                                <Input
+                                                                    label="Satış meneceri"
+                                                                    field={field}
+                                                                    form={form}
+                                                                    meta={meta}
+                                                                    select
+                                                                    options={salesManagers}
+                                                                />
+                                                            )}
+                                                        </Field>
+                                                    </Grid>
+                              
+                                                </Grid>
                                             </Grid>
-
-                                        </Grid>
-
+                                                       
+                                               
+                                            </Grid>
                                         <Divider />
                                         <br />
                                         <Grid container spacing={0} justify="space-between" spacing={5}>
                                             <Grid item md={12} type="agent">
-                                                <CreateAnnex products={values.rent_items} productsFieldName="rent_items" type={5} units={units} />
+                                                <CreateAnnex products={values.rent_items} productsFieldName="rent_items" type={5} units={units} total={values.total || 0} />
                                             </Grid>
                                         </Grid>
                                     </Grid>

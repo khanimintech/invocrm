@@ -16,6 +16,8 @@ const formTypes = {
     8: <SalesForm />,
 }
 
+const isSalesType = contractType => contractType === 1 ||contractType === 2 ||  contractType  ===  3  || contractType  === 8 ? true : false 
+
 const ContractAnnexModal = ({
     open,
     handleClose,
@@ -39,7 +41,10 @@ const ContractAnnexModal = ({
                             ...vals, 
                             type: contract.type, 
                             contract: contract.id, 
-                            contract_id: contract.id
+                            contract_id: contract.id,
+                            ...(isSalesType( contract.type) && vals.total ? {products: []} : {} ),
+                            ...( contract.type === 4 ? {agent_items: []} : {} ),
+                            ...( contract.type === 5 ? {rent_items: []} : {} ),
                             })
                         .then(() => {
                             reloadData();

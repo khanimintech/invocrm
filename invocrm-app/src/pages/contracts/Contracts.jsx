@@ -286,7 +286,7 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                         contract={selectedContract}
                         sellers={sellers}
                         units={units}
-                        reloadData={getContracts}
+                        reloadData={() => getContracts(filters)}
                     />
                 ) : null
             }

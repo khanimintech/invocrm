@@ -11,7 +11,7 @@ import CreateFormActions from '../CreateFormActions';
 import CreateAnnex from '../CreateAnnex';
 
 
-const AgentForm = ({ handleSubmit, contract, handleClose }) => {
+const AgentForm = ({ handleSubmit, contract, handleClose, salesManagers }) => {
     let formikRef = useRef();
     return (
         <>
@@ -19,7 +19,7 @@ const AgentForm = ({ handleSubmit, contract, handleClose }) => {
 				<DialogContentText>
 					<Formik
 						initialValues={{
-							annex_items: [
+							agent_items : [
 								{
 									id: 1,
 								}
@@ -71,7 +71,7 @@ const AgentForm = ({ handleSubmit, contract, handleClose }) => {
                                         <br />
 										<Grid container spacing={0} justify="space-between" spacing={5}>
 											<Grid item md={12} type="agent">
-												<CreateAnnex products={values.annex_items} productsFieldName="agent_items" type={4} />
+												<CreateAnnex products={values.agent_items} productsFieldName="agent_items" type={4} total={values.total || 0} />
 											</Grid>
 										</Grid>
 									</Grid>

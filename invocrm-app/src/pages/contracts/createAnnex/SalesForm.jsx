@@ -13,7 +13,7 @@ import CreateFormActions from '../CreateFormActions';
 import CreateAnnex from '../CreateAnnex';
 
 
-const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units }) => {
+const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units, salesManagers }) => {
 	let formikRef = useRef();
 
 	return (
@@ -22,6 +22,7 @@ const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units }) => {
 				<DialogContentText>
 					<Formik
 						initialValues={{
+							total: 0,
 							products: [
 								{
 									name: "",
@@ -40,7 +41,7 @@ const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units }) => {
 
 						{({ values }) => (
 							<Form>
-								<Grid container  justify="space-between" >
+								<Grid container justify="space-between" >
 									<Grid item md={12} sm={12} xs={12}>
 										<Typography variant="subtitle1" gutterBottom>
 											Ümumi məlumatlar
@@ -101,68 +102,68 @@ const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units }) => {
 												</Field>
 											</Grid>
 											<Grid container spacing={0}>
-											<Grid item md={6} sm={12} xs={12} className="input-wrapper">
-												<Field
-													name="request_no"
-													validate={validateRequired}
-												>
-													{({ field, form, meta }) => (
-														<Input
-															label="Sorğu №"
-															field={field}
-															form={form}
-															meta={meta}
-														/>
-													)}
-												</Field>
-											</Grid>
-											<Grid item md={6} sm={12} xs={12} className="input-wrapper">
-												<Field
-													name="payment_terms"
-													validate={validateRequired}
-												>
-													{({ field, form, meta }) => (
-														<Input
-															label="Ödəniş şərti"
-															field={field}
-															form={form}
-															meta={meta}
-														/>
-													)}
-												</Field>
-											</Grid>
+												<Grid item md={6} sm={12} xs={12} className="input-wrapper">
+													<Field
+														name="request_no"
+														validate={validateRequired}
+													>
+														{({ field, form, meta }) => (
+															<Input
+																label="Sorğu №"
+																field={field}
+																form={form}
+																meta={meta}
+															/>
+														)}
+													</Field>
+												</Grid>
+												<Grid item md={6} sm={12} xs={12} className="input-wrapper">
+													<Field
+														name="payment_terms"
+														validate={validateRequired}
+													>
+														{({ field, form, meta }) => (
+															<Input
+																label="Ödəniş şərti"
+																field={field}
+																form={form}
+																meta={meta}
+															/>
+														)}
+													</Field>
+												</Grid>
 											</Grid>
 											<Grid container>
-											<Grid item md={6} sm={12} xs={12} className="input-wrapper">
-												<Field
-													name="delivery_terms"
-													validate={validateRequired}
-												>
-													{({ field, form, meta }) => (
-														<Input
-															label="Çatdırılma şərti"
-															field={field}
-															form={form}
-															meta={meta}
-														/>
-													)}
-												</Field>
-											</Grid>
-											<Grid item md={6} sm={12} xs={12} className="input-wrapper">
-												<Field
-													name="acquisition_terms"
-													validate={validateRequired}
-												>
-													{({ field, form, meta }) => (
-														<Input
-															label="Məhsulun təhvili"
-															field={field}
-															form={form}
-															meta={meta}
-														/>
-													)}
-												</Field>
-											</Grid>
+												<Grid item md={6} sm={12} xs={12} className="input-wrapper">
+													<Field
+														name="delivery_terms"
+														validate={validateRequired}
+													>
+														{({ field, form, meta }) => (
+															<Input
+																label="Çatdırılma şərti"
+																field={field}
+																form={form}
+																meta={meta}
+															/>
+														)}
+													</Field>
+												</Grid>
+												<Grid item md={6} sm={12} xs={12} className="input-wrapper">
+													<Field
+														name="acquisition_terms"
+														validate={validateRequired}
+													>
+														{({ field, form, meta }) => (
+															<Input
+																label="Məhsulun təhvili"
+																field={field}
+																form={form}
+																meta={meta}
+															/>
+														)}
+													</Field>
+												</Grid>
 											</Grid>
 											<Grid container>
 												<Grid item md={6} sm={12} xs={12} className="input-wrapper">
@@ -182,10 +183,27 @@ const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units }) => {
 														)}
 													</Field>
 												</Grid>
+												<Grid item md={6} className="input-wrapper">
+													<Field
+														name="sales_manager"
+														validate={validateRequired}
+													>
+														{({ field, form, meta }) => (
+															<Input
+																label="Satış meneceri"
+																field={field}
+																form={form}
+																meta={meta}
+																select
+																options={salesManagers}
+															/>
+														)}
+													</Field>
+												</Grid>
 											</Grid>
 											<Divider />
 											<Grid item md={12}>
-												<CreateAnnex products={values.products} units={units} type={1} />
+												<CreateAnnex products={values.products} units={units} type={1} total={values.total || 0} />
 											</Grid>
 										</Grid>
 									</Grid>

@@ -19,7 +19,7 @@ const columns ={
         { header: "Cəmi qiyməti", field: "total", type: "number", readOnly: true },
     ],
     4: [
-        { header: "№", field: "id", type: "text", readOnly: true },
+        { header: "№", field: "index", type: "text", readOnly: true },
         { header: "Müştəri adı", field: "client_name", type: "text" },
         { header: "Müqavilə №", field: "invoice_no", type: "text" },
         { header: "Tarixi", field: "date", type: "date" },
@@ -28,7 +28,7 @@ const columns ={
         { header: "Agent mükafat", field: "agent_reward", type: "text"},
     ],
     5: [
-        { header: "№", field: "id", type: "text", readOnly: true },
+        { header: "№", field: "index", type: "text", readOnly: true },
         { header: "Cihazın adı", field: "item_name", type: "text" },
         { header: "Müddət", field: "term", type: "number" },
         { header: "Ö.V", field: "unit", type: "select" },
@@ -86,6 +86,8 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName , tota
         )
     }
 
+    const totalOrZero = total => +total || 0;
+
     return (
         <>
             <FieldArray
@@ -95,7 +97,7 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName , tota
                     <div className="annex-wat-total-row">
                         <div>
                             <Field
-                                name="annex.with_vat"
+                                name={type ? "with_vat" : "annex.with_vat"}
                             >
                                 {({ field, form, meta }) => (
                                     <Input
@@ -112,7 +114,7 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName , tota
                                 )}
                             </Field>
                             <Field
-                                name="annex.total"
+                                name={type ? "total" :"annex.total" }
                             >
                                 {({ field, form, meta }) => (
                                     <div className="annex-total-row">
@@ -124,7 +126,7 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName , tota
                                             size="small"
                                             type="number"
                                         />
-                                        <span>{`ƏDV-li:  ${+total +(withVat  ? +total*  0.18:0)}₼`}</span>
+                                        <span>{`ƏDV-li:  ${totalOrZero (total) +(withVat  ? totalOrZero(total)*  0.18:0)}₼`}</span>
                                     </div>
                                 )}
                             </Field>
@@ -153,7 +155,7 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName , tota
                                 {
                                     products.map((product, index) => (
                                         <tr key={product.id}>
-                                            {  columns[type || "sales"].map(col => (
+                                            {  columns[type || 1].map(col => (
                                                 <td>
                                                     {bodyTemplate(product, col, arrayHelpers, products, index)}
                                                 </td>
@@ -196,11 +198,11 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName , tota
                             }
                         <div>
                             <Typography variant="subtitle1" gutterBottom>
-								{`Ümumi: ${products.reduce((total, product) => total + product.total, 0)} ₼`}
+								{`Ümumi: ${products.reduce((total, product) => totalOrZero (total) + totalOrZero(product.total), 0)} ₼`}
                             </Typography>
                         
                             <Typography variant="subtitle1" gutterBottom>
-                                {`ƏDV-li:  ${products.reduce((total, product) => total + product.total +  (withVat  ? product.total*  0.18 : 0), 0)} ₼`}
+                                {`ƏDV-li:  ${products.reduce((total, product) => totalOrZero(total) + totalOrZero(product.total) +  (withVat  ? totalOrZero(product.total)*  0.18 : 0), 0)} ₼`}
                             </Typography>
 
                         </div>
