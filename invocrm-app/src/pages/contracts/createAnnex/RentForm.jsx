@@ -12,7 +12,7 @@ import CreateAnnex from '../CreateAnnex';
 import IconButton from '@material-ui/core/IconButton';
 import ControlPointIcon from '@material-ui/icons/ControlPoint';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-
+import { format, parseISO } from 'date-fns'
 
 
 const RentForm = ({ handleSubmit, contract, handleClose, units, salesManagers }) => {
@@ -55,7 +55,7 @@ const RentForm = ({ handleSubmit, contract, handleClose, units, salesManagers })
                                                     {`Əlavə №: ${contract.annex_count + 1}`}
                                                 </Typography>
                                                 <Typography variant="subtitle1" gutterBottom>
-                                                    {`Müqavilə yaradılma tarixi: ${contract.created}`}
+                                                    {`Müqavilə yaradılma tarixi:  ${contract.created ? format(parseISO(contract.created), "MM.dd.yyyy") : "-"}`}
                                                 </Typography>
 
                                                 <Typography variant="subtitle1" gutterBottom>
