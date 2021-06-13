@@ -64,7 +64,7 @@ class ProductsCreateSerializer(serializers.ModelSerializer):
 
 class AnnexCreateSerializer(serializers.ModelSerializer):
 
-    products = ProductsCreateSerializer(many=True, required=False)
+    products = ProductsCreateSerializer(many=True, required=False, allow_null=True)
 
     class Meta:
 
@@ -96,7 +96,7 @@ class AgentInvoiceItemSerializer(serializers.ModelSerializer):
 
 class AgentAnnexCreateSerializer(serializers.ModelSerializer):
 
-    agent_items = AgentInvoiceItemSerializer(many=True)
+    agent_items = AgentInvoiceItemSerializer(many=True, required=False, allow_null=True)
 
     class Meta:
 
@@ -132,8 +132,8 @@ class RentItemsSerializer(serializers.ModelSerializer):
 
 class RentAnnexCreateSerializer(serializers.ModelSerializer):
 
-    rent_items = RentItemsSerializer(many=True)
-    rent_conditions = RentConditionsSerializer(many=True)
+    rent_items = RentItemsSerializer(many=True, required=False, allow_null=True)
+    rent_conditions = RentConditionsSerializer(many=True, required=False, allow_null=True)
 
     class Meta:
         model = BaseAnnex
