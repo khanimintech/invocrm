@@ -38,7 +38,7 @@ class AnnexSerializer(serializers.ModelSerializer):
             return obj.total
 
         if obj.contract.type == BaseContract.Type.RENT:
-            return sum(filter(None, obj.rent_items.values_list('total', flat=True)))
+            return obj.sum_no_invoice_rent
 
         return obj.sum_no_invoice
 
@@ -49,7 +49,7 @@ class AnnexSerializer(serializers.ModelSerializer):
 
         if obj.with_vat is True:
             if obj.contract.type == BaseContract.Type.RENT:
-                return sum(filter(None, obj.rent_items.values_list('total', flat=True))) * 1.18
+                return round(obj.sum_with_invoice_rent, 2)
             return round(obj.sum_with_invoice, 2)
 
         return 0
