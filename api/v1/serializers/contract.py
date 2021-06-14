@@ -1151,7 +1151,7 @@ class ContactListSerializer(serializers.ModelSerializer):
 
     def get_customer(self, obj):
 
-        if obj.person.agreement and obj.person.agreement.company:
+        if hasattr(obj.person, 'agreement') and hasattr(obj.person.agreement, 'company'):
 
             return obj.person.agreement.company.name
 
