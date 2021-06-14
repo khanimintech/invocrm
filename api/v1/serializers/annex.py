@@ -12,6 +12,7 @@ class AnnexSerializer(serializers.ModelSerializer):
     company_name = serializers.SerializerMethodField()
     contract_no = serializers.CharField(source='contract.contract_no')
     contract_type = serializers.SerializerMethodField()
+    sales_manager = serializers.SerializerMethodField()
 
     class Meta:
 
