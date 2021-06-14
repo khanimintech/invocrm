@@ -26,7 +26,6 @@ class TestAnnexViewSet:
         ProductInvoiceItem.objects.create(name='ww', annex=annex, unit=unit, quantity=1, price=1, total=2)
         ProductInvoiceItem.objects.create(name='ww', annex=annex2, unit=unit, quantity=1, price=1, total=2)
 
-
         apiclient.force_login(admin_user)
         response = apiclient.get(reverse('api:v1:annexes-list'))
 
@@ -38,7 +37,7 @@ class TestAnnexViewSet:
         assert payload[0]['request_no'] == '1223'
         assert payload[0]['contract_no'] is None
         assert payload[0]['annex_no'] == 1
-        assert payload[0]['sales_manager'] == sales_manager.id
+        assert payload[0]['sales_manager'] == sales_manager.fullname
         assert payload[0]['payment_terms'] == '122'
         assert payload[0]['contract_type'] == annex.contract.type
         assert payload[0]['sum_no_invoice'] == 4
@@ -49,7 +48,7 @@ class TestAnnexViewSet:
         assert payload[1]['request_no'] == '123'
         assert payload[1]['contract_no'] is None
         assert payload[1]['annex_no'] == 2
-        assert payload[1]['sales_manager'] == sales_manager.id
+        assert payload[1]['sales_manager'] == sales_manager.fullname
         assert payload[1]['payment_terms'] == '1'
         assert payload[1]['contract_type'] == annex2.contract.type
         assert payload[1]['sum_no_invoice'] == 2
