@@ -64,7 +64,7 @@ const OneTimeForm = ({ handleSubmit, handleClose, selectedContract, units, sales
                     innerRef={form => (formikRef = form)}
                 >
 
-                    {({ values, setErrors }) => (
+                    {({ values, setFieldValue }) => (
                         <Form>
                             <Grid container spacing={0} justify="space-between" spacing={5}>
                                 <Grid item md={6} sm={12} xs={12}>
@@ -72,23 +72,28 @@ const OneTimeForm = ({ handleSubmit, handleClose, selectedContract, units, sales
                                         <Typography variant="h6" gutterBottom>
                                             Ümumi məlumatlar
                                             </Typography>
-                                        <TextField
-                                            select
-                                            fullWidth
-                                            label="Növü"
-                                            value={contractType}
-                                            onChange={e => setContractType(e.target.value)}
-                                            variant="outlined"
-                                        >
+                                                <TextField
+                                                    select
+                                                    fullWidth
+                                                    label="Növü"
+                                                    value={contractType}
+                                                    onChange={e => {
+                                                        setContractType(e.target.value)
+                                                    }}
+                                                    variant="outlined"
+                                                    InputProps={{
+                                                        readOnly: !!id
+                                                    }}
+                                                >
 
-                                            <MenuItem value={1}>
-                                                Hüquqi
-                                                </MenuItem>
-                                            <MenuItem value={2}>
-                                                Fiziki
-                                                </MenuItem>
+                                                    <MenuItem value={1}>
+                                                        Hüquqi
+                                                        </MenuItem>
+                                                    <MenuItem value={2}>
+                                                        Fiziki
+                                                        </MenuItem>
 
-                                        </TextField>
+                                                </TextField>
                                     </Grid>
                                     <Divider />
                                     {

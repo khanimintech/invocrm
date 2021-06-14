@@ -56,11 +56,22 @@ const getStateCounts = filters =>
 
 const getAttachments = id => 
     makeAsyncCall({
-        url: `${BACKEND_URL}attahments/${id}`,
+        url: `${BACKEND_URL}contracts/${id}/attachments/`,
         method: 'GET',
     });
 
-const uploadAttachment = (id, file) => Promise.resolve({ statusCode: 200, body: file});
+const uploadAttachment = (type, data, id) => 
+    makeAsyncCall({
+        url: `${BACKEND_URL}contracts/${id}/upload/${type}/`,
+        method: "POST",
+        body: data,
+        headers: {
+            "Content-Type": "multipart/form-data; boundary=AaB03x",
+            "Accept": "application/json",
+            // "type": "formData",
+            mode: 'no-cors',
+        }
+    })
 
 export const ContractsService = {
     index: (filters) => index(filters),
@@ -72,5 +83,5 @@ export const ContractsService = {
     createAnnex: vals => createAnnex(vals),
     getStateCounts: filters => getStateCounts(filters),
     getAttachments: id => getAttachments(id),
-    uploadAttachment: (id, file) => uploadAttachment(id, file)
+    uploadAttachment: (type, data, id) => uploadAttachment(type, data, id)
 }

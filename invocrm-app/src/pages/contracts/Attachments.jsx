@@ -44,38 +44,19 @@ const Attachments = ({ open, setOpen, contract, handleOpenContractClick, handleR
             .then(res => {
                 setAttachments(res.body || { contracts: [], annexes: [] });
             })
-            .catch(err => { // temporrary mocked data
-                setAttachments({
-                    contracts: [
-                        {
-                            id: 1, name: "File 1", created: new Date(), url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-                        },
-                        {
-                            id: 2, name: "Contract 2", created: new Date(), url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
-                        }
-                    ],
-                    annexes: [
-                        {
-                            id: 1, name: "Annex 1", created: new Date(), url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
-                        },
-                        {
-                            id: 2, name: "Test Annex 2", created: new Date(), url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
-                        }
-                    ]
-                })
-            })
             .finally(() => toggleLoading(false))
     }
 
 
     const handleUploadAttahcment = file => {
-        const oldData = attachments [activeTab === 1 ? "contracts" : "annexes"]
-        handleRequest(ContractsService.uploadAttachment(contract.id, file))
+        const type = activeTab === 1 ? "contract" : "annex";
+        const formData = new FormData();
+        formData.append("attachment", file);
+
+        handleRequest(ContractsService.uploadAttachment(type, formData, contract.id))
         .then(res => {
             enqueueSnackbar("Fayl uğurla əlavə edildi", { variant : "success"})
-            setAttachments({ ...attachments, [activeTab === 1 ? "contracts" : "annexes"]: oldData.concat( {
-                id:  attachments [activeTab === 1 ? "contracts" : "annexes"].length + 1, name: file.name, created: new Date(), url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"
-            })})
+            // setAttachments(res.body)
         })
     }
 

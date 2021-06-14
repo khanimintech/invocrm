@@ -125,6 +125,7 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName , tota
                                             meta={meta}
                                             size="small"
                                             type="number"
+                                            onChange={ val => form.setFieldValue(field.name, totalOrZero(val))}
                                         />
                                         <span>{`ƏDV-li:  ${totalOrZero (total) +(withVat  ? totalOrZero(total)*  0.18:0)}₼`}</span>
                                     </div>
