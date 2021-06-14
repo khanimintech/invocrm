@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 
-from api.main_models.annex import UnitOfMeasure
+from api.main_models.annex import UnitOfMeasure, BaseAnnex
 from api.main_models.contract import TradeAgreement, BaseContract, Contact, Bank, BankAccount, Company
 from api.models import CustomUser, Person
 
@@ -22,3 +22,4 @@ admin.site.register(BankAccount)
 admin.site.register(Company)
 
 admin.site.register(UnitOfMeasure)
+admin.site.register(BaseAnnex)

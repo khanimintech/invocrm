@@ -20,7 +20,7 @@ class BaseAnnex(models.Model):
     annex_no = models.IntegerField(default=1)
     request_no = models.CharField(max_length=256, null=True, blank=True)
 
-    annex_date = models.DateTimeField(null=True, blank=True)
+    annex_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
     note = models.TextField(null=True, blank=True)
     # extra_note =  TODO check Gunay if we can use note field above for all added notes.
     payment_terms = models.TextField(null=True, blank=True)
@@ -37,7 +37,7 @@ class BaseAnnex(models.Model):
 
     def save(self, **kwargs):
 
-        self.annex_no = self.contract.annex_list.latest('created').annex_no + 1 if self.contract.annex_list.exists() else 1
+        self.annex_no = self.contract.annex_list.latest('annex_date').annex_no + 1 if self.contract.annex_list.exists() else 1
 
         super(BaseAnnex, self).save(**kwargs)
 
