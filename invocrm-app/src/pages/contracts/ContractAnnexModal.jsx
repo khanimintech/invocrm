@@ -43,8 +43,8 @@ const ContractAnnexModal = ({
                             contract: contract.id, 
                             contract_id: contract.id,
                             ...(isSalesType( contract.type) && vals.total ? {products: []} : {} ),
-                            ...( contract.type === 4 ? {agent_items: []} : {} ),
-                            ...( contract.type === 5 ? {rent_items: []} : {} ),
+                            ...( contract.type === 4  && vals.total? {agent_items: []} : {} ),
+                            ...( contract.type === 5  && vals.total ? {rent_items: []} : {} ),
                             })
                         .then(() => {
                             reloadData();
