@@ -1146,14 +1146,14 @@ class ContactListSerializer(serializers.ModelSerializer):
 
     def get_responsible_person(self, obj):
 
-        if obj.person:
+        if obj.person.type == Person.TYPE.CONTACT:
             return obj.person.fullname
 
     def get_customer(self, obj):
 
-        if hasattr(obj.person, 'agreement') and hasattr(obj.person.agreement, 'company'):
-
-            return obj.person.agreement.company.name
+        if hasattr(obj.person, 'agreement'):
+            if hasattr(obj.person.agreement, 'company'):
+                return obj.person.agreement.company.name
 
 
 class ContactCreateSerializer(serializers.ModelSerializer):

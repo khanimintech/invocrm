@@ -66,7 +66,7 @@ class AnnexStatusStatAPIView(ListAPIView):
 
         response = {
             'all_count': qs.count(),
-            'with_vat': sum(filter(None, qs.filter(with_vat=True).values_list('sum_with_invoice', flat=True))),
+            'with_vat': round(sum(filter(None, qs.filter(with_vat=True).values_list('sum_with_invoice', flat=True))), 2),
             'vat_free': sum(filter(None, qs.filter(with_vat=False).values_list('sum_no_invoice', flat=True))),
 
         }

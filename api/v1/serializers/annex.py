@@ -41,12 +41,12 @@ class AnnexSerializer(serializers.ModelSerializer):
     def get_sum_with_invoice(self, obj):
 
         if obj.total is not None and obj.with_vat is True:
-            return obj.total * 1.18
+            return round(obj.total * 1.18, 2)
 
         if obj.with_vat is True:
             if obj.contract.type == BaseContract.Type.RENT:
                 return sum(filter(None, obj.rent_items.values_list('total', flat=True))) * 1.18
-            return obj.sum_with_invoice
+            return round(obj.sum_with_invoice, 2)
 
         return 0
 
