@@ -33,13 +33,11 @@ const CreateContactModal = ({open, handleClose, handleRequest, reloadData }) => 
                                 fathers_name: "",
                                 position: "",    
                             },
-                            contact: {
-                                mobile: "",
-                                address: "",
-                                work_email: "",
-                                personal_email: "",
-                                web_site: ""
-                            }
+                            mobile: "",
+                            address: "",
+                            work_email: "",
+                            personal_email: "",
+                            web_site: ""
 
                         }}
                         onSubmit={handleSubmit}
@@ -57,7 +55,7 @@ const CreateContactModal = ({open, handleClose, handleRequest, reloadData }) => 
 
                         {({ values }) => (
                             <Form>
-                                <CustomerContacts />
+                                <CustomerContacts  type="contact"/>
                             </Form>
                         )}
                     </Formik>

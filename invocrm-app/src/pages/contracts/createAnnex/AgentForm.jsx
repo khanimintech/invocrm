@@ -67,6 +67,25 @@ const AgentForm = ({ handleSubmit, contract, handleClose, salesManagers }) => {
 												</Field>
 											</Grid>
 										</Grid>
+										<Grid container spacing={0}>
+										<Grid item md={6} className="input-wrapper">
+                                                        <Field
+                                                            name="sales_manager"
+                                                            validate={validateRequired}
+                                                        >
+                                                            {({ field, form, meta }) => (
+                                                                <Input
+                                                                    label="Satış meneceri"
+                                                                    field={field}
+                                                                    form={form}
+                                                                    meta={meta}
+                                                                    select
+                                                                    options={salesManagers}
+                                                                />
+                                                            )}
+                                                        </Field>
+                                                    </Grid>
+										</Grid>
                                         <Divider />
                                         <br />
 										<Grid container spacing={0} justify="space-between" spacing={5}>

@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 
 
 
-const CustomerContacts = ({ readOnly}) => {
+const CustomerContacts = ({ readOnly, type }) => {
 
     return (
         <>
@@ -66,7 +66,7 @@ const CustomerContacts = ({ readOnly}) => {
             </Grid>
             <Grid item md={12} className="input-wrapper">
                 <Field
-                    name="contact.mobile"
+                    name={ type ? "mobile": "contact.mobile"}
                 >
                     {({ field, form, meta }) => (
                         <Input
@@ -96,7 +96,7 @@ const CustomerContacts = ({ readOnly}) => {
             </Grid>
             <Grid item md={12} className="input-wrapper">
                 <Field
-                    name="contact.address"
+                    name={ type ? "address": "contact.address"}
                 >
                     {({ field, form, meta }) => (
                         <Input
@@ -111,7 +111,7 @@ const CustomerContacts = ({ readOnly}) => {
             </Grid>
             <Grid item md={12} className="input-wrapper">
                 <Field
-                    name="contact.work_email"
+                    name={type ? "work_email" : "contact.work_email"}
                 >
                     {({ field, form, meta }) => (
                         <Input
@@ -126,7 +126,7 @@ const CustomerContacts = ({ readOnly}) => {
             </Grid>
             <Grid item md={12} className="input-wrapper">
                 <Field
-                    name="contact.personal_email"
+                    name={type ? "personal_email":"contact.personal_email"}
                 >
                     {({ field, form, meta }) => (
                         <Input
@@ -141,7 +141,7 @@ const CustomerContacts = ({ readOnly}) => {
             </Grid>
             <Grid item md={12} className="input-wrapper">
                 <Field
-                    name="contact.web_site"
+                    name={type ? "web_site": "contact.web_site"}
                 >
                     {({ field, form, meta }) => (
                         <Input
