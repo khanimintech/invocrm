@@ -619,8 +619,8 @@ class TestContractViewSet:
                     "fathers_name": "huquqi",
                     "tin": None,
                     "position": "huquqi"},
-                "products": [{"name": "huquqi", "unit": unit.id, "quantity": 1, "price": 2, "total": 2, "id": p1.id},
-                             {"name": "huquqi", "unit": unit.id, "quantity": 1, "price": 1, "total": 1, "id": p2.id},
+                "products": [{"name": "huquqi", "unit": unit.id, "quantity": 1, "price": 2, "total": 2},
+                             {"name": "huquqi", "unit": unit.id, "quantity": 1, "price": 1, "total": 1},
                              {"name": "huquqi", "unit": unit.id, "quantity": 1, "price": 1, "total": 1}]},
 
             "id": contract.id,
@@ -666,11 +666,6 @@ class TestContractViewSet:
                                   )
 
         assert response.status_code == 200, response.json()
-
-        p1.refresh_from_db()
-        p2.refresh_from_db()
-        assert p1.name == 'huquqi'
-        assert p2.name == 'huquqi'
 
         contract.refresh_from_db()
 

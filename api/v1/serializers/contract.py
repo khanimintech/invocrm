@@ -852,6 +852,7 @@ class OneTimeUpdateSerializer(serializers.ModelSerializer):
             'responsible_person'
         ]
 
+    @atomic
     def update(self, instance, validated_data):
 
         def update_if_not_none(cls, id, data):
@@ -873,15 +874,11 @@ class OneTimeUpdateSerializer(serializers.ModelSerializer):
         update_if_not_none(Person, instance.annex_list.last().seller.id, seller_data)
         update_if_not_none(BaseAnnex, instance.annex_list.last().id, annex_data)
 
+        instance.annex_list.last().products.all().delete()
+
         for p in products_data:
 
-            if p.get('id', None):
-
-                ProductInvoiceItem.objects.filter(id=p.pop('id')).update(annex=instance.annex_list.last(), **p)
-
-            else:
-
-                ProductInvoiceItem.objects.create(annex=instance.annex_list.last(), **p)
+            ProductInvoiceItem.objects.create(annex=instance.annex_list.last(), **p)
 
         return super().update(instance.onetimeagreement, validated_data)
 
@@ -1086,6 +1083,7 @@ class POUpdateSerializer(serializers.ModelSerializer):
             'po_number', 'sales_manager', 'created', 'due_date', 'company', 'type', 'supplements', 'id'
         ]
 
+    @atomic
     def update(self, instance, validated_data):
 
         def update_if_not_none(cls, id, data):
@@ -1097,14 +1095,11 @@ class POUpdateSerializer(serializers.ModelSerializer):
 
         supplements_data = validated_data.pop('supplements')
 
+        instance.poagreement.supplements.all().delete()
+
         for s in supplements_data:
 
-            if s.get('id', None):
-
-                POAgreementSupplements.objects.filter(id=s.pop('id')).update(**s)
-
-            else:
-                POAgreementSupplements.objects.create(agreement=instance.poagreement, **s)
+            POAgreementSupplements.objects.create(agreement=instance.poagreement, **s)
 
         return super().update(instance.poagreement, validated_data)
 

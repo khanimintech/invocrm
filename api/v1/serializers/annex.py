@@ -40,7 +40,9 @@ class AnnexSerializer(serializers.ModelSerializer):
         if obj.contract.type == BaseContract.Type.RENT and obj.sum_no_invoice_rent:
             return obj.sum_no_invoice_rent
 
-        return obj.sum_no_invoice
+        if obj.sum_no_invoice is not None:
+            return obj.sum_no_invoice
+        return 0
 
     def get_sum_with_invoice(self, obj):
 

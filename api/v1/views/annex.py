@@ -55,8 +55,6 @@ class AnnexStatusStatAPIView(ListAPIView):
 
     def get_queryset(self):
 
-
-
         queryset = self.queryset
         return queryset.filter(contract__plant_name=self.request.user.plant_name)
 

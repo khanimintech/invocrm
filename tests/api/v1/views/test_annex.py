@@ -61,8 +61,8 @@ class TestAnnexViewSet:
 
         unit = UnitOfMeasure.objects.create(name='KQ')
 
-
         apiclient.force_login(admin_user)
+
         response = apiclient.post(reverse('api:v1:annexes-list'),
                                   data={
                                       'contract': contract.id,
