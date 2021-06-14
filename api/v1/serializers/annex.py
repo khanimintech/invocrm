@@ -102,7 +102,7 @@ class AgentAnnexCreateSerializer(serializers.ModelSerializer):
 
         model = BaseAnnex
 
-        fields = ['contract', 'created', 'agent_items', 'with_vat', 'total']
+        fields = ['contract', 'created', 'agent_items', 'with_vat', 'total', 'sales_manager']
 
     def create(self, validated_data):
 
@@ -137,7 +137,7 @@ class RentAnnexCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BaseAnnex
-        fields = ['contract', 'created', 'rent_items', 'rent_conditions', 'with_vat', 'total']
+        fields = ['contract', 'created', 'rent_items', 'rent_conditions', 'with_vat', 'total', 'sales_manager']
 
     def create(self, validated_data):
 
