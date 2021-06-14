@@ -92,9 +92,11 @@ class ContractViewSet(ModelViewSet):
 
     @action(detail=True, methods=['POST'], url_path='upload/(?P<type>contract|annex)', url_name='upload')
     def upload(self, *args, **kwargs):
+        print(self.request.FILES)
+        print(self.request.data)
         if not self.request.FILES.get('attachment'):
             return Response({
-                "message": "Provide valid 'attachment' key with 'type' query param"
+                "message": "Provide valid 'attachment' key"
             }, status=400)
         file_data = self.request.FILES.get('attachment')
 

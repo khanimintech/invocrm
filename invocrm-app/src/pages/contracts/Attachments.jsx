@@ -56,7 +56,7 @@ const Attachments = ({ open, setOpen, contract, handleOpenContractClick, handleR
         handleRequest(ContractsService.uploadAttachment(type, formData, contract.id))
         .then(res => {
             enqueueSnackbar("Fayl uğurla əlavə edildi", { variant : "success"})
-            // setAttachments(res.body)
+            getAttachments()
         })
     }
 

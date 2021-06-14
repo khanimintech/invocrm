@@ -66,10 +66,7 @@ const uploadAttachment = (type, data, id) =>
         method: "POST",
         body: data,
         headers: {
-            "Content-Type": "multipart/form-data; boundary=AaB03x",
-            "Accept": "application/json",
-            // "type": "formData",
-            mode: 'no-cors',
+            "Content-Type": null,
         }
     })
 
