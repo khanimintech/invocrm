@@ -69,7 +69,7 @@ class AnnexStatusStatAPIView(ListAPIView):
             'with_vat': sum([round(sum(filter(None, qs.filter(with_vat=True).values_list('sum_with_invoice', flat=True))), 2),
                              round(sum(filter(None, qs.filter(with_vat=True).values_list('sum_with_invoice_rent', flat=True))), 2)]),
             'vat_free': sum([sum(filter(None, qs.filter(with_vat=False).values_list('sum_no_invoice', flat=True))),
-                             sum(filter(None, qs.filter(with_vat=False).values_list('sum_with_invoice_rent', flat=True)))])
+                             sum(filter(None, qs.filter(with_vat=False).values_list('sum_no_invoice_rent', flat=True)))])
 
         }
 
