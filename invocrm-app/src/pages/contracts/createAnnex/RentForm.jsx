@@ -33,7 +33,8 @@ const RentForm = ({ handleSubmit, contract, handleClose, units, salesManagers })
                                 {
                                     name: ""
                                 }
-                            ]
+                            ],
+                            total: null,
                         }}
                         onSubmit={handleSubmit}
                         innerRef={form => (formikRef = form)}

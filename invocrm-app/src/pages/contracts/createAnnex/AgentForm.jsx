@@ -22,8 +22,9 @@ const AgentForm = ({ handleSubmit, contract, handleClose, salesManagers }) => {
 							agent_items : [
 								{
 									client_name: "",
-								}
-							]
+								},
+							],
+							total: null,
 						}}
 						onSubmit={ handleSubmit}
 						innerRef={form => (formikRef = form)}
