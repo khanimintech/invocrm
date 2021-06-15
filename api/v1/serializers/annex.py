@@ -13,6 +13,7 @@ class AnnexSerializer(serializers.ModelSerializer):
     contract_no = serializers.CharField(source='contract.contract_no')
     contract_type = serializers.SerializerMethodField()
     sales_manager = serializers.SerializerMethodField()
+    annex_no = serializers.SerializerMethodField()
 
     class Meta:
 
@@ -20,9 +21,17 @@ class AnnexSerializer(serializers.ModelSerializer):
         fields = ['id', 'company_name', 'request_no', 'contract_no', 'annex_no', 'sales_manager', 'payment_terms',
                   'sum_no_invoice', 'sum_with_invoice', 'annex_date', 'created', 'contract_type', 'with_vat']
 
+    def get_annex_no(self, obj):
+
+        if obj.contract.type == BaseContract.Type.ONE_TIME:
+            return None
+        return obj.annex_no
+
     def get_sales_manager(self, obj):
         if obj.sales_manager:
             return obj.sales_manager.fullname
+        if obj.contract.type == BaseContract.Type.ONE_TIME and obj.contract.sales_manager:
+            return obj.contract.sales_manager.fullname
 
     def get_company_name(self, obj):
 
