@@ -21,7 +21,7 @@ const AgentForm = ({ handleSubmit, contract, handleClose, salesManagers }) => {
 						initialValues={{
 							agent_items : [
 								{
-									id: 1,
+									client_name: "",
 								}
 							]
 						}}

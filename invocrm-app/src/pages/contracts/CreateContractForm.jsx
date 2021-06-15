@@ -30,7 +30,7 @@ const CreateContractModal = ({open, formType, handleRequest, handleClose, enqueu
   const handleSubmit = (vals, formikBag ) => {
     let values =  {...vals, type: +formType}
     if (+formType === 6)
-      values = {...vals, type: +formType, annex: { ...vals.annex, products: (+formType === 6 && vals.annex.total && !vals.annex.products[0].name) ? [] : vals.annex.products} }
+      values = {...vals, type: +formType, annex: { ...vals.annex, total: vals.total || undefined, products: (+formType === 6 && vals.annex.total && !vals.annex.products[0].name) ? [] : vals.annex.products} }
     handleRequest(
       ContractsService.save(values)
     )

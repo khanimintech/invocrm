@@ -22,7 +22,6 @@ const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units, salesM
 				<DialogContentText>
 					<Formik
 						initialValues={{
-							total: 0,
 							products: [
 								{
 									name: "",
@@ -30,7 +29,6 @@ const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units, salesM
 									unit: 0,
 									price: 0,
 									total: 0,
-									id: 1,
 								}
 							]
 						}}

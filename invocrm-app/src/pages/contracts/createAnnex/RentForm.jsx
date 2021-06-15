@@ -25,7 +25,6 @@ const RentForm = ({ handleSubmit, contract, handleClose, units, salesManagers })
                         initialValues={{
                             rent_items: [
                                 {
-                                    id: 1,
                                     quantity: 0,
                                     one_day_rent: 0,
                                 },

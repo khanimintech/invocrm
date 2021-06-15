@@ -33,7 +33,7 @@ const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType, sele
                     created: created ? parseISO(created)  : new Date(),
                     sales_manager: sales_manager,
                     company,
-                    supplements: supplements || [{}],
+                    supplements: supplements && supplements.length ? supplements.map(s => ({ ...s, id: undefined})) : [{}],
                 }}
                 onSubmit={handleSubmit}
                 innerRef={form => (formikRef = form)}

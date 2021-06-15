@@ -73,7 +73,7 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName , tota
                                 form.setFieldValue(`${arrayFieldName}[${index}].total`, val * products[index].quantity)
                             }
                             if (col.field === "quantity") {
-                                form.setFieldValue(`${arrayFieldName}[${index}].total`, type === 5 ? products[index].one_day_rent * val : products[index].price * val)
+                                form.setFieldValue(`${arrayFieldName}[${index}].total`, type === 5 ? (+products[index].one_day_rent || 0) * val : products[index].price * val)
                             }
                             if (col.field === "one_day_rent") {
                                 form.setFieldValue(`${arrayFieldName}[${index}].total`, val*products[index].quantity)
