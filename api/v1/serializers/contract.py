@@ -1122,11 +1122,15 @@ class BankListSerializer(serializers.ModelSerializer):
 
         if obj.company_owner:
             return obj.company_owner.name
+        if obj.personal_owner:
+            return obj.personal_owner.fullname
 
     def get_company_tin(self, obj):
 
         if obj.company_owner:
             return obj.company_owner.tin
+        if obj.personal_owner:
+            return obj.personal_owner.fullname
 
 
 class ContactListSerializer(serializers.ModelSerializer):
