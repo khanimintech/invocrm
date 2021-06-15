@@ -148,6 +148,9 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'invocrm.auth.CsrfExemptSessionAuthentication',
     ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
 }
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/index/'
