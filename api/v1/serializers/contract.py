@@ -1150,8 +1150,12 @@ class ContactListSerializer(serializers.ModelSerializer):
 
     def get_customer(self, obj):
 
-        if getattr(obj.person, 'agreement', None) and getattr(obj.person.agreement, 'company', None):
+        if getattr(obj.person, 'agreement', None) and not obj.person.agreement._is_individual_contract:
                 return obj.person.agreement.company.name
+
+        if getattr(obj.person, 'agreement', None) and obj.person.agreement._is_individual_contract:
+                return obj.person.agreement.executor.fullname
+
 
 
 class ContactCreateSerializer(serializers.ModelSerializer):
