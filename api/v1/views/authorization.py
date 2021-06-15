@@ -11,6 +11,7 @@ class LoginAPIView(APIView):
 
     authentication_classes = (CsrfExemptSessionAuthentication, )
     serializer_class = LoginSerializer
+    permission_classes = ()
 
     def post(self, request, *args, **kwargs):
 

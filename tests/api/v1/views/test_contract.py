@@ -16,6 +16,7 @@ def test_login(apiclient, admin_user, PASSWORD):
 
     admin_user.is_active = True
     admin_user.save()
+
     response = apiclient.post(reverse('api:v1:login'), data={
         'email': admin_user.email,
         'password': PASSWORD
