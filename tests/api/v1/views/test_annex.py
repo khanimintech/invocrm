@@ -236,4 +236,4 @@ class TestAnnexStatusStatAPIView:
         assert response.status_code == 200
         assert response.json()['all_count'] == 2
         assert response.json()['with_vat'] == 5.9
-        assert response.json()['vat_free'] == 4
+        assert response.json()['vat_free'] == 9
