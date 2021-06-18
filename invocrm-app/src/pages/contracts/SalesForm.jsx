@@ -102,6 +102,9 @@ const SalesForm = ({ handleSubmit, handleClose, formType, selectedContract, sale
                                                             {label: "Xidmət", value: 2},
                                                             {label: "Distribyutor", value: 3},
                                                             {label: "Agent", value: 4},
+                                                            {label: "İcarə", value: 5},
+                                                            {label: "Bir-dəfəlik", value: 6},
+                                                            {label: "Beynəlxalq müqavilə", value: 7},
                                                         ]}
                                                     />
                                                 )}
