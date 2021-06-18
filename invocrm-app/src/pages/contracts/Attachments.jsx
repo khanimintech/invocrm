@@ -18,7 +18,7 @@ const Files = ({ files }) => {
                     <DescriptionIcon />
                     <span>{file.name}</span>
                 </div>
-                <span>{ format(parseISO('2019-02-11T14:00:00'), 'MM/dd/yyyy')}</span>
+                <span>{ format(parseISO(file.created), 'MM/dd/yyyy')}</span>
             </div>
         ))
     )
