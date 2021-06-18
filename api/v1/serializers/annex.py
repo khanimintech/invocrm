@@ -61,7 +61,8 @@ class AnnexSerializer(serializers.ModelSerializer):
         if obj.with_vat is True:
             if obj.contract.type == BaseContract.Type.RENT and obj.sum_with_invoice_rent:
                 return round(obj.sum_with_invoice_rent, 2)
-            return round(obj.sum_with_invoice, 2)
+            if obj.sum_with_invoice:
+                return round(obj.sum_with_invoice, 2)
 
         return 0
 
