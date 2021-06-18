@@ -95,6 +95,7 @@ const App = ({ history }) => {
     { url: "/annexes", component: <Annexes /> },
     { url: "/contacts", component: <Contacts /> },
     { url: "/banks", component: <Banks /> },
+    { url: "/", component: user ? <Contracts /> : <Login /> },
   ]
 
   return (
