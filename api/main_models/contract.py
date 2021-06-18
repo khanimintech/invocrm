@@ -128,7 +128,7 @@ class CustomerTemplateAgreement(BaseContract):
 
     class CustomerType:
 
-        TRADE, SERVICE, DISTRIBUTION, AGENT = range(1, 5)
+        TRADE, SERVICE, DISTRIBUTION, AGENT, RENT, ONE_TIME, INTERNATIONAL = range(1, 8)
 
         CHOICES = (
             (TRADE, _('Trade')),
@@ -143,12 +143,12 @@ class CustomerTemplateAgreement(BaseContract):
 
 class Contact(models.Model):
 
-    mobile = models.CharField(max_length=50, null=True, blank=True)
-    address = models.CharField(max_length=50, null=True, blank=True)
-    work_email = models.CharField(max_length=50, null=True, blank=True)
-    personal_email = models.CharField(max_length=50, null=True, blank=True)
-    web_site = models.CharField(max_length=100, null=True, blank=True)
-    plant_name = models.CharField(max_length=100, null=True, blank=True)
+    mobile = models.CharField(max_length=256, null=True, blank=True)
+    address = models.CharField(max_length=512, null=True, blank=True)
+    work_email = models.CharField(max_length=256, null=True, blank=True)
+    personal_email = models.CharField(max_length=256, null=True, blank=True)
+    web_site = models.CharField(max_length=256, null=True, blank=True)
+    plant_name = models.CharField(max_length=256, null=True, blank=True)
 
 
 class Company(models.Model):
