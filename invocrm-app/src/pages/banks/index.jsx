@@ -6,9 +6,9 @@ import ContactPhoneIcon from '@material-ui/icons/ContactPhone';
 
 
 const columns = [
+    { field: 'company_name', header: 'Şirkət' , filter: true },
     { field: 'company_tin', header: 'VÖEN' , filter: true },
     { field: 'account', header: 'Hesab №' , filter: true },
-    { field: 'company_name', header: 'Şirkət' , filter: true },
     { field: 'name', header: 'Bank adı', filter: true  },
     { field: 'swift_no', header: "SWIFT" , filter: true },
     { field: 'code', header: "Bank kodu" , filter: true },
