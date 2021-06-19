@@ -7,10 +7,10 @@ from api.main_models.contract import TradeAgreement, BaseContract, AgentAgreemen
 
 class TestAnnexViewSet:
 
-    def test_annex_list_ok(self, apiclient, admin_user, sales_manager):
+    def test_annex_list_ok(self, apiclient, admin_user, sales_manager, executor):
 
         contract = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager,
-                                                 due_date=timezone.now(),type=BaseContract.Type.TRADE)
+                                                 due_date=timezone.now(),type=BaseContract.Type.TRADE, executor=executor)
 
         annex = BaseAnnex.objects.create(contract=contract, request_no='1223', annex_date=timezone.now(),
                                  note='122', payment_terms='122', delivery_terms='111', acquisition_terms='133',
@@ -33,7 +33,7 @@ class TestAnnexViewSet:
         payload = response.json()
 
         assert payload[0]['id'] == annex.id
-        assert payload[0]['company_name'] == 'N/A'
+        assert payload[0]['company_name'] == annex.contract.executor.fullname
         assert payload[0]['request_no'] == '1223'
         assert payload[0]['contract_no'] is None
         assert payload[0]['annex_no'] == 1
@@ -44,7 +44,7 @@ class TestAnnexViewSet:
         assert payload[0]['sum_with_invoice'] == 0
 
         assert payload[1]['id'] == annex2.id
-        assert payload[1]['company_name'] == 'N/A'
+        assert payload[1]['company_name'] == annex.contract.executor.fullname
         assert payload[1]['request_no'] == '123'
         assert payload[1]['contract_no'] is None
         assert payload[1]['annex_no'] == 2

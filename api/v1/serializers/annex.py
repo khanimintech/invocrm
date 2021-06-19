@@ -37,8 +37,8 @@ class AnnexSerializer(serializers.ModelSerializer):
 
         if obj.contract._is_individual_contract:
 
-            if obj.executor:
-                return obj.executor.fullname
+            if obj.contract.executor:
+                return obj.contract.executor.fullname
         else:
             return obj.contract.company.name
 
