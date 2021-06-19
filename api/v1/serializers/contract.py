@@ -23,30 +23,45 @@ def custom_update(instance, validated_data):
 
     update_if_not_none(Company, instance.company.id, validated_data.pop('company'))
     update_if_not_none(Person, instance.executor.id, validated_data.pop('executor'))
+    instance.executor.refresh_from_db()
     update_if_not_none(Bank, instance.company.bank_acc_list.last().bank.id, validated_data.pop('bank', None))
     update_if_not_none(BankAccount, instance.company.bank_acc_list.last().bank.id, validated_data.pop('bank_account', None))
 
     responsible_person_data = validated_data.pop('responsible_person', None)
     contact_data = validated_data.pop('contact', None)
 
-    if responsible_person_data is not None and instance.responsible_person is not None:
-        update_if_not_none(Person, instance.responsible_person.id, responsible_person_data)
+    if responsible_person_data is not None:
 
-        if contact_data is not None and instance.responsible_person.contact is not None:
-            update_if_not_none(Contact, instance.responsible_person.contact.id, contact_data)
+        if instance.responsible_person is not None:
 
-        if contact_data is not None and not instance.responsible_person.contact:
-            con = Contact.objects.create(**contact_data)
-            instance.responsible_person.contact = con
-            instance.responsible_person.save()
+            update_if_not_none(Person, instance.responsible_person.id, responsible_person_data)
 
-    if responsible_person_data is not None and not instance.responsible_person:
+            instance.responsible_person.refresh_from_db()
+            rp = instance.responsible_person
 
-        rp = Person.objects.create(**responsible_person_data)
-        if contact_data is not None:
-            con = Contact.objects.create(**contact_data)
-            rp.contact = con
-            rp.save()
+            if contact_data is not None:
+
+                if instance.responsible_person.contact is not None:
+                    update_if_not_none(Contact, instance.responsible_person.contact.id, contact_data)
+
+                if not instance.responsible_person.contact:
+
+                    con = Contact.objects.create(**contact_data)
+                    instance.responsible_person.contact = con
+                    instance.responsible_person.save()
+
+        if not instance.responsible_person:
+
+            rp = Person.objects.create(**responsible_person_data)
+
+            if contact_data is not None:
+                con = Contact.objects.create(**contact_data)
+                rp.contact = con
+
+        # must call save() for Person objects to change fullname(changed in refactored save(), update() dont call save())
+
+        rp.save()
+        instance.executor.save()
 
         validated_data['responsible_person'] = rp
 
@@ -687,6 +702,7 @@ class AgentUpdateSerializer(serializers.ModelSerializer):
                 return cls.objects.filter(id=id).update(**data)
 
         update_if_not_none(Person, instance.executor.id, validated_data.pop('executor'))
+        instance.executor.refresh_from_db()
         update_if_not_none(Bank, instance.executor.b_acc_list.last().bank.id, validated_data.pop('bank', None))
         update_if_not_none(BankAccount, instance.executor.b_acc_list.last().bank.id, validated_data.pop('bank_account', None))
 
@@ -694,8 +710,10 @@ class AgentUpdateSerializer(serializers.ModelSerializer):
         contact_data = validated_data.pop('contact', None)
 
         if responsible_person_data is not None and instance.responsible_person is not None:
-            update_if_not_none(Person, instance.responsible_person.id, responsible_person_data)
 
+            update_if_not_none(Person, instance.responsible_person.id, responsible_person_data)
+            instance.responsible_person.refresh_from_db()
+            rp = instance.responsible_person
             if contact_data is not None and instance.responsible_person.contact is not None:
                 update_if_not_none(Contact, instance.responsible_person.contact.id, contact_data)
 
@@ -710,9 +728,12 @@ class AgentUpdateSerializer(serializers.ModelSerializer):
             if contact_data is not None:
                 con = Contact.objects.create(**contact_data)
                 rp.contact = con
-                rp.save()
 
-            validated_data['responsible_person'] = rp
+        # must call save() for Person objects to change fullname(changed in refactored save(), update() dont call save())
+        instance.executor.save()
+        rp.save()
+
+        validated_data['responsible_person'] = rp
 
         return super().update(instance.agentagreement, validated_data)
 
@@ -866,12 +887,14 @@ class OneTimeUpdateSerializer(serializers.ModelSerializer):
 
         update_if_not_none(Contact, instance.executor.contact.id, executor_contact_data)
         update_if_not_none(Person, instance.executor.id, executor_data)
+        instance.executor.refresh_from_db()
 
         annex_data = validated_data.pop('annex')
         seller_data = annex_data.pop('seller')
         products_data = annex_data.pop('products')
 
         update_if_not_none(Person, instance.annex_list.last().seller.id, seller_data)
+        instance.annex_list.last().seller.refresh_from_db()
         update_if_not_none(BaseAnnex, instance.annex_list.last().id, annex_data)
 
         instance.annex_list.last().products.all().delete()
@@ -879,6 +902,10 @@ class OneTimeUpdateSerializer(serializers.ModelSerializer):
         for p in products_data:
 
             ProductInvoiceItem.objects.create(annex=instance.annex_list.last(), **p)
+
+        # must call save() for Person objects to change fullname(changed in refactored save(), update() dont call save())
+        instance.executor.save()
+        instance.annex_list.last().seller.save()
 
         return super().update(instance.onetimeagreement, validated_data)
 

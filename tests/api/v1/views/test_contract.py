@@ -166,7 +166,6 @@ class TestContractViewSet:
         d = AgentAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
                                   type=BaseContract.Type.TRADE, contract_no='123', company=company, territory='asdf')
 
-
         apiclient.force_login(admin_user)
         response = apiclient.get(reverse('api:v1:contracts-detail', args=[t.id]))
 
@@ -182,7 +181,6 @@ class TestContractViewSet:
 
         BankAccount.objects.create(account='123', bank=bank, address='address', city='city1',
                                    swift_no='swift_123', correspondent_account='cor_123', company_owner=company)
-
 
         apiclient.force_login(admin_user)
 
@@ -235,6 +233,7 @@ class TestContractViewSet:
         assert response.status_code == 200, response.json()
 
         t.refresh_from_db()
+        t.executor.refresh_from_db()
 
         assert t.contract_no == '123'
         assert t.company.name == 'My_company'
@@ -245,10 +244,12 @@ class TestContractViewSet:
         assert t.executor.first_name == 'First1'
         assert t.executor.last_name == 'Last1'
         assert t.executor.fathers_name == 'Father1'
+        assert t.executor.fullname == 'First1 Last1'
 
         assert t.responsible_person.first_name == 'First'
         assert t.responsible_person.last_name == 'Last'
         assert t.responsible_person.fathers_name == 'Father'
+        assert t.responsible_person.fullname == 'First Last'
 
         assert t.responsible_person.contact.mobile == '1234567890'
         assert t.responsible_person.contact.address == 'My_address'
@@ -271,7 +272,6 @@ class TestContractViewSet:
                                         type=BaseContract.Type.PO, contract_no='1234', company=company, po_number='2')
         s1 = POAgreementSupplements.objects.create(supplement_no='123', agreement=po)
         s2 = POAgreementSupplements.objects.create(supplement_no='1234', agreement=po)
-
 
         apiclient.force_login(admin_user)
         response = apiclient.put(reverse('api:v1:contracts-detail', args=[po.id]),
@@ -310,7 +310,6 @@ class TestContractViewSet:
         t = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager,
                                           type=BaseContract.Type.TRADE, contract_no='123')
 
-
         apiclient.force_login(admin_user)
         response = apiclient.delete(reverse('api:v1:contracts-detail', args=[t.id]))
 
@@ -322,7 +321,6 @@ class TestContractViewSet:
         assert t.status == BaseContract.Status.EXPIRED
 
     def test_po_create(self, apiclient, admin_user, sales_manager):
-
 
         apiclient.force_login(admin_user)
         response = apiclient.post(reverse('api:v1:contracts-list'),
@@ -344,7 +342,6 @@ class TestContractViewSet:
         assert response.status_code == 201, response.json()
 
     def test_agent_create(self, apiclient, admin_user, sales_manager):
-
 
         apiclient.force_login(admin_user)
 
@@ -394,7 +391,6 @@ class TestContractViewSet:
         assert response.status_code == 201, response.json()
 
     def test_trade_create(self, apiclient, admin_user, sales_manager):
-
 
         apiclient.force_login(admin_user)
         response = apiclient.post(reverse('api:v1:contracts-list'),
