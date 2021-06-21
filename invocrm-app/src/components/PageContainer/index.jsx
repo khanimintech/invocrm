@@ -177,7 +177,8 @@ const PageContent = ({
 		const el = document.getElementById("pdf-table").cloneNode(true)
 		Array.from(el.getElementsByClassName("p-filter-column")).forEach(f => f.remove())
 		el.getElementsByClassName("p-datatable-header")[0].remove()
-		el.getElementsByClassName("actions-th")[0].remove()
+		if (el.getElementsByClassName("actions-th")[0])
+			el.getElementsByClassName("actions-th")[0].remove()
 		var win = window.open();
 		win.document.write(`
 			<html>
