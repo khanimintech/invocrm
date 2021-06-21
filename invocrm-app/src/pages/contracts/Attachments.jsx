@@ -13,7 +13,7 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 const Files = ({ files }) => {
     return (
         files.map( file => (
-            <div className="file-row">
+            <div className="file-row" key={file.id}>
                 <div  className="clickable-column" onClick={() => window.open(file.url, "_blank")}>
                     <DescriptionIcon />
                     <span>{file.name}</span>
