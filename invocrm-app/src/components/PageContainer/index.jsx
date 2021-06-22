@@ -257,7 +257,7 @@ const PageContent = ({
 							&nbsp;&nbsp;
               				<Tooltip title="Çap et" placement="top"  >
 							 <IconButton onClick={printDocument} className="pdf-icon" >
-									<PrintIcon color="secondary" />
+									<PrintIcon color="secondary" className="print-icon" />
 									</IconButton>
 								
 							</Tooltip>

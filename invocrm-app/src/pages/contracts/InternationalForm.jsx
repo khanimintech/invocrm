@@ -16,7 +16,7 @@ import { parseISO } from 'date-fns'
 const InternationalForm = ({ handleSubmit, handleRequest, handleClose, selectedContract, salesManagers, banks  }) => {
     let formikRef = useRef();
     const {contract_no,  company, 
-        created, due_date, id, sales_manager, type , country, responsible_person, executor,
+        created, due_date, id, sales_manager , country, responsible_person, executor,
         payment_condition, contact, bank, bank_account,
     } = selectedContract || {};
 
@@ -55,7 +55,7 @@ const InternationalForm = ({ handleSubmit, handleRequest, handleClose, selectedC
 
                         {({ values, setErrors }) => (
                             <Form>
-                                <Grid container spacing={0} justify="space-between" spacing={5}>
+                                <Grid container justify="space-between" spacing={5}>
                                     <Grid item md={6} sm={12} xs={12}>
                                         <Grid item md={12}>
                                             <Typography variant="h6" gutterBottom>

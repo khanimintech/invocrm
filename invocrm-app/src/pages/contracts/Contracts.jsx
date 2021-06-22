@@ -19,16 +19,17 @@ import ContractAnnexModal from './ContractAnnexModal';
 import { AnnexesService } from '../../services/AnnexesService';
 import { BanksService }from '../../services/BanksService';
 import Attachments from './Attachments';
-
+// import BlockIcon from '@material-ui/icons/Block';
 
 import './styles.scss';
 
 
 const initialOverviews = [
-    { id: 2, status: "Vaxtı bitən", count: 0, icon: <PriorityHighIcon />, color: "#42A5F5" },
-    { id: 3, status: "Vaxtı bitir", count: 0, icon: <AccessAlarmIcon />, color: "rgb(90 89 204)" },
-    { id: 0, status: "Prosesdə", count: 0, icon: <HourglassEmptyIcon />, color: "#FFB300" },
+    { id: 2, status: "Vaxtı bitən", count: 0, icon: <PriorityHighIcon />, color: "rgb(245, 66, 83)" },
+    { id: 3, status: "Vaxtı bitir", count: 0, icon: <AccessAlarmIcon />, color: "#FFB300"  },
+    { id: 0, status: "Prosesdə", count: 0, icon: <HourglassEmptyIcon />, color: "rgb(66, 165, 245)"},
     { id: 1, status: "Təsdiqlənib", count: 0, icon: <CheckCircleIcon />, color: "#66BB6A" },
+    // { id: 4, status: "Ləğv edildi", count: 0, icon: <BlockIcon />, color: "#4f5452" },
 ]
 
 const columns = [
@@ -45,10 +46,9 @@ const columns = [
 
 
 
-const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
+const Contracts = ({ handleRequest, enqueueSnackbar }) => {
 
     let dt = useRef(null);
-    let dtW = useRef(null);
     const [overviews, setOverviews] = useState(initialOverviews);
     const [contracts, setContracts] = useState(null);
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -144,6 +144,7 @@ const Contracts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                     if (o.id === 1) return { ...o, count: res.body.approved_count}
                     if (o.id === 2) return { ...o, count: res.body.expired_count}
                     if (o.id === 3) return { ...o, count: res.body.expires_in_2_weeks}
+                    return o;
                 })
                 setOverviews(updatedOverviews)
                 setAllCount(res.body.all_count)

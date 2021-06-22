@@ -57,13 +57,16 @@
         height: 30px;
     }
     .csv-icon {
-        color: $color-blue;
+        color: $color-green;
     }
     .pdf-icon {
-        color: $color-green;
+        color: $color-red;
     }
     .add-icon {
         color: $color-purple;
+    }
+    .print-icon{
+        color: $color-black;
     }
 }
 

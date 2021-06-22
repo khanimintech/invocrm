@@ -107,36 +107,11 @@ const useStyles = makeStyles((theme) => ({
       display: 'block',
     },
   },
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-      width: 'auto',
-    },
-  },
-  searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   inputRoot: {
     color: 'inherit',
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
     width: '100%',
@@ -217,21 +192,8 @@ const Layout = props => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            InvoCRM
+            PMZ CRM
           </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Axtar..."
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton
@@ -267,7 +229,7 @@ const Layout = props => {
             <ListItemIcon>
               <FileCopyIcon />
             </ListItemIcon>
-            <ListItemText primary="Muqavile" />
+            <ListItemText primary="Satış" />
             {isSubMenuVisible ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
           <Collapse in={isSubMenuVisible} timeout="auto" unmountOnExit>
@@ -277,7 +239,7 @@ const Layout = props => {
                   <ListItemIcon>
                     <InsertDriveFileIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Muqavileler" />
+                  <ListItemText primary="Müqavilələr" />
                 </ListItem>
             </Link>
             <Link to="/annexes" className={location.pathname === "/annexes" ? "active" : ""}>
@@ -285,7 +247,7 @@ const Layout = props => {
                 <ListItemIcon>
                   <PostAddIcon />
                 </ListItemIcon>
-                <ListItemText primary="Elaveler" />
+                <ListItemText primary="Əlavələr" />
               </ListItem>
               </Link>
               <Link to="/banks" className={location.pathname === "/banks" ? "active" : ""}>
@@ -308,7 +270,7 @@ const Layout = props => {
           </Collapse>
           <ListItem button>
             <ListItemIcon><LiveHelpIcon /> </ListItemIcon>
-            <ListItemText primary="Sorgu" />
+            <ListItemText primary="Sorğu" />
           </ListItem>
         </List>
         {renderMenu}

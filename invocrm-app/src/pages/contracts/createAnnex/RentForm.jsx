@@ -43,7 +43,7 @@ const RentForm = ({ handleSubmit, contract, handleClose, units, salesManagers })
 
                         {({ values }) => (
                             <Form>
-                                <Grid container spacing={0} justify="space-between" spacing={5}>
+                                <Grid container  justify="space-between" spacing={5}>
                                     <Grid item md={12} sm={12} xs={12}>
                                         <Typography variant="subtitle1" gutterBottom>
                                             Ümumi məlumatlar
@@ -156,7 +156,7 @@ const RentForm = ({ handleSubmit, contract, handleClose, units, salesManagers })
                                             </Grid>
                                         <Divider />
                                         <br />
-                                        <Grid container spacing={0} justify="space-between" spacing={5}>
+                                        <Grid container justify="space-between" spacing={5}>
                                             <Grid item md={12} type="agent">
                                                 <CreateAnnex products={values.rent_items} productsFieldName="rent_items" type={5} units={units} total={values.total || 0} />
                                             </Grid>

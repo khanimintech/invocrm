@@ -98,7 +98,6 @@ const ExtendedTable = ({
 
     const header = (
         <TableHeader
-            headerTitle={headerTitle}
             selectedColumns={selectedColumns}
             columns={columns}
             onColumnToggle={onColumnToggle}

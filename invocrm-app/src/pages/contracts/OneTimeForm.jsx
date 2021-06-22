@@ -5,7 +5,6 @@ import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import DialogContent from '@material-ui/core/DialogContent';
 import CreateFormActions from './CreateFormActions';
-import CustomerContacts from './CustomerContacts';
 import CompnayOneTimeForm from './CompanyOneTimeForm';
 import CreateAnnex from './CreateAnnex';
 import TextField from '@material-ui/core/TextField';
@@ -16,7 +15,7 @@ import { parseISO } from 'date-fns'
 const OneTimeForm = ({ handleSubmit, handleClose, selectedContract, units, salesManagers }) => {
     let formikRef = useRef();
     const { contract_no, company,
-        created, due_date, id, sales_manager, type,
+        created, due_date, id, sales_manager,
         executor, final_amount_with_writing, part_acquisition,
         part_payment, price_offer, price_offer_validity, standard, unpaid_period, unpaid_value, executor_contact,
         warranty_period, annex

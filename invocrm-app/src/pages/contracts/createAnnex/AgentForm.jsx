@@ -33,7 +33,7 @@ const AgentForm = ({ handleSubmit, contract, handleClose, salesManagers }) => {
 
 						{({ values }) => (
 							<Form>
-								<Grid container spacing={0} justify="space-between" spacing={5}>
+								<Grid container  justify="space-between" >
 									<Grid item md={12} sm={12} xs={12}>
 										<Typography variant="subtitle1" gutterBottom>
 											Ümumi məlumatlar
@@ -89,7 +89,7 @@ const AgentForm = ({ handleSubmit, contract, handleClose, salesManagers }) => {
 										</Grid>
                                         <Divider />
                                         <br />
-										<Grid container spacing={0} justify="space-between" spacing={5}>
+										<Grid container spacing={0} justify="space-between" >
 											<Grid item md={12} type="agent">
 												<CreateAnnex products={values.agent_items} productsFieldName="agent_items" type={4} total={values.total || 0} />
 											</Grid>

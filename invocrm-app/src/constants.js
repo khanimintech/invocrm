@@ -15,7 +15,7 @@ export const contractTypes = {
     3: "Distribyutor",
     4:  "Agent",
     5: "İcarə",
-    6: "Bir-dəfəlik",
+    6: "Birdəfəlik",
     7: "Purchase order",
     8: "Beynəlxalq müqavilə",
     9: "Müştəri şablon"
