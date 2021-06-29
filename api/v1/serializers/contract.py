@@ -224,7 +224,7 @@ class OneTimeUpdateAnnexSerializer(serializers.ModelSerializer):
 
 class OneTimeAnnexSerializer(serializers.ModelSerializer):
 
-    seller = PersonSerializer()
+    seller = PersonSerializer(required=False)
     products = OneTimeProductSerializer(many=True, required=False)
 
     class Meta:
@@ -237,7 +237,7 @@ class OneTimeAnnexSerializer(serializers.ModelSerializer):
 class ContractListSerializer(serializers.ModelSerializer):
 
     company_name = serializers.SerializerMethodField()
-    sales_manager = serializers.CharField(source='sales_manager.fullname')
+    sales_manager = serializers.SerializerMethodField()
     annex_count = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
     executor_name = serializers.SerializerMethodField()
@@ -249,9 +249,14 @@ class ContractListSerializer(serializers.ModelSerializer):
         fields = ['id', 'company_name', 'contract_no', 'type', 'created', 'due_date', 'sales_manager',
                   'annex_count', 'status', 'executor_name']
 
+    def get_sales_manager(self, obj):
+
+        if obj.sales_manager is not None:
+            return obj.sales_manager.fullname
+
     def get_executor_name(self, obj):
 
-        if obj.executor:
+        if obj.executor is not None:
             return obj.executor.fullname
 
         return 'N/A'
@@ -259,7 +264,8 @@ class ContractListSerializer(serializers.ModelSerializer):
     def get_company_name(self, obj):
 
         if obj._is_individual_contract:
-            if obj.executor:
+
+            if obj.executor is not None:
                 return obj.executor.fullname
             return None
 
@@ -359,7 +365,10 @@ class ContractCreateBaseSerializer(serializers.ModelSerializer):
             products_data = annex_data.pop('products', None)
             seller_data = annex_data.pop('seller', None)
 
-            seller = Person.objects.create(type=Person.TYPE.SELLER, **seller_data)
+            seller = None
+
+            if seller_data:
+                seller = Person.objects.create(type=Person.TYPE.SELLER, **seller_data)
 
             annex = BaseAnnex.objects.create(contract=contract, seller=seller, **annex_data)
 
@@ -823,7 +832,6 @@ class OneTimeCreateSerializer(ContractCreateBaseSerializer):
     executor_contact = ContactSerializer(required=False)
     annex = OneTimeAnnexSerializer(required=False)
     products = OneTimeProductSerializer(required=False, many=True)
-    seller = PersonSerializer(required=False)
 
     class Meta:
         model = OneTimeAgreement
@@ -832,7 +840,7 @@ class OneTimeCreateSerializer(ContractCreateBaseSerializer):
             'sales_manager', 'created', 'company', 'executor', 'executor_contact', 'type',
             'final_amount_with_writing', 'price_offer', 'price_offer_validity', 'warranty_period',
             'unpaid_period', 'unpaid_value', 'part_payment', 'part_acquisition', 'standard', 'annex',
-            'products', 'responsible_person', 'contact', 'seller'
+            'products', 'responsible_person', 'contact'
         ]
 
 

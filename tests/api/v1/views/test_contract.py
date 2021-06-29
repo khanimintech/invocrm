@@ -106,7 +106,6 @@ class TestContractViewSet:
             attachment=SimpleUploadedFile("annex.pdf", b"content")
         )
 
-
         response = apiclient.get(reverse('api:v1:contracts-attachments', args=(trade_aggrement_base.id,)))
 
         assert response.status_code == 200
@@ -137,7 +136,6 @@ class TestContractViewSet:
         assert payload['annexes'] and len(payload['annexes']) == 1
         annex = payload['annexes'][0]
         assert 'annex' in annex['name']
-
 
     def test_contract_detail_ok(self, apiclient, admin_user, sales_manager):
 
@@ -494,7 +492,6 @@ class TestContractViewSet:
 
     def test_one_time_create(self, apiclient, admin_user, sales_manager):
 
-
         apiclient.force_login(admin_user)
 
         unit = UnitOfMeasure.objects.create(name='asdf')
@@ -557,6 +554,21 @@ class TestContractViewSet:
                                       'part_acquisition': 'asdf',
                                       'standard': 'asdf',
                                       'final_amount_with_writing': 'asdf'
+                                  },
+                                  format='json'
+                                  )
+
+        assert response.status_code == 201, response.json()
+
+    def test_one_time_create_not_fields(self, apiclient, admin_user):
+
+        apiclient.force_login(admin_user)
+
+        unit = UnitOfMeasure.objects.create(name='asdf')
+
+        response = apiclient.post(reverse('api:v1:contracts-list'),
+                                  data={
+                                      'type': BaseContract.Type.ONE_TIME
                                   },
                                   format='json'
                                   )
@@ -658,7 +670,7 @@ class TestContractViewSet:
                 "email":None},
             "type": BaseContract.Type.ONE_TIME
         }
-,
+                                 ,
                                   format='json'
                                   )
 

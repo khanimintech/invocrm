@@ -106,15 +106,15 @@ class OneTimeAgreement(BaseContract):
 
     AG_TYPE = BaseContract.Type.ONE_TIME
 
-    final_amount_with_writing = models.TextField()
-    price_offer = models.TextField()
-    price_offer_validity = models.TextField()
-    warranty_period = models.TextField()
-    unpaid_period = models.TextField()
-    unpaid_value = models.TextField()
-    part_payment = models.TextField()
-    part_acquisition = models.TextField()
-    standard = models.TextField()
+    final_amount_with_writing = models.TextField(null=True, blank=True)
+    price_offer = models.TextField(null=True, blank=True)
+    price_offer_validity = models.TextField(null=True, blank=True)
+    warranty_period = models.TextField(null=True, blank=True)
+    unpaid_period = models.TextField(null=True, blank=True)
+    unpaid_value = models.TextField(null=True, blank=True)
+    part_payment = models.TextField(null=True, blank=True)
+    part_acquisition = models.TextField(null=True, blank=True)
+    standard = models.TextField(null=True, blank=True)
 
 
 class InternationalAgreement(BaseContract):
