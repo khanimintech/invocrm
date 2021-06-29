@@ -1,3 +1,4 @@
+from django.db.transaction import atomic
 from rest_framework import serializers
 
 from api.main_models.annex import BaseAnnex, ProductInvoiceItem, UnitOfMeasure, AgentInvoiceItem, RentConditions, \
@@ -19,7 +20,7 @@ class AnnexSerializer(serializers.ModelSerializer):
 
         model = BaseAnnex
         fields = ['id', 'company_name', 'request_no', 'contract_no', 'annex_no', 'sales_manager', 'payment_terms',
-                  'sum_no_invoice', 'sum_with_invoice', 'annex_date', 'created', 'contract_type', 'with_vat']
+                  'sum_no_invoice', 'sum_with_invoice', 'annex_date', 'created', 'contract_type', 'with_vat', 'status']
 
     def get_annex_no(self, obj):
 
@@ -88,7 +89,7 @@ class AnnexCreateSerializer(serializers.ModelSerializer):
 
         model = BaseAnnex
 
-        fields = ['contract', 'request_no', 'annex_date', 'payment_terms', 'delivery_terms',
+        fields = ['contract', 'request_no', 'annex_date', 'payment_terms', 'delivery_terms', 'status',
                   'acquisition_terms', 'created', 'seller', 'sales_manager', 'products', 'with_vat', 'total']
 
     def create(self, validated_data):
@@ -101,6 +102,44 @@ class AnnexCreateSerializer(serializers.ModelSerializer):
             ProductInvoiceItem.objects.bulk_create(ProductInvoiceItem(annex=annex, **p) for p in products)
 
         return annex
+
+
+class AnnexUpdateSerializer(serializers.ModelSerializer):
+
+    products = ProductsCreateSerializer(many=True, required=False, allow_null=True)
+
+    class Meta:
+
+        model = BaseAnnex
+
+        fields = ['request_no', 'payment_terms', 'delivery_terms', 'acquisition_terms', 'created',
+                  'seller', 'sales_manager', 'products', 'with_vat', 'total', 'status']
+
+    @atomic
+    def update(self, instance, validated_data):
+
+        instance.products.all().delete()
+
+        products = validated_data.pop('products', None)
+
+        annex = super().update(instance, validated_data)
+
+        if products:
+
+            ProductInvoiceItem.objects.bulk_create(ProductInvoiceItem(annex=annex, **p) for p in products)
+
+        return annex
+
+
+class AnnexGetSerializer(serializers.ModelSerializer):
+
+    products = ProductsCreateSerializer(many=True, required=False, allow_null=True)
+
+    class Meta:
+        model = BaseAnnex
+
+        fields = ['id', 'request_no', 'payment_terms', 'delivery_terms', 'acquisition_terms', 'created',
+                  'seller', 'sales_manager', 'products', 'with_vat', 'total', 'annex_no', 'status']
 
 
 class AgentInvoiceItemSerializer(serializers.ModelSerializer):
@@ -120,7 +159,7 @@ class AgentAnnexCreateSerializer(serializers.ModelSerializer):
 
         model = BaseAnnex
 
-        fields = ['contract', 'created', 'agent_items', 'with_vat', 'total', 'sales_manager']
+        fields = ['contract', 'created', 'agent_items', 'with_vat', 'total', 'sales_manager', 'status']
 
     def create(self, validated_data):
 
@@ -155,7 +194,7 @@ class RentAnnexCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BaseAnnex
-        fields = ['contract', 'created', 'rent_items', 'rent_conditions', 'with_vat', 'total', 'sales_manager']
+        fields = ['contract', 'created', 'rent_items', 'rent_conditions', 'with_vat', 'total', 'sales_manager', 'status']
 
     def create(self, validated_data):
 

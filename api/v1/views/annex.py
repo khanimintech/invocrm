@@ -9,7 +9,7 @@ from api.filters.annex import AnnexFilterSet
 from api.main_models.annex import BaseAnnex, UnitOfMeasure, ProductInvoiceItem
 from api.main_models.contract import BaseContract
 from api.v1.serializers.annex import AnnexSerializer, AnnexCreateSerializer, UnitSerializer, AgentAnnexCreateSerializer, \
-    RentAnnexCreateSerializer
+    RentAnnexCreateSerializer, AnnexUpdateSerializer, AnnexGetSerializer
 
 
 class AnnexViewSet(ModelViewSet):
@@ -20,8 +20,6 @@ class AnnexViewSet(ModelViewSet):
     filterset_class = AnnexFilterSet
 
     def get_queryset(self):
-
-
 
         queryset = self.queryset
         return queryset.filter(contract__plant_name=self.request.user.plant_name).a_invoice_sum()
@@ -43,6 +41,14 @@ class AnnexViewSet(ModelViewSet):
                 return RentAnnexCreateSerializer
 
             return AnnexCreateSerializer
+
+        elif self.action == 'update':
+
+            return AnnexUpdateSerializer
+
+        elif self.action == 'retrieve':
+
+            return AnnexGetSerializer
 
         return super().get_serializer_class()
 

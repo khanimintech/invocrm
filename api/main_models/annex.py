@@ -3,6 +3,7 @@ from django.utils import timezone
 from api.main_models.contract import BaseContract
 from api.main_models.managers import AnnexQuerySet
 from api.models import Person
+from django.utils.translation import gettext as _
 
 # This is fake pseudo annex just to store supplement for now,
 # because subject to change, will be added PO suppl file itself here, probably
@@ -13,11 +14,21 @@ class POAgreementSupplements(models.Model):
 
 class BaseAnnex(models.Model):
 
+    class Status:
+
+        IN_PROCESS, APPROVED, EXPIRED = range(0, 3)
+
+        CHOICES = (
+            (IN_PROCESS, _('In process')),
+            (APPROVED, _('Approved')),
+            (EXPIRED, _('Expired')),
+        )
+
     objects = AnnexQuerySet.as_manager()
 
     contract = models.ForeignKey(BaseContract, on_delete=models.CASCADE, related_name='annex_list')
 
-    annex_no = models.IntegerField(default=1)
+    annex_no = models.IntegerField(default=0)
     request_no = models.CharField(max_length=256, null=True, blank=True)
 
     annex_date = models.DateTimeField(null=True, blank=True, default=timezone.now)
@@ -35,11 +46,7 @@ class BaseAnnex(models.Model):
 
     total = models.IntegerField(null=True, blank=True)
 
-    def save(self, **kwargs):
-
-        self.annex_no = self.contract.annex_list.latest('annex_date').annex_no + 1 if self.contract.annex_list.exists() else 1
-
-        super(BaseAnnex, self).save(**kwargs)
+    status = models.SmallIntegerField(choices=Status.CHOICES, default=Status.IN_PROCESS)
 
 
 class UnitOfMeasure(models.Model):

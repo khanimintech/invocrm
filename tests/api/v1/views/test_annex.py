@@ -54,6 +54,32 @@ class TestAnnexViewSet:
         assert payload[1]['sum_no_invoice'] == 2
         assert payload[1]['sum_with_invoice'] == 2 * 1.18
 
+    def test_annex_detail(self, apiclient, admin_user, sales_manager, executor):
+
+        contract = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager,
+                                                 due_date=timezone.now(),type=BaseContract.Type.TRADE, executor=executor)
+
+        annex = BaseAnnex.objects.create(contract=contract, request_no='1223', annex_date=timezone.now(),
+                                         note='122', payment_terms='122', delivery_terms='111', acquisition_terms='133',
+                                         seller=sales_manager, sales_manager=sales_manager, annex_no=1)
+
+        unit = UnitOfMeasure.objects.create(name='w')
+
+        ProductInvoiceItem.objects.create(name='ww', annex=annex, unit=unit, quantity=1, price=1, total=2)
+
+        apiclient.force_login(admin_user)
+        response = apiclient.get(reverse('api:v1:annexes-detail', args=[annex.id]))
+
+        assert response.status_code == 200
+        payload = response.json()
+
+        assert payload['id'] == annex.id
+        assert payload['request_no'] == '1223'
+        assert payload['payment_terms'] == '122'
+        assert payload['delivery_terms'] == '111'
+        assert payload['acquisition_terms'] == '133'
+        assert payload['annex_no'] == 1
+
     def test_annex_create(self, apiclient, admin_user, sales_manager):
 
         contract = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager,
@@ -110,6 +136,68 @@ class TestAnnexViewSet:
         assert annex.sales_manager.id == sales_manager.id
         assert annex.products.count() == 2
         assert annex.with_vat is True
+
+    def test_annex_update(self, apiclient, admin_user, sales_manager):
+
+        contract = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager,
+                                                 due_date=timezone.now(), type=BaseContract.Type.TRADE)
+
+        annex = BaseAnnex.objects.create(contract=contract, request_no='1223', annex_date=timezone.now(),
+                                         note='122', payment_terms='122', delivery_terms='111', acquisition_terms='133',
+                                         seller=sales_manager, sales_manager=sales_manager, annex_no=1)
+
+        unit = UnitOfMeasure.objects.create(name='KQ')
+
+        apiclient.force_login(admin_user)
+
+        response = apiclient.put(reverse('api:v1:annexes-detail', args=[annex.id]),
+                                 data={
+                                      'request_no': '123',
+                                      'annex_date': timezone.now(),
+                                      'payment_terms': 'payment terms',
+                                      'delivery_terms': 'delivery terms',
+                                      'acquisition_terms': 'acquisition terms',
+                                      'created': timezone.now(),
+                                      'seller': sales_manager.id,
+                                      'sales_manager': sales_manager.id,
+                                      'with_vat': True,
+                                      'status': BaseAnnex.Status.APPROVED,
+                                      'products': [
+                                          {
+                                              'name': '123',
+                                              'quantity': 1,
+                                              'price': 1,
+                                              'total': 1,
+                                              'unit': unit.id
+                                          },
+                                          {
+                                              'name': '123q',
+                                              'quantity': 11,
+                                              'price': 11,
+                                              'total': 11,
+                                              'unit': unit.id
+                                          }
+                                      ]
+
+                                  },
+                                 format='json'
+                                 )
+
+        assert response.status_code == 200, response.json()
+        assert BaseAnnex.objects.all().count() == 1
+
+        annex = BaseAnnex.objects.first()
+
+        assert annex.contract.id == contract.id
+        assert annex.request_no == '123'
+        assert annex.payment_terms == 'payment terms'
+        assert annex.delivery_terms == 'delivery terms'
+        assert annex.acquisition_terms == 'acquisition terms'
+        assert annex.seller.id == sales_manager.id
+        assert annex.sales_manager.id == sales_manager.id
+        assert annex.products.count() == 2
+        assert annex.with_vat is True
+        assert annex.status == BaseAnnex.Status.APPROVED
 
     def test_agent_annex_create(self, apiclient, admin_user, sales_manager):
 
