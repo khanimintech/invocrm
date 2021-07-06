@@ -10,7 +10,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
         <>
             <Grid item md={12} className="input-wrapper">
                 <Field
-                    validate={validateRequired}
                     name="company.name"
                 >
                     {({ field, form, meta }) => (
@@ -30,7 +29,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
                         <Grid item md={3} className="input-wrapper" >
                             <Field
                                 name="executor.first_name"
-                                validate={validateRequired}
                             >
                                 {({ field, form, meta }) => (
                                     <Input
@@ -45,7 +43,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
                         <Grid item md={3} className="input-wrapper">
                             <Field
                                 name="executor.last_name"
-                                validate={validateRequired}
                             >
                                 {({ field, form, meta }) => (
                                     <Input
@@ -60,7 +57,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
                         <Grid item md={3} className="input-wrapper">
                             <Field
                                 name= "executor.fathers_name"
-                                validate={validateRequired}
                             >
                                 {({ field, form, meta }) => (
                                     <Input
@@ -77,7 +73,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
             </Grid>
             <Grid item md={12} className="input-wrapper">
                 <Field
-                    validate={validateRequired}
                     name="company.tin"
                 >
                     {({ field, form, meta }) => (
@@ -92,7 +87,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
             </Grid>
             <Grid item md={12} className="input-wrapper">
                 <Field
-                    validate={validateRequired}
                     name={!id ? "executor_contact.mobile" : "executor.contact.mobile"}
                 >
                     {({ field, form, meta }) => (
@@ -107,7 +101,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
             </Grid>
             <Grid item md={12} className="input-wrapper">
                 <Field
-                    validate={validateRequired}
                     name={!id ? "executor_contact.personal_email" : "executor.contact.personal_email"}
                 >
                     {({ field, form, meta }) => (
@@ -128,7 +121,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
                         <Grid item md={3} className="input-wrapper" >
                             <Field
                                 name="annex.seller.first_name"
-                                validate={validateRequired}
                             >
                                 {({ field, form, meta }) => (
                                     <Input
@@ -143,7 +135,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
                         <Grid item md={3} className="input-wrapper">
                             <Field
                                 name="annex.seller.last_name"
-                                validate={validateRequired}
                             >
                                 {({ field, form, meta }) => (
                                     <Input
@@ -158,7 +149,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
                         <Grid item md={3} className="input-wrapper">
                             <Field
                                 name="annex.seller.fathers_name"
-                                validate={validateRequired}
                             >
                                 {({ field, form, meta }) => (
                                     <Input
@@ -176,7 +166,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
             <Grid item md={12} className="input-wrapper">
                 <Field
                     name="annex.seller.position"
-                    validate={validateRequired}
                 >
                     {({ field, form, meta }) => (
                         <Input
@@ -190,7 +179,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
             </Grid>
             <Grid item md={12} className="input-wrapper">
                 <Field
-                    validate={validateRequired}
                     name="annex.request_no"
                 >
                     {({ field, form, meta }) => (
@@ -208,7 +196,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
             <Grid item md={12} className="input-wrapper">
                 <Field
                     name="sales_manager"
-                    validate={validateRequired}
                 >
                     {({ field, form, meta }) => (
                         <Input
@@ -226,7 +213,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
             <Grid item md={12} className="input-wrapper">
                 <Field
                     name="final_amount_with_writing"
-                    validate={validateRequired}
                 >
                     {({ field, form, meta }) => (
                         <Input
@@ -241,7 +227,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
             <Grid item md={12} className="input-wrapper">
                 <Field
                     name="annex.payment_terms"
-                    validate={validateRequired}
                 >
                     {({ field, form, meta }) => (
                         <Input
@@ -256,7 +241,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
             <Grid item md={12} className="input-wrapper">
                 <Field
                     name="annex.acquisition_terms"
-                    validate={validateRequired}
                 >
                     {({ field, form, meta }) => (
                         <Input
@@ -272,7 +256,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
             <Grid item md={12} className="input-wrapper">
                 <Field
                     name="annex.delivery_terms"
-                    validate={validateRequired}
                 >
                     {({ field, form, meta }) => (
                         <Input
@@ -288,7 +271,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
             <Grid item md={12} className="input-wrapper">
                 <Field
                     name="price_offer"
-                    validate={validateRequired}
                 >
                     {({ field, form, meta }) => (
                         <Input
@@ -304,7 +286,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
             <Grid item md={12} className="input-wrapper">
                 <Field
                     name="price_offer_validity"
-                    validate={validateRequired}
                 >
                     {({ field, form, meta }) => (
                         <Input
@@ -320,7 +301,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
             <Grid item md={12} className="input-wrapper">
                 <Field
                     name="warranty_period"
-                    validate={validateRequired}
                 >
                     {({ field, form, meta }) => (
                         <Input
@@ -336,7 +316,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
             <Grid item md={12} className="input-wrapper">
                 <Field
                     name="unpaid_period"
-                    validate={validateRequired}
                 >
                     {({ field, form, meta }) => (
                         <Input
@@ -351,7 +330,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
             <Grid item md={12} className="input-wrapper">
                 <Field
                     name="unpaid_value"
-                    validate={validateRequired}
                 >
                     {({ field, form, meta }) => (
                         <Input
@@ -366,7 +344,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
             <Grid item md={12} className="input-wrapper">
                 <Field
                     name="part_acquisition"
-                    validate={validateRequired}
                 >
                     {({ field, form, meta }) => (
                         <Input
@@ -381,7 +358,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
             <Grid item md={12} className="input-wrapper">
                 <Field
                     name="part_payment"
-                    validate={validateRequired}
                 >
                     {({ field, form, meta }) => (
                         <Input
@@ -396,7 +372,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
             <Grid item md={12} className="input-wrapper">
                 <Field
                     name="standard"
-                    validate={validateRequired}
                 >
                     {({ field, form, meta }) => (
                         <Input
@@ -411,7 +386,6 @@ const CompanyOneTimeForm = ({ salesManagers, id  }) => {
             <Grid item md={12} className="input-wrapper">
                 <Field
                     name="created"
-                    validate={validateRequired}
                 >
                     {({ field, form, meta }) => (
                         <Input
