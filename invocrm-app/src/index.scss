@@ -199,6 +199,11 @@ body {
     background-color: $color-blue !important;
     color: #fff !important;
 }
+.annex-status {
+    &.status-2{
+        background-color: $color-red !important;
+    }
+}
 .status-3{
     background-color: $color-purple !important;
     color: #fff !important;

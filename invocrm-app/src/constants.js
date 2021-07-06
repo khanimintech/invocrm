@@ -9,6 +9,12 @@ export const contractStatuses = [
     {value: 3, label: "Vaxtı bitir"}
   ]
 
+  export const annexStatuses = [
+    {value: 0, label: "Prosesdə"},
+    {value: 1, label: "Təsdiqlənib"},
+    {value: 2, label: "Ləğv edilib"}
+  ]
+
 export const contractTypes = {
     1: "Alqı-satqı",
     2: "Xidmət",

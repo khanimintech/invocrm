@@ -86,6 +86,27 @@ const AgentForm = ({ handleSubmit, contract, handleClose, salesManagers }) => {
                                                             )}
                                                         </Field>
                                                     </Grid>
+													<Grid item md={6} className="input-wrapper">
+                                                        <Field
+                                                            name="status"
+                                                            validate={validateRequired}
+                                                        >
+                                                            {({ field, form, meta }) => (
+                                                                <Input
+                                                                    label="Status"
+                                                                    field={field}
+                                                                    form={form}
+                                                                    meta={meta}
+                                                                    select
+                                                                    options={[
+																		{value: 0, label: "Prosesdə"},
+																		{value: 1, label: "Təsdiqlənib"},
+																		{value: 2, label: "Ləğv edilib"}
+																	]}
+                                                                />
+                                                            )}
+                                                        </Field>
+                                                    </Grid>
 										</Grid>
                                         <Divider />
                                         <br />

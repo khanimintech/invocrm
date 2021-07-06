@@ -29,7 +29,7 @@ const ExtendedTable = ({
     enqueueSnackbar, getData,
     getItem, addItem, onAttachmentClick,
     filters, setFilters ,
-    tableLoading, getStateCounts
+    tableLoading, getStateCounts, annexStatus
 }) => {
 
     const [globalFilter, setGlobalFilter] = useState();
@@ -151,17 +151,19 @@ const ExtendedTable = ({
     }
 
     const statusItemTemplate = (option) => {
-        return <Chip label={option.label} className={`status-${option.value}`} />
+        return <Chip label={option.label} className={`status-${option.value}  ${annexStatus ? "annex-status": ""}`} />
     }
 
     const typeItemTemplate = (option) => <span value={option.value} >{option.label}</span>
 
     const statusBodyTemplate = (value) => {
-        const status = contractStatuses.find(contractStatus => contractStatus.value === value);
+        let status = contractStatuses.find(contractStatus => contractStatus.value === value);
+        if (annexStatus)
+            if (value === 2) status = { value:2, label: "Ləğv edildi"}
         return (
             <React.Fragment>
                 <span className="p-column-title">Status</span>
-                <Chip label={status.label} className={`status status-${status.value}`} />
+                <Chip label={status.label} className={`status status-${status.value} ${annexStatus ? "annex-status": ""}`} />
             </React.Fragment>
         );
     }

@@ -5,11 +5,19 @@ import AccessAlarmIcon from '@material-ui/icons/AccessAlarm';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import { AnnexesService } from '../../services/AnnexesService';
 import ExtendedTable from '../../components/ExtendedTable';
+import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import BlockIcon from '@material-ui/icons/Block';
+import { annexStatuses } from './../../constants';
+
 
 
 const initialOverviews = [
-    { id: 1, status: "ƏDV-siz", count: 0, icon: <PriorityHighIcon />, color: "#42A5F5", width: 3 },
-    { id: 2, status: "ƏDV-li", count: 0, icon: <AccessAlarmIcon />, color: "rgb(90 89 204)", width: 3 },
+    { id: 1, status: "ƏDV-siz", count: 0, icon: <PriorityHighIcon />, color: "#42A5F5"  },
+    { id: 2, status: "ƏDV-li", count: 0, icon: <AccessAlarmIcon />, color: "rgb(90 89 204)"},
+    { id: 3, status: "Prosesdə", count: 0, icon: <HourglassEmptyIcon />, color:  "#FFB300"},
+    { id: 4, status: "Təsdiqlənib", count: 0, icon: <CheckCircleIcon />, color:"#66BB6A" },
+    { id: 5, status: "Ləğv edilib", count: 0, icon:  <BlockIcon />, color:"rgb(245, 66, 83)" },
 ]
 
 const columns = [
@@ -23,7 +31,8 @@ const columns = [
     { field: 'payment_terms', header: "Ödəniş şərti" , filter: true },
     { field: 'sum_no_invoice', header: "Məbləğ (ƏDV-siz)" , filter: false },
     { field: 'sum_with_invoice', header: "Məbləğ (ƏDV-li)" , filter: false },
-     { field: 'created', header: 'Yaradılma Tarixi', filter: true  },
+    { field: 'created', header: 'Yaradılma Tarixi', filter: true  },
+    { field: 'status', header: 'Status', filter: true  },
 ];
 
 
@@ -64,7 +73,9 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 const updatedOverviews = overviews.map( o => {
                     if (o.id === 1) return { ...o, count: res.body.vat_free}
                     if (o.id === 2) return { ...o, count: res.body.with_vat}
-                    if (o.id === 3) return { ...o, count: res.all_count}
+                    if (o.id === 3) return { ...o, count: res.body.in_process}
+                    if (o.id === 4) return { ...o, count: res.body.approved}
+                    if (o.id === 5) return { ...o, count: res.body.canceled}
                 })
                 setOverviews(updatedOverviews)
                 setAllCount(res.body.all_count)
@@ -96,6 +107,8 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 filters={filters}
                 setFilters={setFilters}
                 tableLoading={tableLoading}
+                annexStatus
+                statuses={annexStatuses}
             />
 
 

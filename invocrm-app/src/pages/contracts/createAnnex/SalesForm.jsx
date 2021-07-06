@@ -200,7 +200,29 @@ const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units, salesM
 													</Field>
 												</Grid>
 											</Grid>
-										
+											<Grid container>
+												<Grid item md={6} className="input-wrapper">
+															<Field
+																name="status"
+																validate={validateRequired}
+															>
+																{({ field, form, meta }) => (
+																	<Input
+																		label="Status"
+																		field={field}
+																		form={form}
+																		meta={meta}
+																		select
+																		options={[
+																			{value: 0, label: "Prosesdə"},
+																			{value: 1, label: "Təsdiqlənib"},
+																			{value: 2, label: "Ləğv edilib"}
+																		]}
+																	/>
+																)}
+															</Field>
+														</Grid>
+												</Grid>
 											<Divider />
 												<Grid item md={12}>
 													<CreateAnnex products={values.products} units={units} type={1} total={values.total || 0} hideAnnexTable={hideAnnexTable} />

@@ -37,7 +37,6 @@
 
 .attachments-sidebar {
     &.MuiDrawer-root {
-        // z-index: -1  !important;
         height: 50%;
     }
     .MuiBackdrop-root{
@@ -48,7 +47,7 @@
         bottom: 0;
         top: auto;
         height: 60%;
-        width: 300px;
+        width: 380px;
     }
     .contract-header {
         background-color: $color-purple;
