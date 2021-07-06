@@ -273,7 +273,7 @@ class ContractListSerializer(serializers.ModelSerializer):
 
     def get_annex_count(self, obj):
 
-        return obj.annex_list.count()
+        return obj.annex_list.filter(status=BaseAnnex.Status.APPROVED).count()
 
     def get_status(self, obj):
 

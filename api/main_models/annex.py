@@ -16,12 +16,12 @@ class BaseAnnex(models.Model):
 
     class Status:
 
-        IN_PROCESS, APPROVED, EXPIRED = range(0, 3)
+        IN_PROCESS, APPROVED, CANCELED = range(0, 3)
 
         CHOICES = (
             (IN_PROCESS, _('In process')),
             (APPROVED, _('Approved')),
-            (EXPIRED, _('Expired')),
+            (CANCELED, _('Canceled')),
         )
 
     objects = AnnexQuerySet.as_manager()

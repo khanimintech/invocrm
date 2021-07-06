@@ -7,7 +7,11 @@ class BaseContract(models.Model):
 
     class Status:
 
-        IN_PROCESS, APPROVED, EXPIRED = range(0, 3)# expires after 2 weeks status - processing on view
+        # expires after 2 weeks status(3) - processing on view
+        IN_PROCESS = 0
+        APPROVED = 1
+        EXPIRED = 2
+        CANCELED = 4
 
         CHOICES = (
             (IN_PROCESS, _('In process')),

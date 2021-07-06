@@ -64,6 +64,8 @@ class AnnexStatusStatAPIView(ListAPIView):
 
     def list(self, request, *args, **kwargs):
 
+        IN_PROCESS, APPROVED, CANCELED = range(0, 3)
+
         qs = self.filter_queryset(self.get_queryset())
 
         response = {
@@ -71,7 +73,11 @@ class AnnexStatusStatAPIView(ListAPIView):
             'with_vat': sum([round(sum(filter(None, qs.filter(with_vat=True).values_list('sum_with_invoice', flat=True))), 2),
                              round(sum(filter(None, qs.filter(with_vat=True).values_list('sum_with_invoice_rent', flat=True))), 2)]),
             'vat_free': sum([sum(filter(None, qs.filter().values_list('sum_no_invoice', flat=True))),
-                             sum(filter(None, qs.filter().values_list('sum_no_invoice_rent', flat=True)))])
+                             sum(filter(None, qs.filter().values_list('sum_no_invoice_rent', flat=True)))]),
+
+            'in_process': qs.filter(status=IN_PROCESS).count(),
+            'approved': qs.filter(status=APPROVED).count(),
+            'canceled': qs.filter(status=CANCELED).count()
 
         }
 
