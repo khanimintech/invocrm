@@ -13,7 +13,7 @@ import CreateFormActions from '../CreateFormActions';
 import CreateAnnex from '../CreateAnnex';
 
 
-const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units, salesManagers , hideAnnexTable}) => {
+const POForm = ({ handleSubmit, contract, sellers, handleClose, units, salesManagers }) => {
 	let formikRef = useRef();
 
 	return (
@@ -23,7 +23,7 @@ const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units, salesM
 					<Formik
 						initialValues={{
 							total: null,
-							products: hideAnnexTable  ? null :[
+							products: [
 								{
 									name: "",
 									quantity: 0,
@@ -200,13 +200,10 @@ const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units, salesM
 													</Field>
 												</Grid>
 											</Grid>
-										
 											<Divider />
-												<Grid item md={12}>
-													<CreateAnnex products={values.products} units={units} type={1} total={values.total || 0} hideAnnexTable={hideAnnexTable} />
-												</Grid>
-													
-											
+											<Grid item md={12}>
+												<CreateAnnex products={values.products} units={units} type={1} total={values.total || 0} />
+											</Grid>
 										</Grid>
 									</Grid>
 								</Grid>
@@ -221,4 +218,4 @@ const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units, salesM
 }
 
 
-export default SalesForm;
+export default POForm;

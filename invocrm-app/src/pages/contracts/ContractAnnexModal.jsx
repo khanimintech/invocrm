@@ -4,6 +4,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import SalesForm from './createAnnex/SalesForm';
 import AgentForm from './createAnnex/AgentForm';
 import RentForm from './createAnnex/RentForm';
+import POForm from './createAnnex/POForm';
 
 
 
@@ -13,7 +14,9 @@ const formTypes = {
     3: <SalesForm />,
     4: <AgentForm />,
     5: <RentForm />,
+    7: <SalesForm hideAnnexTable/>,
     8: <SalesForm />,
+    9: <SalesForm hideAnnexTable/>,
 }
 
 const isSalesType = contractType => contractType === 1 ||contractType === 2 ||  contractType  ===  3  || contractType  === 8 ? true : false 

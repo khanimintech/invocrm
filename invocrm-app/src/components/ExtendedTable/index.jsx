@@ -190,7 +190,7 @@ const ExtendedTable = ({
                             {value}
                             &nbsp;
                             {
-                                add  && (type === 1 || type === 2 || type === 3 || type === 4 || type === 5 ||  type === 8 )? (
+                                add  &&  type !== 6 ? (
                                     <Tooltip title="Yenisin yarat" placement="top">
                                         <IconButton size="small" color="primary" className="add-icon" onClick={() => addItem(row)}>
                                             <AddIcon />

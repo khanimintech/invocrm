@@ -38,7 +38,7 @@ const columns ={
     ]
 }
 
-const CreateAnnex = ({ products, units, readOnly, type, productsFieldName , total }) => {
+const CreateAnnex = ({ products, units, readOnly, type, productsFieldName , total, hideAnnexTable }) => {
 
     const [withVat, setWithVat] = useState(false);
 
@@ -133,53 +133,57 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName , tota
                             </Field>
 
                         </div>
-                        <table
-                            className="p-datatable p-datatable-responsive p-datatable-gridlines product-table"
-                        >
-                            <thead className="p-datatable-thead">
-                                {
-                                    columns[type || 1].map(col => <th key={col.header}>{col.header}</th>)
-                                }
-                                {
-                                    products.length === 1 || readOnly ? null : (
-                                        <th>
-                                            <Tooltip title="Sil" placement="top">
-                                                <ClearIcon />
-                                            </Tooltip>
+                        {
+                            hideAnnexTable ? null : (
+                            <>
+                                <table
+                                    className="p-datatable p-datatable-responsive p-datatable-gridlines product-table"
+                                >
+                                    <thead className="p-datatable-thead">
+                                        {
+                                            columns[type || 1].map(col => <th key={col.header}>{col.header}</th>)
+                                        }
+                                        {
+                                            products.length === 1 || readOnly ? null : (
+                                                <th>
+                                                    <Tooltip title="Sil" placement="top">
+                                                        <ClearIcon />
+                                                    </Tooltip>
 
-                                        </th>
-                                    )
-                                }
-                            </thead>
-                            <tbody className="p-datatable-tbody">
+                                                </th>
+                                            )
+                                        }
+                                    </thead>
+                                    <tbody className="p-datatable-tbody">
 
-                                {
-                                    products.map((product, index) => (
-                                        <tr key={product.id}>
-                                            {  columns[type || 1].map(col => (
-                                                <td>
-                                                    {bodyTemplate(product, col, arrayHelpers, products, index)}
-                                                </td>
-                                            ))}
-                                            {
-                                                products.length === 1 ? null : (
-                                                    <td>
-                                                        <IconButton size="small" className="attach-icon" onClick={() => arrayHelpers.remove(index)} >
-                                                            <HighlightOffIcon color="secondary" />
-                                                        </IconButton>
+                                        {
+                                            products.map((product, index) => (
+                                                <tr key={product.id}>
+                                                    {  columns[type || 1].map(col => (
+                                                        <td>
+                                                            {bodyTemplate(product, col, arrayHelpers, products, index)}
+                                                        </td>
+                                                    ))}
+                                                    {
+                                                        products.length === 1 ? null : (
+                                                            <td>
+                                                                <IconButton size="small" className="attach-icon" onClick={() => arrayHelpers.remove(index)} >
+                                                                    <HighlightOffIcon color="secondary" />
+                                                                </IconButton>
 
-                                                    </td>
-                                                )
-                                            }
-                                        </tr>
-                                    ))
-                                }
-                            </tbody>
-                        </table>
-                        <br />
+                                                            </td>
+                                                        )
+                                                    }
+                                                </tr>
+                                            ))
+                                        }
+                                    </tbody>
+                                </table>
+                                <br />
+
                         <div className="bottom-wrapper">
                             {
-                                readOnly ? null : (
+                                readOnly  ? null : (
                                     <Button
                                         variant="contained"
                                         color="primary"
@@ -197,6 +201,7 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName , tota
                             </Button>
                                 )
                             }
+
                         <div>
                             <Typography variant="subtitle1" gutterBottom>
 								{`Ümumi: ${products.reduce((total, product) => totalOrZero (total) + totalOrZero(product.total), 0)} ₼`}
@@ -208,6 +213,9 @@ const CreateAnnex = ({ products, units, readOnly, type, productsFieldName , tota
 
                         </div>
                         </div>
+                            </>
+                            )
+                        }
                     </div>
                 )}
             />
