@@ -1192,7 +1192,6 @@ class ContactListSerializer(serializers.ModelSerializer):
                 return obj.person.agreement.executor.fullname
 
 
-
 class ContactCreateSerializer(serializers.ModelSerializer):
 
     responsible_person = ContactPersonSerializer(required=False)
@@ -1200,7 +1199,7 @@ class ContactCreateSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = Contact
-        fields = ['address', 'mobile', 'personal_email', 'web_site', 'work_email', 'responsible_person']
+        fields = ['address', 'mobile', 'personal_email', 'web_site', 'work_email', 'responsible_person', 'company_name']
 
     def create(self, validated_data):
 
@@ -1208,6 +1207,26 @@ class ContactCreateSerializer(serializers.ModelSerializer):
 
         contact = super().create(validated_data)
         Person.objects.create(type=Person.TYPE.CONTACT, contact=contact, **responsible_person)
+
+        return contact
+
+
+class ContactEditSerializer(serializers.ModelSerializer):
+
+    responsible_person = ContactPersonSerializer(required=False)
+
+    class Meta:
+
+        model = Contact
+        fields = ['address', 'mobile', 'personal_email', 'web_site', 'work_email', 'responsible_person', 'company_name']
+
+    def update(self, instance, validated_data):
+
+        responsible_person = validated_data.pop('responsible_person', None)
+
+        contact = super().update(instance, validated_data)
+
+        Person.objects.filter(contact=instance).update(type=Person.TYPE.CONTACT, contact=contact, **responsible_person)
 
         return contact
 

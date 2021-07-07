@@ -611,7 +611,6 @@ class TestContractViewSet:
         p1 = ProductInvoiceItem.objects.create(name='ww', annex=annex, unit=unit, quantity=1, price=1, total=2)
         p2 = ProductInvoiceItem.objects.create(name='ww', annex=annex, unit=unit, quantity=1, price=1, total=2)
 
-
         apiclient.force_login(admin_user)
 
         response = apiclient.put(reverse('api:v1:contracts-detail', args=[contract.id]), data={
@@ -753,6 +752,45 @@ class TestContactViewSet:
                                   )
 
         assert response.status_code == 201, response.json()
+        assert Contact.objects.all().count() == 1
+
+        contact = Contact.objects.first()
+
+        assert contact.person.first_name == 'name'
+
+        assert contact.mobile == '1234'
+        assert contact.address == 'address'
+        assert contact.work_email == 'w_email'
+        assert contact.personal_email == 'p_email'
+        assert contact.web_site == 'w_site'
+        assert contact.plant_name == 'plant'
+
+    def test_contact_update(self, apiclient, admin_user, responsible_person):
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+        contact = responsible_person.contact
+        contact.plant_name = 'plant'
+        contact.save()
+
+        apiclient.force_login(admin_user)
+
+        response = apiclient.put(reverse('api:v1:contacts-detail', args=[contact.id]),
+                                 data={
+                                     'mobile': "1234",
+                                     'address': "address",
+                                     'work_email': "w_email",
+                                     'personal_email': "p_email",
+                                     'web_site': "w_site",
+                                     'responsible_person': {'first_name': "name",
+                                                            'last_name': "",
+                                                            'fathers_name': "",
+                                                            'position': ""}
+                                 },
+                                 format='json'
+                                 )
+
+        assert response.status_code == 200, response.json()
         assert Contact.objects.all().count() == 1
 
         contact = Contact.objects.first()

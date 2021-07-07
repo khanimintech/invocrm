@@ -48,6 +48,8 @@ class BaseAnnex(models.Model):
 
     status = models.SmallIntegerField(choices=Status.CHOICES, default=Status.IN_PROCESS)
 
+    revision_count = models.IntegerField(default=0)
+
 
 class UnitOfMeasure(models.Model):
     name = models.CharField(max_length=40)

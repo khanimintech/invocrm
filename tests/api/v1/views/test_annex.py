@@ -162,6 +162,7 @@ class TestAnnexViewSet:
                                       'sales_manager': sales_manager.id,
                                       'with_vat': True,
                                       'status': BaseAnnex.Status.APPROVED,
+                                      'revision': True,
                                       'products': [
                                           {
                                               'name': '123',
@@ -198,6 +199,7 @@ class TestAnnexViewSet:
         assert annex.products.count() == 2
         assert annex.with_vat is True
         assert annex.status == BaseAnnex.Status.APPROVED
+        assert annex.revision_count == 1
 
     def test_agent_annex_create(self, apiclient, admin_user, sales_manager):
 

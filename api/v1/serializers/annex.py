@@ -107,18 +107,24 @@ class AnnexCreateSerializer(serializers.ModelSerializer):
 class AnnexUpdateSerializer(serializers.ModelSerializer):
 
     products = ProductsCreateSerializer(many=True, required=False, allow_null=True)
+    revision = serializers.BooleanField(allow_null=True)
 
     class Meta:
 
         model = BaseAnnex
 
         fields = ['request_no', 'payment_terms', 'delivery_terms', 'acquisition_terms', 'created',
-                  'seller', 'sales_manager', 'products', 'with_vat', 'total', 'status']
+                  'seller', 'sales_manager', 'products', 'with_vat', 'total', 'status', 'revision']
 
     @atomic
     def update(self, instance, validated_data):
 
         instance.products.all().delete()
+
+        revision = validated_data.pop('revision', None)
+
+        if revision:
+            instance.revision_count += 1
 
         products = validated_data.pop('products', None)
 
