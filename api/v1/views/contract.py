@@ -93,8 +93,6 @@ class ContractViewSet(ModelViewSet):
 
     @action(detail=True, methods=['POST'], url_path='upload/(?P<type>contract|annex)', url_name='upload')
     def upload(self, *args, **kwargs):
-        print(self.request.FILES)
-        print(self.request.data)
         if not self.request.FILES.get('attachment'):
             return Response({
                 "message": "Provide valid 'attachment' key"
@@ -185,8 +183,6 @@ class ContactViewSet(ModelViewSet):
 
         queryset = self.queryset
 
-        print(queryset.filter(Q(person__agreement__plant_name=self.request.user.plant_name) |
-                               Q(plant_name=self.request.user.plant_name)),'eeeeeeeee')
 
         return queryset.filter(Q(person__agreement__plant_name=self.request.user.plant_name) |
                                Q(plant_name=self.request.user.plant_name))
