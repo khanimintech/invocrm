@@ -193,6 +193,27 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                                 )}
                                             </Field>
                                         </Grid>
+                                        {
+                                            selectedContract ? (
+                                                <Grid item md={12} className="input-wrapper">
+														<Field
+															name="status"
+					
+														>
+															{({ field, form, meta }) => (
+																<Input
+																	label="Ləğv edildi"
+																	field={field}
+																	form={form}
+																	meta={meta}
+																	checkbox
+                                                                    onChange={val => form.setFieldValue(field.name, val? 4 : undefined)}
+																/>
+															)}
+														</Field>
+                                                </Grid>
+                                            ) : null
+                                        }
                                         <CustomerContacts values={values} setErrors={setErrors} />
                                     </Grid>
                                     <BankRequisits hideTin type={4} banks={banks} />

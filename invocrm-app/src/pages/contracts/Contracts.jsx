@@ -19,7 +19,7 @@ import ContractAnnexModal from './ContractAnnexModal';
 import { AnnexesService } from '../../services/AnnexesService';
 import { BanksService }from '../../services/BanksService';
 import Attachments from './Attachments';
-// import BlockIcon from '@material-ui/icons/Block';
+import BlockIcon from '@material-ui/icons/Block';
 
 import './styles.scss';
 
@@ -29,7 +29,7 @@ const initialOverviews = [
     { id: 3, status: "Vaxtı bitir", count: 0, icon: <AccessAlarmIcon />, color: "#FFB300"  },
     { id: 0, status: "Prosesdə", count: 0, icon: <HourglassEmptyIcon />, color: "rgb(66, 165, 245)"},
     { id: 1, status: "Təsdiqlənib", count: 0, icon: <CheckCircleIcon />, color: "#66BB6A" },
-    // { id: 4, status: "Ləğv edildi", count: 0, icon: <BlockIcon />, color: "#4f5452" },
+    { id: 4, status: "Ləğv edildi", count: 0, icon: <BlockIcon />, color:"rgb(245, 66, 83)" },
 ]
 
 const columns = [
@@ -144,6 +144,7 @@ const Contracts = ({ handleRequest, enqueueSnackbar }) => {
                     if (o.id === 1) return { ...o, count: res.body.approved_count}
                     if (o.id === 2) return { ...o, count: res.body.expired_count}
                     if (o.id === 3) return { ...o, count: res.body.expires_in_2_weeks}
+                    if (o.id === 4) return { ...o, count: res.body.canceled}
                     return o;
                 })
                 setOverviews(updatedOverviews)

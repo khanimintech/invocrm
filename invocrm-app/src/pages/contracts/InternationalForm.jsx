@@ -293,6 +293,27 @@ const InternationalForm = ({ handleSubmit, handleRequest, handleClose, selectedC
                                                 )}
                                             </Field>
                                         </Grid>
+                                        {
+                                            selectedContract ? (
+                                                <Grid item md={12} className="input-wrapper">
+														<Field
+															name="status"
+					
+														>
+															{({ field, form, meta }) => (
+																<Input
+																	label="Ləğv edildi"
+																	field={field}
+																	form={form}
+																	meta={meta}
+																	checkbox
+                                                                    onChange={val => form.setFieldValue(field.name, val? 4 : undefined)}
+																/>
+															)}
+														</Field>
+                                                </Grid>
+                                            ) : null
+                                        }
                                         <CustomerContacts values={values} setErrors={setErrors}  />
                                     </Grid>
                                     <BankRequisits banks={banks} />

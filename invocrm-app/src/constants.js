@@ -6,7 +6,8 @@ export const contractStatuses = [
     { value: 0, label: "Prosesdə"},
     {value: 1, label: "Təsdiqlənib"},
     {value: 2, label: "Vaxtı bitən"},
-    {value: 3, label: "Vaxtı bitir"}
+    {value: 3, label: "Vaxtı bitir"},
+    {value: 4, label: "Ləğv edildi"}
   ]
 
   export const annexStatuses = [

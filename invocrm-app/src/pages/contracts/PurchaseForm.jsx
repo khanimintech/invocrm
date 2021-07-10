@@ -129,6 +129,27 @@ const PurchaseForm = ({ handleSubmit, handleRequest, handleClose, formType, sele
                                         )}
                                     </Field>
                                 </Grid>
+                                {
+                                            selectedContract ? (
+                                                <Grid item md={12} className="input-wrapper">
+														<Field
+															name="status"
+					
+														>
+															{({ field, form, meta }) => (
+																<Input
+																	label="Ləğv edildi"
+																	field={field}
+																	form={form}
+																	meta={meta}
+																	checkbox
+                                                                    onChange={val => form.setFieldValue(field.name, val? 4 : undefined)}
+																/>
+															)}
+														</Field>
+                                                </Grid>
+                                            ) : null
+                                        }
                                 <Grid container spacing={0} >
                                     <FieldArray
                                         validate={validateRequired}
