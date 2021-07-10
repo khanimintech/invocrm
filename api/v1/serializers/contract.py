@@ -1176,7 +1176,7 @@ class ContactListSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = Contact
-        fields = ['customer', 'address', 'responsible_person', 'mobile', 'personal_email', 'web_site', 'work_email']
+        fields = ['id', 'customer', 'address', 'responsible_person', 'mobile', 'personal_email', 'web_site', 'work_email']
 
     def get_responsible_person(self, obj):
 
