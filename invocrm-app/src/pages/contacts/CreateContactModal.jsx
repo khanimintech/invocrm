@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import CustomerContacts from '../contracts/CustomerContacts';
@@ -8,7 +8,13 @@ import { ContactsService } from '../../services/ContactsService';
 
 const CreateContactModal = ({open, handleClose, handleRequest, reloadData, selectedContact }) => {
     let formikRef = useRef();
-    const [disabled, setDisabled] = useState(true);
+    const [disabled, setDisabled] = useState( true);
+
+
+    useEffect(() => {
+        if (selectedContact)
+            setDisabled(Object.values(selectedContact).join("").length ? false : true)
+    }, [selectedContact])
 
     const handleSubmit = (vals) => {
         handleRequest(
@@ -41,6 +47,7 @@ const CreateContactModal = ({open, handleClose, handleRequest, reloadData, selec
                             ...selectedContact,
                         }}
                         onSubmit={handleSubmit}
+                        enableReinitialize
                         innerRef={form => (formikRef = form)}
                         validate={(vals) => {
                             const formValues = { ...vals.contact, ...vals.responsible_person };

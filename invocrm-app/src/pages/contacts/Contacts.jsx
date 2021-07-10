@@ -88,10 +88,13 @@ const Contacts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 createModal ? (
                     <CreateContactModal
                         open={true}
-                        handleClose={() => toggleCreateModal(false)}
+                        handleClose={() => {
+                            toggleCreateModal(false)
+                            setSelectedContact()
+                        }}
                         handleRequest={handleRequest}
                         reloadData={getContacts}
-                        seelctedContact={selectedContact}
+                        selectedContact={selectedContact}
                     />
                 ) : null
             }

@@ -18,14 +18,14 @@ const remove = (id) =>
 
 const save = values => 
     makeAsyncCall({
-        url: `${BACKEND_URL}contacts/`,
-        method: 'POST',
+        url: `${BACKEND_URL}contacts/${values.id ? `${values.id}/` : ""}`,
+        method: values.id ? "PUT" : 'POST',
         body: JSON.stringify(values)
     });
 
 const getContact = id =>
     makeAsyncCall({
-        url: `${BACKEND_URL}contacts/${id}`,
+        url: `${BACKEND_URL}contacts/${id}/`,
         method: 'GET'
     });
 
