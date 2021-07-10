@@ -58,7 +58,7 @@ const RentForm = ({ handleSubmit, contract, handleClose, units, salesManagers, s
 										) : null
 									}
     
-                                        <Grid container spacing={0}>
+                                        <Grid container spacing={1}>
                                             
                                             <Grid item md={6}>
                                             {
