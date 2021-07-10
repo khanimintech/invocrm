@@ -36,10 +36,19 @@ const getStateCounts = filters =>
         method: 'GET',
     });
 
+
+const getItem = id =>
+    makeAsyncCall({
+        url: `${BACKEND_URL}annexes/${id}/`,
+        method: 'GET',
+    });
+
+
 export const AnnexesService = {
     index: (filters) => index(filters),
     remove: id => remove(id),
     save: values => save(values),
     getUnits: () => getUnits(),
-    getStateCounts: filters => getStateCounts(filters)
+    getStateCounts: filters => getStateCounts(filters),
+    getItem: id => getItem(id),
 }

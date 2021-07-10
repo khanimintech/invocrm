@@ -43,8 +43,8 @@ export function makeAsyncCall(options){
 
 export const validateRequired = value => {
   let err;
-  if (!value) return err = "Bu sahə mütləqdir";
-  return err;
+  if (value || value === 0) return err;
+  else return err = "Bu sahə mütləqdir"
 }
 
 export const createFilterUrl = (url, filters) => {

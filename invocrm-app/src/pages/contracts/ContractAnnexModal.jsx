@@ -4,7 +4,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import SalesForm from './createAnnex/SalesForm';
 import AgentForm from './createAnnex/AgentForm';
 import RentForm from './createAnnex/RentForm';
-
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 const formTypes = {
@@ -30,47 +30,56 @@ const ContractAnnexModal = ({
     contract,
     sellers,
     units,
-    reloadData
+    reloadData,
+    modalLoading,
+    annexType,
+    selectedAnnex
 }) => {
+    console.log(formType)
     return (
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
         <DialogTitle id="form-dialog-title">Müqaviləyə əlavə</DialogTitle>
-        <div className="create-annex-form">
-            {  formType ?
-                React.cloneElement( formTypes[formType], {
-                    handleSubmit: (vals, formikBag) => {
-                        handleSubmit({
-                            ...vals, 
-                            type: contract.type, 
-                            contract: contract.id, 
-                            contract_id: contract.id,
-                            ...(isSalesType( contract.type) && vals.total ? {products: []} : {} ),
-                            ...( contract.type === 4  && vals.total? {agent_items: []} : {} ),
-                            ...( contract.type === 5  && vals.total ? {rent_items: []} : {} ),
-                            })
-                        .then(() => {
-                            reloadData();
-                            handleClose();
-                        })
-                        .catch(({ statusCode, body }) => {
-                            if (statusCode == 400) {
-                                Object.keys(body).forEach(field => {
-                                    formikBag.setErrors({ [field]: body[field]})
+        {  modalLoading ? <div className="spinner-wrapper"><CircularProgress /></div>  : (
+            <div className="create-annex-form">
+                {  formType ?
+                    React.cloneElement( formTypes[formType], {
+                        handleSubmit: (vals, formikBag) => {
+                            handleSubmit({
+                                ...(annexType ? {} : {
+                                    contract: contract ? contract.id : undefined,
+                                    ...(contract && isSalesType( contract.type) && vals.total ? {products: []} : {} ),
+                                }),
+                                ...vals, 
+                                type: contract ? contract.type : undefined, 
+                                contract_id: contract ? contract.id : undefined,
+                                ...( contract && contract.type === 4  && vals.total? {agent_items: []} : {} ),
+                                ...( contract && contract.type === 5  && vals.total ? {rent_items: []} : {} ),
                                 })
-                            }
+                            .then(() => {
+                                reloadData();
+                                handleClose();
+                            })
+                            .catch(({ statusCode, body }) => {
+                                if (statusCode == 400) {
+                                    Object.keys(body).forEach(field => {
+                                        formikBag.setErrors({ [field]: body[field]})
+                                    })
+                                }
+                            })
+                            
+                        },
+                        handleRequest,
+                        handleClose,
+                        salesManagers,
+                        contract,
+                        sellers,
+                        units,
+                        selectedAnnex
                         })
-                        
-                    },
-                    handleRequest,
-                    handleClose,
-                    salesManagers,
-                    contract,
-                    sellers,
-                    units
-                    })
-                : null
-            }
-        </div>
+                    : null
+                }
+            </div>
+        )}
       </Dialog>
     )
 }

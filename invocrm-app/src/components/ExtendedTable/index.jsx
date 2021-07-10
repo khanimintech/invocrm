@@ -29,7 +29,7 @@ const ExtendedTable = ({
     enqueueSnackbar, getData,
     getItem, addItem, onAttachmentClick,
     filters, setFilters ,
-    tableLoading, getStateCounts, annexStatus
+    tableLoading, getStateCounts, annexStatus, isAnnex
 }) => {
 
     const [globalFilter, setGlobalFilter] = useState();
@@ -172,7 +172,8 @@ const ExtendedTable = ({
 
     const cellTemplate = (value, col, row) => {
         const { header, showDetails, add, field } = col;
-        const { type } = row;
+        const { type, contract_type } = row;
+        const isColumnClickable = isAnnex ? (contract_type !== 6 && showDetails) : showDetails;
         if (field === "created" || field === "due_date" || field === "signature_date")
             return (
                 <React.Fragment>
@@ -186,7 +187,7 @@ const ExtendedTable = ({
                 {
                     showDetails ? (
                         <Tooltip title="Göstər" placement="top">
-                            <span className="clickable-column" onClick={showDetails ? () => handleShow(row) : null}>{`${type === 7 ? "PO " : ""}${value || "NA"}`}</span>
+                            <span className={isColumnClickable ? "clickable-column": ""} onClick={isColumnClickable ? () =>  handleShow(row) : null}>{`${type === 7 ? "PO " : ""}${value || "NA"}`}</span>
                         </Tooltip>
                     ) : <span>
                             {value}

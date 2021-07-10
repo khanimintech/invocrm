@@ -11,7 +11,7 @@ import CreateFormActions from '../CreateFormActions';
 import CreateAnnex from '../CreateAnnex';
 
 
-const AgentForm = ({ handleSubmit, contract, handleClose, salesManagers }) => {
+const AgentForm = ({ handleSubmit, contract, handleClose, salesManagers, selectedAnnex }) => {
     let formikRef = useRef();
     return (
         <>
@@ -19,7 +19,9 @@ const AgentForm = ({ handleSubmit, contract, handleClose, salesManagers }) => {
 				<DialogContentText>
 					<Formik
 						initialValues={{
-							agent_items : [
+							...selectedAnnex,
+							status: selectedAnnex && selectedAnnex.status ?  selectedAnnex.status : 0,
+							agent_items : selectedAnnex && selectedAnnex.agent_items && selectedAnnex.agent_items.length ? selectedAnnex.agent_items : [
 								{
 									client_name: "",
 								},
@@ -35,22 +37,32 @@ const AgentForm = ({ handleSubmit, contract, handleClose, salesManagers }) => {
 							<Form>
 								<Grid container  justify="space-between" >
 									<Grid item md={12} sm={12} xs={12}>
-										<Typography variant="subtitle1" gutterBottom>
-											Ümumi məlumatlar
-                                        </Typography>
-										<Divider />
+									{
+										contract ? (
+											<>
+											<Typography variant="subtitle1" gutterBottom>
+													Ümumi məlumatlar
+												</Typography>
+												<Divider />
+											</>
+										) : null
+									}
 										<Grid container spacing={0}>
-											<Grid item md={6}>
-												<Typography variant="subtitle1" gutterBottom>
-													{`Müqavilə №: ${contract.contract_no}`}
-												</Typography>
-                                                <Typography variant="subtitle1" gutterBottom>
-													{`Əlavə №: ${contract.annex_count + 1}`}
-												</Typography>
-                                                <Typography variant="subtitle1" gutterBottom>
-													{`Agent: ${contract.executor_name}`}
-												</Typography>
-											</Grid>
+											{
+												contract? (
+													<Grid item md={6}>
+														<Typography variant="subtitle1" gutterBottom>
+															{`Müqavilə №: ${contract.contract_no}`}
+														</Typography>
+														<Typography variant="subtitle1" gutterBottom>
+															{`Əlavə №: ${contract.annex_count + 1}`}
+														</Typography>
+														<Typography variant="subtitle1" gutterBottom>
+															{`Agent: ${contract.executor_name}`}
+														</Typography>
+													</Grid>
+												) : null
+											}
                                             <Grid item md={6} sm={12} xs={12}  className="input-wrapper">
 												<Field
 													name="created"

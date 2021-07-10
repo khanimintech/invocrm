@@ -4,12 +4,13 @@ import PriorityHighIcon from '@material-ui/icons/PriorityHigh';
 import AccessAlarmIcon from '@material-ui/icons/AccessAlarm';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import { AnnexesService } from '../../services/AnnexesService';
+import { ContractsService } from '../../services/ContractsService';
 import ExtendedTable from '../../components/ExtendedTable';
 import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import BlockIcon from '@material-ui/icons/Block';
 import { annexStatuses } from './../../constants';
-
+import ContractAnnexModal from './../contracts/ContractAnnexModal';
 
 
 const initialOverviews = [
@@ -22,7 +23,7 @@ const initialOverviews = [
 
 const columns = [
     { field: 'company_name', header: 'Şirkət', filter: true },
-    { field: 'request_no', header: 'Sorğu №', filter: true  },
+    { field: 'request_no', header: 'Sorğu №', filter: true, showDetails: true  },
     { field: 'contract_no', header: 'Müqavilə Nömrəsi' , filter: true },
     { field: 'contract_type', header: 'Müqavilə Növü' , filter: true },
     { field: 'annex_no', header: 'Əlavə №' , filter: true },
@@ -44,9 +45,19 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     const [filters, setFilters] = useState({});
     const [tableLoading, toggleLoading] = useState(false);
     const [allCount, setAllCount] = useState(0);
+    const [modalLoading, toggleModalLoading] = useState(false);
+    const [annexType, setAnnexType] = useState();
+    const [annexModal, toggleAnnexModal] = useState();
+    const [selectedAnex, setSelectedAnnex] = useState()
+    const [sellers, setSellers] = useState([]);
+    const [salesManagers, setSalesManagers] = useState([]);
+    const [units, setUnits] = useState([]);
 
     useEffect(() => {
         getOverviews();
+        getSalesManagers()
+        getSellers();
+        getUnits();
     }, [filters.annex_created_after, filters.annex_created_before])
 
 
@@ -64,6 +75,40 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
         })
     }
 
+   const getSalesManagers = () => {
+        handleRequest(
+            ContractsService.getSalesManagers()
+        )
+        .then(res => setSalesManagers(res.body.map(salesManager => ({ value: salesManager.id, label: salesManager.fullname }))))
+    }
+
+    const getSellers = () => {
+        handleRequest(
+            ContractsService.getSellers()
+        )
+        .then(res => setSellers(res.body.map(seller => ({ value: seller.id, label: seller.fullname }))))
+    }
+
+    const getUnits = () => {
+        handleRequest(
+            AnnexesService.getUnits()
+        ).then((res) => {
+            if (res.body)
+                setUnits(res.body)
+        })
+    }
+
+
+    const getAnnex = (annex) => {
+        toggleModalLoading(true)
+        setAnnexType(annex.contract_type)
+        handleRequest(AnnexesService.getItem(annex.id))
+        .then(({ body }) => {
+            toggleAnnexModal(true)
+            setSelectedAnnex(body)
+            toggleModalLoading(false)
+        })
+    }
 
     const getOverviews = () => {
         handleRequest(
@@ -81,6 +126,13 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 setAllCount(res.body.all_count)
             }
         })
+    }
+
+
+    const handleAddAnenx = vals => {
+        return handleRequest(
+            ContractsService.createAnnex({...vals, request_no: vals.request_no || null})
+        )
     }
 
 
@@ -104,13 +156,35 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 elRef={dt}
                 enqueueSnackbar={enqueueSnackbar}
                 getData={getAnnexes}
+                getItem={getAnnex}
                 filters={filters}
                 setFilters={setFilters}
                 tableLoading={tableLoading}
                 annexStatus
                 statuses={annexStatuses}
+                isAnnex
             />
+                {
+                annexModal ? (
+                    <ContractAnnexModal
+                        open={true}
+                        handleClose={() => {
+                            toggleAnnexModal(false)
+                            setSelectedAnnex(null)
+                        }}
+                        handleSubmit={handleAddAnenx}
+                        handleRequest={handleRequest}
+                        formType={annexType}
+                        salesManagers={salesManagers}
+                        sellers={sellers}
+                        units={units}
+                        reloadData={() => getAnnexes(filters)}
+                        modalLoading={modalLoading}
+                        selectedAnnex={selectedAnex}
 
+                    />
+                ) : null
+            }
 
         </PageContent>
     )

@@ -13,7 +13,7 @@ import CreateFormActions from '../CreateFormActions';
 import CreateAnnex from '../CreateAnnex';
 
 
-const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units, salesManagers , hideAnnexTable}) => {
+const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units, salesManagers , hideAnnexTable, selectedAnnex}) => {
 	let formikRef = useRef();
 
 	return (
@@ -22,8 +22,10 @@ const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units, salesM
 				<DialogContentText>
 					<Formik
 						initialValues={{
+							...selectedAnnex,
+							status: selectedAnnex && selectedAnnex.status ?  selectedAnnex.status : 0,
 							total: null,
-							products: hideAnnexTable  ? null :[
+							products: hideAnnexTable  ? null : (selectedAnnex && selectedAnnex.products && selectedAnnex.products.length ? selectedAnnex.products : [
 								{
 									name: "",
 									quantity: 0,
@@ -31,7 +33,7 @@ const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units, salesM
 									price: 0,
 									total: 0,
 								}
-							]
+							])
 						}}
 						onSubmit={handleSubmit}
 						innerRef={form => (formikRef = form)}
@@ -41,32 +43,44 @@ const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units, salesM
 						{({ values }) => (
 							<Form>
 								<Grid container justify="space-between" >
+									
 									<Grid item md={12} sm={12} xs={12}>
-										<Typography variant="subtitle1" gutterBottom>
-											Ümumi məlumatlar
-                      					</Typography>
-										<Divider />
-										<Grid container>
-											<Grid item md={6}>
-												<Typography variant="subtitle1" gutterBottom>
-													{`Şirkət/Müştəri: ${contract.company_name}`}
+									{
+										contract ? (
+											<>
+											<Typography variant="subtitle1" gutterBottom>
+													Ümumi məlumatlar
 												</Typography>
-												<Typography variant="subtitle1" gutterBottom>
-													{`Müqavilə Növü: ${contractTypes[contract.type]}`}
-												</Typography>
-												<Typography variant="subtitle1" gutterBottom>
-													{`Müqavilə №: ${contract.contract_no}`}
-												</Typography>
-											</Grid>
-											<Grid item md={6}>
-												<Typography variant="subtitle1" gutterBottom>
-													{`Tarix : ${contract.created ? format(parseISO(contract.created), "MM.dd.yyyy") : "-"}`}
-												</Typography>
-												<Typography variant="subtitle1" gutterBottom>
-													{`Əlavə № : ${contract.annex_count + 1}`}
-												</Typography>
-											</Grid>
-										</Grid>
+												<Divider />
+											</>
+										) : null
+									}
+										
+										{
+											contract ? (
+												<Grid container>
+													<Grid item md={6}>
+														<Typography variant="subtitle1" gutterBottom>
+															{`Şirkət/Müştəri: ${contract.company_name}`}
+														</Typography>
+														<Typography variant="subtitle1" gutterBottom>
+															{`Müqavilə Növü: ${contractTypes[contract.type]}`}
+														</Typography>
+														<Typography variant="subtitle1" gutterBottom>
+															{`Müqavilə №: ${contract.contract_no}`}
+														</Typography>
+													</Grid>
+													<Grid item md={6}>
+														<Typography variant="subtitle1" gutterBottom>
+															{`Tarix : ${contract.created ? format(parseISO(contract.created), "MM.dd.yyyy") : "-"}`}
+														</Typography>
+														<Typography variant="subtitle1" gutterBottom>
+															{`Əlavə № : ${contract.annex_count + 1}`}
+														</Typography>
+													</Grid>
+												</Grid>
+											): null
+										}
 										<Grid container justify="space-between" >
 											<Grid item md={6} sm={12} xs={12} className="input-wrapper">
 												<Field

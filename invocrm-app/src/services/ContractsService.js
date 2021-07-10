@@ -43,8 +43,8 @@ const getItem = id =>
 
 const createAnnex = values => 
     makeAsyncCall({
-        url: `${BACKEND_URL}annexes/`,
-        method: 'POST',
+        url: `${BACKEND_URL}annexes/${values.id ? `${values.id}/` : ""}`,
+        method: values.id ? "PUT" : 'POST',
         body: JSON.stringify(values)
     });
 

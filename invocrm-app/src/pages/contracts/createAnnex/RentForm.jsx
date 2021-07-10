@@ -15,7 +15,7 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { format, parseISO } from 'date-fns'
 
 
-const RentForm = ({ handleSubmit, contract, handleClose, units, salesManagers }) => {
+const RentForm = ({ handleSubmit, contract, handleClose, units, salesManagers, selectedAnnex }) => {
     let formikRef = useRef();
     return (
         <>
@@ -23,13 +23,15 @@ const RentForm = ({ handleSubmit, contract, handleClose, units, salesManagers })
                 <DialogContentText>
                     <Formik
                         initialValues={{
-                            rent_items: [
+                            ...selectedAnnex,
+                            status: selectedAnnex && selectedAnnex.status ?  selectedAnnex.status : 0,
+                            rent_items: selectedAnnex && selectedAnnex.rent_items && selectedAnnex.rent_items.length? selectedAnnex.rent_items : [
                                 {
                                     quantity: 0,
                                     one_day_rent: 0,
                                 },
                             ],
-                            rent_conditions: [
+                            rent_conditions: selectedAnnex &&  selectedAnnex.rent_conditions &&  selectedAnnex.rent_conditions.length ? selectedAnnex.rent_conditions : [
                                 {
                                     name: ""
                                 }
@@ -45,26 +47,41 @@ const RentForm = ({ handleSubmit, contract, handleClose, units, salesManagers })
                             <Form>
                                 <Grid container  justify="space-between" spacing={5}>
                                     <Grid item md={12} sm={12} xs={12}>
-                                        <Typography variant="subtitle1" gutterBottom>
-                                            Ümumi məlumatlar
-                                        </Typography>
-                                        <Divider />
+                                    {
+										contract ? (
+											<>
+											<Typography variant="subtitle1" gutterBottom>
+													Ümumi məlumatlar
+												</Typography>
+												<Divider />
+											</>
+										) : null
+									}
+    
                                         <Grid container spacing={0}>
+                                            
                                             <Grid item md={6}>
-                                                <Typography variant="subtitle1" gutterBottom>
+                                            {
+                                                contract ? (
+                                                    <>
+                                                    <Typography variant="subtitle1" gutterBottom>
                                                     {`Əlavə №: ${contract.annex_count + 1}`}
-                                                </Typography>
-                                                <Typography variant="subtitle1" gutterBottom>
-                                                    {`Müqavilə yaradılma tarixi:  ${contract.created ? format(parseISO(contract.created), "MM.dd.yyyy") : "-"}`}
-                                                </Typography>
+                                                    </Typography>
+                                                    <Typography variant="subtitle1" gutterBottom>
+                                                        {`Müqavilə yaradılma tarixi:  ${contract.created ? format(parseISO(contract.created), "MM.dd.yyyy") : "-"}`}
+                                                    </Typography>
 
-                                                <Typography variant="subtitle1" gutterBottom>
-                                                    {`Müqavilə №: ${contract.contract_no}`}
-                                                </Typography>
+                                                    <Typography variant="subtitle1" gutterBottom>
+                                                        {`Müqavilə №: ${contract.contract_no}`}
+                                                    </Typography>
 
-                                                <Typography variant="subtitle1" gutterBottom>
-                                                    {`Şirkət: ${contract.company_name}`}
-                                                </Typography>
+                                                    <Typography variant="subtitle1" gutterBottom>
+                                                        {`Şirkət: ${contract.company_name}`}
+                                                    </Typography>
+                                                    </>
+                                                ): null
+                                            }
+                                               
 
                                                 <FieldArray
                                                     validate={validateRequired}
@@ -111,6 +128,25 @@ const RentForm = ({ handleSubmit, contract, handleClose, units, salesManagers })
                                                         </>
                                                     )}
                                                 />
+                                                 <Field
+                                                            name="status"
+                                                            validate={validateRequired}
+                                                        >
+                                                            {({ field, form, meta }) => (
+                                                                <Input
+                                                                    label="Status"
+                                                                    field={field}
+                                                                    form={form}
+                                                                    meta={meta}
+                                                                    select
+                                                                    options={[
+																		{value: 0, label: "Prosesdə"},
+																		{value: 1, label: "Təsdiqlənib"},
+																		{value: 2, label: "Ləğv edilib"}
+																	]}
+                                                                />
+                                                            )}
+                                                        </Field>
                                             </Grid>
                                             <Grid item md={6}>
                                                 <Grid container spacing={0}>
@@ -148,27 +184,7 @@ const RentForm = ({ handleSubmit, contract, handleClose, units, salesManagers })
                                                             )}
                                                         </Field>
                                                     </Grid>
-                                                    <Grid item md={12} className="input-wrapper">
-                                                        <Field
-                                                            name="status"
-                                                            validate={validateRequired}
-                                                        >
-                                                            {({ field, form, meta }) => (
-                                                                <Input
-                                                                    label="Status"
-                                                                    field={field}
-                                                                    form={form}
-                                                                    meta={meta}
-                                                                    select
-                                                                    options={[
-																		{value: 0, label: "Prosesdə"},
-																		{value: 1, label: "Təsdiqlənib"},
-																		{value: 2, label: "Ləğv edilib"}
-																	]}
-                                                                />
-                                                            )}
-                                                        </Field>
-                                                    </Grid>
+                   
                                                 </Grid>
                                                 
                                             </Grid>

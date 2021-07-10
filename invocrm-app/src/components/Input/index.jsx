@@ -44,7 +44,7 @@ const Input = ({field, form, meta, label, placeholder, required, defaultValue, s
                 select
                 fullWidth
                 label={label}
-                value={value || ""}
+                value={value || value === 0 ? value :  ""}
                 onChange={e => setFieldValue(name, e.target.value)}
                 required={required}
                 error={submitCount && error}
