@@ -81,6 +81,21 @@ const CustomerContacts = ({ readOnly, type }) => {
             </Grid>
             <Grid item md={12} className="input-wrapper">
                 <Field
+                    name="company_name"
+                >
+                    {({ field, form, meta }) => (
+                        <Input
+                            label="Şirkət adı"
+                            field={field}
+                            form={form}
+                            meta={meta}
+                            readOnly={readOnly}
+                        />
+                    )}
+                </Field>
+            </Grid>
+            <Grid item md={12} className="input-wrapper">
+                <Field
                     name="responsible_person.position"
                 >
                     {({ field, form, meta }) => (

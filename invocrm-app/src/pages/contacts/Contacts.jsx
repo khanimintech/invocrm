@@ -12,9 +12,10 @@ import CreateContactModal from './CreateContactModal';
 
 
 const columns = [
-    { field: 'customer', header: 'Müştəri', filter: true},
+    { field: 'customer', header: 'Müştəri', filter: true, showDetails: true},
     { field: 'address', header: 'Ünvan' , filter: true},
     { field: 'responsible_person', header: 'Əlaqədar şəxs' , filter: true},
+    { field: 'company_name', header: 'Şirkət' , filter: true},
     { field: 'mobile', header: 'Əlaqə nömrəsi' , filter: true},
     { field: 'personal_email', header: "Şəxsi e-ünvan" , filter: true},
     { field: 'web_site', header: "WEB sayt" , filter: true},
@@ -27,12 +28,23 @@ const Contacts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     const [contacts, setContacts] = useState(null);
     const [filters, setFilters] = useState({});
     const [createModal, toggleCreateModal] = useState(false);
+    const [selectedContact, setSelectedContact] = useState();
+
 
     const getContacts = (filters) => {
         return handleRequest(
             ContactsService.index(filters)
         ).then(res => {
             setContacts(res.body)
+        })
+    }
+
+    const getContact = (contact) => {
+        return handleRequest(
+            ContactsService.getItem(contact.id)
+        ).then(({ body }) => {
+            toggleCreateModal(true)
+            setSelectedContact(body)
         })
     }
 
@@ -70,6 +82,7 @@ const Contacts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                 getData={getContacts}
                 filters={filters}
                 setFilters={setFilters}
+                getItem={getContact}
             />
             {
                 createModal ? (
@@ -78,6 +91,7 @@ const Contacts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                         handleClose={() => toggleCreateModal(false)}
                         handleRequest={handleRequest}
                         reloadData={getContacts}
+                        seelctedContact={selectedContact}
                     />
                 ) : null
             }

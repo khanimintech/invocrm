@@ -35,7 +35,7 @@ const ContractAnnexModal = ({
     annexType,
     selectedAnnex
 }) => {
-    console.log(formType)
+
     return (
         <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
         <DialogTitle id="form-dialog-title">Müqaviləyə əlavə</DialogTitle>

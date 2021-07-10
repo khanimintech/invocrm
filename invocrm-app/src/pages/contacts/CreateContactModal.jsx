@@ -6,7 +6,7 @@ import CreateFormActions from '../contracts/CreateFormActions';
 import { Formik, Form } from 'formik';
 import { ContactsService } from '../../services/ContactsService';
 
-const CreateContactModal = ({open, handleClose, handleRequest, reloadData }) => {
+const CreateContactModal = ({open, handleClose, handleRequest, reloadData, selectedContact }) => {
     let formikRef = useRef();
     const [disabled, setDisabled] = useState(true);
 
@@ -37,8 +37,8 @@ const CreateContactModal = ({open, handleClose, handleRequest, reloadData }) => 
                             address: "",
                             work_email: "",
                             personal_email: "",
-                            web_site: ""
-
+                            web_site: "",
+                            ...selectedContact,
                         }}
                         onSubmit={handleSubmit}
                         innerRef={form => (formikRef = form)}
