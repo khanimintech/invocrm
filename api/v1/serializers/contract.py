@@ -313,10 +313,11 @@ class AttachmentSerializer(serializers.Serializer):
 class BaseContractAttachmentSerializer(serializers.ModelSerializer):
     contracts = AttachmentSerializer(source='attachments', many=True)
     annexes = AttachmentSerializer(source='annex_attachments', many=True)
+    other = AttachmentSerializer(source='other_attachments', many=True)
 
     class Meta:
         model = BaseContract
-        fields = ('contracts', 'annexes')
+        fields = ('contracts', 'annexes', 'other')
 
 
 class ContractCreateBaseSerializer(serializers.ModelSerializer):

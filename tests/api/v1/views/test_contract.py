@@ -6,7 +6,7 @@ from django.utils import timezone
 from rest_framework.reverse import reverse
 
 from api.main_models.annex import UnitOfMeasure, BaseAnnex, ProductInvoiceItem, POAgreementSupplements
-from api.main_models.attachment import ContractAttachment, AnnexAttachment
+from api.main_models.attachment import ContractAttachment, AnnexAttachment, OtherAttachment
 from api.main_models.contract import BaseContract, TradeAgreement, Company, Bank, BankAccount, ServiceAgreement, \
     Contact, DistributionAgreement, AgentAgreement, OneTimeAgreement, POAgreement
 from api.models import Person
@@ -106,10 +106,18 @@ class TestContractViewSet:
             attachment=SimpleUploadedFile("annex.pdf", b"content")
         )
 
+        OtherAttachment.objects.create(
+            contract=trade_aggrement_base,
+            attachment=SimpleUploadedFile("annex.pdf", b"content")
+        )
+
         response = apiclient.get(reverse('api:v1:contracts-attachments', args=(trade_aggrement_base.id,)))
 
         assert response.status_code == 200
         payload = response.json()
+
+        assert payload['other'] and len(payload['other']) == 1, payload
+        assert payload['annex'] and len(payload['annex']) == 1, payload
         assert payload['contracts'] and len(payload['contracts']) == 1, payload
         attachment = payload['contracts'][0]
         assert 'agreement' in attachment['name']
@@ -119,6 +127,25 @@ class TestContractViewSet:
         annex = payload['annexes'][0]
         assert 'annex' in annex['name']
         assert 'annex' in annex['url']
+
+    def test_contract_attachments_delete(self, apiclient, admin_user, trade_aggrement_base):
+        apiclient.force_login(admin_user)
+
+        ContractAttachment.objects.create(
+            contract=trade_aggrement_base,
+            attachment=SimpleUploadedFile("agreement.pdf", b"content")
+        )
+
+        a_att = AnnexAttachment.objects.create(
+            contract=trade_aggrement_base,
+            attachment=SimpleUploadedFile("annex.pdf", b"content")
+        )
+
+        response = apiclient.delete(reverse('api:v1:contracts-attachments', args=(trade_aggrement_base.id, 'annex', a_att.id)))
+
+        assert response.status_code == 204
+        assert AnnexAttachment.objects.count() == 0
+
 
     def test_contract_attachments_list_only_annex(self, apiclient, admin_user, trade_aggrement_base):
         apiclient.force_login(admin_user)

@@ -5,13 +5,13 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from api.choices import CONTRACT_CHOICE, CREATE_SERIALIZER_CHOICE, GET_SERIALIZER_CHOICE, UPDATE_SERIALIZER_CHOICE
 from api.filters.contract import ContractFilterSet, BankFilterSet, ContactFilterSet, StatFilterSet
-from api.main_models.attachment import ContractAttachment, AnnexAttachment
+from api.main_models.attachment import ContractAttachment, AnnexAttachment, OtherAttachment
 
 from api.main_models.contract import BaseContract, BankAccount, Contact
 from api.models import Person
@@ -47,8 +47,6 @@ class ContractViewSet(ModelViewSet):
     filterset_class = ContractFilterSet
 
     def get_queryset(self):
-
-
 
         queryset = self.queryset
         return queryset.filter(plant_name=self.request.user.plant_name)
@@ -91,17 +89,33 @@ class ContractViewSet(ModelViewSet):
 
         return super().get_serializer_class()
 
-    @action(detail=True, methods=['POST'], url_path='upload/(?P<type>contract|annex)', url_name='upload')
+    @action(detail=True, methods=['POST'], url_path='upload/(?P<type>contract|annex|other)', url_name='upload')
     def upload(self, *args, **kwargs):
         if not self.request.FILES.get('attachment'):
             return Response({
                 "message": "Provide valid 'attachment' key"
             }, status=400)
         file_data = self.request.FILES.get('attachment')
-
-        AttachmentModel = ContractAttachment if kwargs.get('type') == 'contract' else AnnexAttachment
+        model_map = {
+            "contract": ContractAttachment,
+            "annex": AnnexAttachment,
+            "other": OtherAttachment
+        }
+        AttachmentModel = model_map.get(kwargs.get('type'))
         AttachmentModel.objects.create(attachment=file_data, contract=self.get_object())
 
+        return Response(status=204)
+
+    @action(detail=True, methods=['DELETE'], url_path='(?P<type>contract|annex|other)/(?P<attachment_id>\d+)', url_name='attachments')
+    def attachments_delete(self, *args, **kwargs):
+        attachment_id = kwargs.get("attachment_id")
+        model_map = {
+            "contract": ContractAttachment,
+            "annex": AnnexAttachment,
+            "other": OtherAttachment
+        }
+        AttachmentModel = model_map.get(kwargs.get('type'))
+        get_object_or_404(AttachmentModel, id=attachment_id).delete()
         return Response(status=204)
 
     @action(detail=True, methods=['GET'], serializer_class=BaseContractAttachmentSerializer)
