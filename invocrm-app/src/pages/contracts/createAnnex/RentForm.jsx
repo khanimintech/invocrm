@@ -147,7 +147,28 @@ const RentForm = ({ handleSubmit, contract, handleClose, units, salesManagers, s
                                                                 />
                                                             )}
                                                         </Field>
+                                                        {
+                                                            selectedAnnex ? (
+                                                                <Field
+                                                                    name="revision"
+                                                                    validate={validateRequired}
+                                                                >
+                                                                    {({ field, form, meta }) => (
+                                                                        <Input
+                                                                            label="Reviziya"
+                                                                            field={field}
+                                                                            form={form}
+                                                                            meta={meta}
+                                                                            checkbox
+                                                                        />
+                                                                    )}
+                                                                </Field>
+                                                            ): null
+                                                        }
+									
                                             </Grid>
+                                            
+                     
                                             <Grid item md={6}>
                                                 <Grid container spacing={0}>
                                                     <Grid item md={12} sm={12} >
@@ -190,7 +211,9 @@ const RentForm = ({ handleSubmit, contract, handleClose, units, salesManagers, s
                                             </Grid>
                                                        
                                                
+                                    
                                             </Grid>
+                                            {!selectedAnnex ? <br/> : null}
                                         <Divider />
                                         <br />
                                         <Grid container justify="space-between" spacing={5}>

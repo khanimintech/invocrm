@@ -65,12 +65,14 @@ const Input = ({field, form, meta, label, placeholder, required, defaultValue, s
         return (
             <FormControlLabel
                 labelPlacement="start"
+                className={submitCount && error  ? "error" : ""}
                 control={
                 <Checkbox
                     checked={field.value}
                     onChange={e => onChange ?   onChange( e.target.checked) : setFieldValue(name, e.target.checked)}
                     name={field.name}
                     color="primary"
+
                 />
                 }
                 label={label}

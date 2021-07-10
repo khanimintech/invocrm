@@ -236,6 +236,26 @@ const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units, salesM
 																)}
 															</Field>
 														</Grid>
+														{
+															selectedAnnex ? (
+																	<Grid item md={6} className="input-wrapper">
+																	<Field
+																		name="revision"
+																		validate={validateRequired}
+																	>
+																		{({ field, form, meta }) => (
+																			<Input
+																				label="Reviziya"
+																				field={field}
+																				form={form}
+																				meta={meta}
+																				checkbox
+																			/>
+																		)}
+																	</Field>
+																</Grid>
+															) : null
+														}
 												</Grid>
 											<Divider />
 												<Grid item md={12}>

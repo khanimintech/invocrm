@@ -20,6 +20,9 @@
     }
     .MuiFormControlLabel-labelPlacementStart {
         margin-left: 0;
+        &.error {
+            color: $color-red;
+        }
     }
 }
 

@@ -45,11 +45,11 @@ const ContractAnnexModal = ({
                     React.cloneElement( formTypes[formType], {
                         handleSubmit: (vals, formikBag) => {
                             handleSubmit({
-                                ...(annexType ? {} : {
-                                    contract: contract ? contract.id : undefined,
-                                    ...(contract && isSalesType( contract.type) && vals.total ? {products: []} : {} ),
-                                }),
                                 ...vals, 
+                                ...(annexType ? (isSalesType( annexType) && vals.total ? {products: []} : {} ) : {
+                                    contract: contract ? contract.id : undefined,
+                                    ...(isSalesType(contract.type) && vals.total ? {products: []} : {} ),
+                                }),
                                 type: contract ? contract.type : undefined, 
                                 contract_id: contract ? contract.id : undefined,
                                 ...( contract && contract.type === 4  && vals.total? {agent_items: []} : {} ),

@@ -181,6 +181,7 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
                         reloadData={() => getAnnexes(filters)}
                         modalLoading={modalLoading}
                         selectedAnnex={selectedAnex}
+                        annexType={annexType}
 
                     />
                 ) : null
