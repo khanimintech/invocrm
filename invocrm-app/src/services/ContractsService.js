@@ -70,6 +70,12 @@ const uploadAttachment = (type, data, id) =>
         }
     })
 
+const deleteAttachment = (type, contratId, id) =>
+    makeAsyncCall({
+        url: `${BACKEND_URL}contracts/${contratId}/attachments/${type}/${id}/`,
+        method: "DELETE",
+    })
+
 export const ContractsService = {
     index: (filters) => index(filters),
     getItem: id => getItem(id),
@@ -80,5 +86,6 @@ export const ContractsService = {
     createAnnex: vals => createAnnex(vals),
     getStateCounts: filters => getStateCounts(filters),
     getAttachments: id => getAttachments(id),
-    uploadAttachment: (type, data, id) => uploadAttachment(type, data, id)
+    uploadAttachment: (type, data, id) => uploadAttachment(type, data, id),
+    deleteAttachment: (type, contratId, id) => deleteAttachment(type, contratId, id)
 }
