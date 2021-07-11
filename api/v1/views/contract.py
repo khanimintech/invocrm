@@ -106,7 +106,7 @@ class ContractViewSet(ModelViewSet):
 
         return Response(status=204)
 
-    @action(detail=True, methods=['DELETE'], url_path='(?P<type>contract|annex|other)/(?P<attachment_id>\d+)', url_name='attachments')
+    @action(detail=True, methods=['DELETE'], url_path='attachments/(?P<type>contract|annex|other)/(?P<attachment_id>\d+)', url_name='attachments')
     def attachments_delete(self, *args, **kwargs):
         attachment_id = kwargs.get("attachment_id")
         model_map = {
