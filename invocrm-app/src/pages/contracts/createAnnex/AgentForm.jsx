@@ -26,7 +26,7 @@ const AgentForm = ({ handleSubmit, contract, handleClose, salesManagers, selecte
 									client_name: "",
 								},
 							],
-							total: null,
+							total: selectedAnnex.total || null,
 						}}
 						onSubmit={handleSubmit}
 						innerRef={form => (formikRef = form)}
@@ -125,7 +125,6 @@ const AgentForm = ({ handleSubmit, contract, handleClose, salesManagers, selecte
 													<Grid item md={6} className="input-wrapper">
 														<Field
 															name="revision"
-															validate={validateRequired}
 														>
 															{({ field, form, meta }) => (
 																<Input

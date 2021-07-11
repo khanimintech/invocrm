@@ -36,7 +36,7 @@ const RentForm = ({ handleSubmit, contract, handleClose, units, salesManagers, s
                                     name: ""
                                 }
                             ],
-                            total: null,
+                            total: selectedAnnex.total || null,
                         }}
                         onSubmit={handleSubmit}
                         innerRef={form => (formikRef = form)}
@@ -151,7 +151,6 @@ const RentForm = ({ handleSubmit, contract, handleClose, units, salesManagers, s
                                                             selectedAnnex ? (
                                                                 <Field
                                                                     name="revision"
-                                                                    validate={validateRequired}
                                                                 >
                                                                     {({ field, form, meta }) => (
                                                                         <Input

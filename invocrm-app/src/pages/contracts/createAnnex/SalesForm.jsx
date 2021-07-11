@@ -24,7 +24,7 @@ const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units, salesM
 						initialValues={{
 							...selectedAnnex,
 							status: selectedAnnex && selectedAnnex.status ?  selectedAnnex.status : 0,
-							total: null,
+							total: selectedAnnex.total || null,
 							products: hideAnnexTable  ? null : (selectedAnnex && selectedAnnex.products && selectedAnnex.products.length ? selectedAnnex.products : [
 								{
 									name: "",
@@ -241,7 +241,6 @@ const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units, salesM
 																	<Grid item md={6} className="input-wrapper">
 																	<Field
 																		name="revision"
-																		validate={validateRequired}
 																	>
 																		{({ field, form, meta }) => (
 																			<Input
