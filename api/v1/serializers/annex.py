@@ -89,7 +89,7 @@ class AnnexCreateSerializer(serializers.ModelSerializer):
 
         model = BaseAnnex
 
-        fields = ['contract', 'request_no', 'annex_date', 'payment_terms', 'delivery_terms', 'status',
+        fields = ['contract', 'request_no', 'annex_date', 'payment_terms', 'delivery_terms', 'status', 'annex_no',
                   'acquisition_terms', 'created', 'seller', 'sales_manager', 'products', 'with_vat', 'total']
 
     def create(self, validated_data):
@@ -114,7 +114,7 @@ class AnnexUpdateSerializer(serializers.ModelSerializer):
         model = BaseAnnex
 
         fields = ['request_no', 'payment_terms', 'delivery_terms', 'acquisition_terms', 'created',
-                  'seller', 'sales_manager', 'products', 'with_vat', 'total', 'status', 'revision']
+                  'seller', 'sales_manager', 'products', 'with_vat', 'total', 'status', 'revision', 'annex_no']
 
     @atomic
     def update(self, instance, validated_data):
@@ -157,6 +157,17 @@ class AgentInvoiceItemSerializer(serializers.ModelSerializer):
         fields = ['client_name', 'invoice_no', 'date', 'annex_no', 'paids_from_customer', 'agent_reward']
 
 
+class AnnexAgentGetSerializer(serializers.ModelSerializer):
+
+    agent_items = AgentInvoiceItemSerializer(many=True, required=False, allow_null=True)
+
+    class Meta:
+        model = BaseAnnex
+
+        fields = ['id', 'request_no', 'payment_terms', 'delivery_terms', 'acquisition_terms', 'created',
+                  'seller', 'sales_manager', 'agent_items', 'with_vat', 'total', 'annex_no', 'status']
+
+
 class AgentAnnexCreateSerializer(serializers.ModelSerializer):
 
     agent_items = AgentInvoiceItemSerializer(many=True, required=False, allow_null=True)
@@ -191,6 +202,18 @@ class RentItemsSerializer(serializers.ModelSerializer):
     class Meta:
         model = RentItems
         fields = ['item_name', 'term', 'quantity', 'one_day_rent', 'total', 'unit']
+
+
+class AnnexRentGetSerializer(serializers.ModelSerializer):
+
+    rent_items = RentItemsSerializer(many=True, required=False, allow_null=True)
+    rent_conditions = RentConditionsSerializer(many=True, required=False, allow_null=True)
+
+    class Meta:
+        model = BaseAnnex
+
+        fields = ['id', 'request_no', 'payment_terms', 'delivery_terms', 'acquisition_terms', 'created',
+                  'seller', 'sales_manager', 'rent_items', 'with_vat', 'total', 'annex_no', 'status', 'rent_conditions']
 
 
 class RentAnnexCreateSerializer(serializers.ModelSerializer):

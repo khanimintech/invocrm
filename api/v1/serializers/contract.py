@@ -1177,7 +1177,8 @@ class ContactListSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = Contact
-        fields = ['id', 'customer', 'address', 'responsible_person', 'mobile', 'personal_email', 'web_site', 'work_email', 'company_name']
+        fields = ['id', 'customer', 'address', 'responsible_person', 'mobile', 'personal_email', 'web_site',
+                  'work_email', 'company_name']
 
     def get_responsible_person(self, obj):
 
@@ -1186,10 +1187,13 @@ class ContactListSerializer(serializers.ModelSerializer):
 
     def get_customer(self, obj):
 
-        if getattr(obj.person, 'agreement', None) and not obj.person.agreement._is_individual_contract:
+        if obj.company_name is not None:
+            return obj.company_name
+
+        elif getattr(obj.person, 'agreement', None) and not obj.person.agreement._is_individual_contract:
                 return obj.person.agreement.company.name
 
-        if getattr(obj.person, 'agreement', None) and obj.person.agreement._is_individual_contract:
+        elif getattr(obj.person, 'agreement', None) and obj.person.agreement._is_individual_contract:
                 return obj.person.agreement.executor.fullname
 
 
