@@ -280,10 +280,11 @@ class ContractListSerializer(serializers.ModelSerializer):
         APPROVED = 1
         EXPIRED = 2
         EXPIRES = 3
+        CANCELED = 4
 
         two_week_for_expire = timezone.now() + timedelta(weeks=2)
 
-        if obj.status != EXPIRED or obj.status != APPROVED:
+        if obj.status not in [APPROVED, EXPIRED, CANCELED]:
 
             if obj.due_date is not None and obj.due_date < timezone.now():
 

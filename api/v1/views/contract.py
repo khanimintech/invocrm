@@ -26,11 +26,12 @@ def filter_status_count(qs, status):
     APPROVED = 1
     EXPIRED = 2
     EXPIRES = 3
+    CANCELED = 4
 
     two_week_for_expire = timezone.now() + timedelta(weeks=2)
 
     if status == EXPIRES:
-        return qs.filter(due_date__lt=two_week_for_expire).exclude(Q(status=APPROVED) | Q(status=EXPIRED)).count()
+        return qs.filter(due_date__lt=two_week_for_expire).exclude(status__in=[APPROVED, EXPIRED, CANCELED]).count()
 
     if status == IN_PROCESS:
         return qs.filter(status=IN_PROCESS).exclude(due_date__lt=two_week_for_expire).count()
@@ -161,7 +162,9 @@ class ContractStatusStatAPIView(ListAPIView):
             'in_process_count': filter_status_count(qs, BaseContract.Status.IN_PROCESS),
             'approved_count': filter_status_count(qs, BaseContract.Status.APPROVED),
             'expired_count': filter_status_count(qs, BaseContract.Status.EXPIRED),
-            'expires_in_2_weeks': filter_status_count(qs, EXPIRES)
+            'canceled_count': filter_status_count(qs, BaseContract.Status.CANCELED),
+            'expires_in_2_weeks': filter_status_count(qs, EXPIRES),
+
         }
 
         return Response(response)
