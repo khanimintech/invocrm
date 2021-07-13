@@ -17,7 +17,7 @@ from api.main_models.contract import BaseContract, BankAccount, Contact
 from api.models import Person
 from api.v1.serializers.contract import ContractListSerializer, BankListSerializer, ContactListSerializer, \
     SalesManagerSerializer, SellerSerializer, BaseContractAttachmentSerializer, ContactCreateSerializer, \
-    ContactEditSerializer
+    ContactEditSerializer, ContactGetSerializer
 
 
 def filter_status_count(qs, status):
@@ -197,7 +197,6 @@ class ContactViewSet(ModelViewSet):
 
         queryset = self.queryset
 
-
         return queryset.filter(Q(person__agreement__plant_name=self.request.user.plant_name) |
                                Q(plant_name=self.request.user.plant_name))
 
@@ -210,6 +209,10 @@ class ContactViewSet(ModelViewSet):
         elif self.action == 'update':
 
             return ContactEditSerializer
+
+        elif self.action == 'retrieve':
+
+            return ContactGetSerializer
 
         return super().get_serializer_class()
 
