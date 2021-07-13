@@ -1244,7 +1244,8 @@ class ContactGetSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = Contact
-        fields = ['address', 'mobile', 'personal_email', 'web_site', 'work_email', 'responsible_person', 'company_name']
+        fields = ['address', 'mobile', 'personal_email', 'web_site', 'work_email', 'responsible_person',
+                  'company_name', 'custom']
 
 
 class SalesManagerSerializer(serializers.ModelSerializer):
