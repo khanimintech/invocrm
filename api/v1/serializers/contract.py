@@ -1204,12 +1204,13 @@ class ContactCreateSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = Contact
-        fields = ['address', 'mobile', 'personal_email', 'web_site', 'work_email', 'responsible_person', 'company_name',
-                  'custom']
+        fields = ['address', 'mobile', 'personal_email', 'web_site', 'work_email', 'responsible_person', 'company_name']
 
     def create(self, validated_data):
 
         responsible_person = validated_data.pop('responsible_person', None)
+
+        validated_data['custom'] = True
 
         contact = super().create(validated_data)
         Person.objects.create(type=Person.TYPE.CONTACT, contact=contact, **responsible_person)
@@ -1239,7 +1240,7 @@ class ContactEditSerializer(serializers.ModelSerializer):
 
 class ContactGetSerializer(serializers.ModelSerializer):
 
-    responsible_person = ContactPersonSerializer(required=False)
+    responsible_person = ContactPersonSerializer(source='person')
 
     class Meta:
 

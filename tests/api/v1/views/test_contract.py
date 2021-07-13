@@ -831,6 +831,31 @@ class TestContactViewSet:
         assert contact.web_site == 'w_site'
         assert contact.plant_name == 'plant'
 
+    def test_contact_detail(self, apiclient, admin_user, responsible_person):
+
+        admin_user.plant_name = 'plant'
+        admin_user.save()
+
+        contact = responsible_person.contact
+        contact.plant_name = 'plant'
+        contact.save()
+
+        apiclient.force_login(admin_user)
+
+        response = apiclient.get(reverse('api:v1:contacts-detail', args=[contact.id]))
+
+        assert response.status_code == 200, response.json()
+
+        assert response.json()['responsible_person']['first_name'] == 'Resp'
+        assert response.json()['responsible_person']['last_name'] == 'Pers'
+        assert response.json()['responsible_person']['fathers_name'] == 'Resp_Father'
+
+        assert response.json()['mobile'] == '12345_rp'
+        assert response.json()['address'] == 'rp_address'
+        assert response.json()['personal_email'] == 'rp_email@email.email'
+        assert response.json()['work_email'] == 'rp_wemail@email.email'
+        assert response.json()['web_site'] == 'rp_site.site'
+
 
 class TestBankViewSet:
 

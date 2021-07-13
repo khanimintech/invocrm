@@ -42,7 +42,7 @@ def sales_manager(db):
 
 @pytest.fixture
 def responsible_person(db):
-    contact = Contact.objects.create(mobile='12345_rp', address='rp_address',
+    contact = Contact.objects.create(mobile='12345_rp', address='rp_address', work_email='rp_wemail@email.email',
                                      personal_email='rp_email@email.email', web_site='rp_site.site')
 
     responsible_person = Person.objects.create(
