@@ -4,6 +4,9 @@ form {
     }
     .input-wrapper {
         margin: 10px 0;
+        .MuiFormControl-marginNormal{
+          margin: 0;
+        }
     }
    
 }

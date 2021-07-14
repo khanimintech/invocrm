@@ -24,7 +24,8 @@ const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units, salesM
 						initialValues={{
 							...selectedAnnex,
 							status: selectedAnnex && selectedAnnex.status ?  selectedAnnex.status : 0,
-							total: selectedAnnex.total || null,
+							total: selectedAnnex ? selectedAnnex.total : null,
+              revision: selectedAnnex && selectedAnnex.revision!== undefined ? selectedAnnex.revision : false,
 							products: hideAnnexTable  ? null : (selectedAnnex && selectedAnnex.products && selectedAnnex.products.length ? selectedAnnex.products : [
 								{
 									name: "",
@@ -253,9 +254,50 @@ const SalesForm = ({ handleSubmit, contract, sellers, handleClose, units, salesM
 																		)}
 																	</Field>
 																</Grid>
-															) : null
+															) : (
+                                <Grid item md={6} className="input-wrapper">
+                                <Field
+                                validate={validateRequired}
+                                name={`annex_no`}
+                              >
+                                {({ field, form, meta }) => (
+                                  <>
+                                    <Input
+                                      label="Annex nömrəsi"
+                                      field={field}
+                                      form={form}
+                                      meta={meta}
+                                    />
+                                  </>
+                                )}
+                              </Field>
+                              </Grid>
+                              )
 														}
 												</Grid>
+                        {
+                          selectedAnnex ? (
+                            <Grid container>
+                              <Grid item md={6} className="input-wrapper">
+                                <Field
+                                validate={validateRequired}
+                                name={`annex_no`}
+                              >
+                                {({ field, form, meta }) => (
+                                  <>
+                                    <Input
+                                      label="Annex nömrəsi"
+                                      field={field}
+                                      form={form}
+                                      meta={meta}
+                                    />
+                                  </>
+                                )}
+                              </Field>
+                              </Grid>
+                            </Grid>
+                          ) : null
+                        }
 											<Divider />
 												<Grid item md={12}>
 													<CreateAnnex products={values.products} units={units} type={1} total={values.total || 0} hideAnnexTable={hideAnnexTable} />

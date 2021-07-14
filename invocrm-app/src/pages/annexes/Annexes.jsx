@@ -132,7 +132,9 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     const handleAddAnenx = vals => {
         return handleRequest(
             ContractsService.createAnnex({...vals, request_no: vals.request_no || null})
-        )
+        ).then(() => {
+          getOverviews()
+        })
     }
 
 

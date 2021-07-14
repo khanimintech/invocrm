@@ -15,7 +15,6 @@ const columns = [
     { field: 'customer', header: 'Müştəri', filter: true, showDetails: true},
     { field: 'address', header: 'Ünvan' , filter: true},
     { field: 'responsible_person', header: 'Əlaqədar şəxs' , filter: true},
-    { field: 'company_name', header: 'Şirkət' , filter: true},
     { field: 'mobile', header: 'Əlaqə nömrəsi' , filter: true},
     { field: 'personal_email', header: "Şəxsi e-ünvan" , filter: true},
     { field: 'web_site', header: "WEB sayt" , filter: true},
