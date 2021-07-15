@@ -54,7 +54,6 @@ class TestContractViewSet:
         TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
                                       type=BaseContract.Type.TRADE, contract_no='123')
 
-
         apiclient.force_login(admin_user)
         response = apiclient.get(reverse('api:v1:contracts-list'))
 
@@ -146,7 +145,6 @@ class TestContractViewSet:
         assert response.status_code == 204
         assert AnnexAttachment.objects.count() == 0
 
-
     def test_contract_attachments_list_only_annex(self, apiclient, admin_user, trade_aggrement_base):
         apiclient.force_login(admin_user)
 
@@ -215,6 +213,7 @@ class TestContractViewSet:
                                      'type': BaseContract.Type.TRADE,
                                      'sales_manager': sales_manager.id,
                                      'due_date': timezone.now(),
+                                     'status': BaseContract.Status.CANCELED,
                                      'company': {
                                          'name': 'My_company',
                                          'type': Company.ASC,
@@ -782,6 +781,9 @@ class TestContactViewSet:
         assert Contact.objects.all().count() == 1
 
         contact = Contact.objects.first()
+
+        assert contact.custom is True
+        assert False
 
         assert contact.person.first_name == 'name'
 

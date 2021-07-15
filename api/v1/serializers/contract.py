@@ -459,7 +459,7 @@ class TradeUpdateSerializer(serializers.ModelSerializer):
 
         fields = [
             'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
-            'responsible_person', 'type', 'bank', 'bank_account', 'contact'
+            'responsible_person', 'type', 'bank', 'bank_account', 'contact', 'status'
         ]
 
     def update(self, instance, validated_data):
@@ -540,7 +540,7 @@ class ServiceUpdateSerializer(serializers.ModelSerializer):
 
         fields = [
             'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
-            'responsible_person', 'type', 'bank', 'bank_account', 'contact'
+            'responsible_person', 'type', 'bank', 'bank_account', 'contact', 'status'
         ]
 
     def update(self, instance, validated_data):
@@ -624,7 +624,7 @@ class DistributionUpdateSerializer(serializers.ModelSerializer):
         fields = [
             'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
             'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'territory',
-            'subject_of_distribution'
+            'subject_of_distribution', 'status'
         ]
 
     def update(self, instance, validated_data):
@@ -702,7 +702,7 @@ class AgentUpdateSerializer(serializers.ModelSerializer):
         model = AgentAgreement
 
         fields = [
-            'contract_no', 'sales_manager', 'created', 'due_date', 'executor',
+            'contract_no', 'sales_manager', 'created', 'due_date', 'executor', 'status'
             'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'territory',
         ]
 
@@ -819,7 +819,7 @@ class RentUpdateSerializer(serializers.ModelSerializer):
 
         fields = [
             'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
-            'responsible_person', 'type', 'bank', 'bank_account', 'contact'
+            'responsible_person', 'type', 'bank', 'bank_account', 'contact', 'status'
         ]
 
     def update(self, instance, validated_data):
@@ -880,7 +880,7 @@ class OneTimeUpdateSerializer(serializers.ModelSerializer):
             'sales_manager', 'created', 'company', 'executor', 'type', 'id',
             'final_amount_with_writing', 'price_offer', 'price_offer_validity', 'warranty_period',
             'unpaid_period', 'unpaid_value', 'part_payment', 'part_acquisition', 'standard', 'annex',
-            'responsible_person'
+            'responsible_person', 'status'
         ]
 
     @atomic
@@ -993,7 +993,7 @@ class InternationalUpdateSerializer(serializers.ModelSerializer):
         fields = [
             'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
             'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'country',
-            'payment_condition'
+            'payment_condition', 'status'
         ]
 
     def update(self, instance, validated_data):
@@ -1072,7 +1072,7 @@ class CustomerUpdateSerializer(serializers.ModelSerializer):
         model = CustomerTemplateAgreement
 
         fields = [
-            'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
+            'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor', 'status'
             'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'custom_contract_type'
         ]
 
@@ -1117,7 +1117,7 @@ class POUpdateSerializer(serializers.ModelSerializer):
         model = POAgreement
 
         fields = [
-            'po_number', 'sales_manager', 'created', 'due_date', 'company', 'type', 'supplements', 'id'
+            'po_number', 'sales_manager', 'created', 'due_date', 'company', 'type', 'supplements', 'id', 'status'
         ]
 
     @atomic

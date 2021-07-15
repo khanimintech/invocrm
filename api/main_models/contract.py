@@ -17,6 +17,7 @@ class BaseContract(models.Model):
             (IN_PROCESS, _('In process')),
             (APPROVED, _('Approved')),
             (EXPIRED, _('Expired')),
+            (CANCELED, _('Canceled')),
         )
 
     class Type:
