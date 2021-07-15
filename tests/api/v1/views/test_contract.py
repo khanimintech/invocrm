@@ -783,8 +783,6 @@ class TestContactViewSet:
         contact = Contact.objects.first()
 
         assert contact.custom is True
-        assert False
-
         assert contact.person.first_name == 'name'
 
         assert contact.mobile == '1234'
