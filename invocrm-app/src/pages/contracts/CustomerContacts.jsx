@@ -79,7 +79,9 @@ const CustomerContacts = ({ readOnly, type, values }) => {
                     )}
                 </Field>
             </Grid>
-            <Grid item md={12} className="input-wrapper">
+            {
+              values.custom ? (
+                <Grid item md={12} className="input-wrapper">
                 <Field
                     name="company_name"
                 >
@@ -89,11 +91,13 @@ const CustomerContacts = ({ readOnly, type, values }) => {
                             field={field}
                             form={form}
                             meta={meta}
-                            readOnly={!values.custom}
                         />
                     )}
                 </Field>
             </Grid>
+              ) : null
+            }
+           
             <Grid item md={12} className="input-wrapper">
                 <Field
                     name="responsible_person.position"

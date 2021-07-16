@@ -166,7 +166,7 @@ const AgentForm = ({ handleSubmit, contract, handleClose, salesManagers, selecte
                                 {({ field, form, meta }) => (
                                   <>
                                     <Input
-                                      label="Sorğu nömrəsi"
+                                      label="Annex nömrəsi"
                                       field={field}
                                       form={form}
                                       meta={meta}
