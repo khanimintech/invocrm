@@ -415,7 +415,7 @@ class TradeGetSerializer(serializers.ModelSerializer):
 
         fields = [
             'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
-            'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'id'
+            'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'id', 'status'
         ]
 
     def get_contact(self, obj):
@@ -496,7 +496,7 @@ class ServiceGetSerializer(serializers.ModelSerializer):
 
         fields = [
             'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
-            'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'id'
+            'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'id', 'status'
         ]
 
     def get_contact(self, obj):
@@ -579,7 +579,7 @@ class DistributionGetSerializer(serializers.ModelSerializer):
         fields = [
             'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
             'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'id', 'territory',
-            'subject_of_distribution'
+            'subject_of_distribution', 'status'
         ]
 
     def get_contact(self, obj):
@@ -659,7 +659,7 @@ class AgentGetSerializer(serializers.ModelSerializer):
         model = AgentAgreement
 
         fields = [
-            'contract_no', 'sales_manager', 'created', 'due_date', 'executor',
+            'contract_no', 'sales_manager', 'created', 'due_date', 'executor', 'status',
             'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'id', 'territory',
         ]
 
@@ -775,7 +775,7 @@ class RentGetSerializer(serializers.ModelSerializer):
 
         fields = [
             'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
-            'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'id'
+            'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'id', 'status'
         ]
 
     def get_contact(self, obj):
@@ -859,7 +859,7 @@ class OneTimeGetSerializer(ContractCreateBaseSerializer):
             'sales_manager', 'created', 'company', 'executor', 'type', 'id',
             'final_amount_with_writing', 'price_offer', 'price_offer_validity', 'warranty_period',
             'unpaid_period', 'unpaid_value', 'part_payment', 'part_acquisition', 'standard', 'annex',
-            'responsible_person',
+            'responsible_person', 'status'
         ]
 
     def get_annex(self, obj):
@@ -948,7 +948,7 @@ class InternationalGetSerializer(serializers.ModelSerializer):
         fields = [
             'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
             'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'id', 'country',
-            'payment_condition'
+            'payment_condition', 'status'
         ]
 
     def get_contact(self, obj):
@@ -1028,7 +1028,7 @@ class CustomerGetSerializer(serializers.ModelSerializer):
         model = CustomerTemplateAgreement
 
         fields = [
-            'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor',
+            'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor', 'status',
             'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'id', 'custom_contract_type'
         ]
 
@@ -1104,7 +1104,7 @@ class POGetSerializer(ContractCreateBaseSerializer):
         model = POAgreement
 
         fields = [
-            'po_number', 'sales_manager', 'created', 'due_date', 'company', 'type', 'supplements', 'id'
+            'po_number', 'sales_manager', 'created', 'due_date', 'company', 'type', 'supplements', 'id', 'status'
         ]
 
 
@@ -1167,7 +1167,7 @@ class BankListSerializer(serializers.ModelSerializer):
         if obj.company_owner:
             return obj.company_owner.tin
         if obj.personal_owner:
-            return obj.personal_owner.fullname
+            return obj.personal_owner.tin
 
 
 class ContactListSerializer(serializers.ModelSerializer):
