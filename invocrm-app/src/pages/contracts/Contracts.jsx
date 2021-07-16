@@ -144,7 +144,7 @@ const Contracts = ({ handleRequest, enqueueSnackbar }) => {
                     if (o.id === 1) return { ...o, count: res.body.approved_count}
                     if (o.id === 2) return { ...o, count: res.body.expired_count}
                     if (o.id === 3) return { ...o, count: res.body.expires_in_2_weeks}
-                    if (o.id === 4) return { ...o, count: res.body.canceled}
+                    if (o.id === 4) return { ...o, count: res.body.canceled_count}
                     return o;
                 })
                 setOverviews(updatedOverviews)
