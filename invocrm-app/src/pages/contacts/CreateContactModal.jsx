@@ -62,7 +62,7 @@ const CreateContactModal = ({open, handleClose, handleRequest, reloadData, selec
 
                         {({ values }) => (
                             <Form>
-                                <CustomerContacts  type="contact"/>
+                                <CustomerContacts  type="contact" values={values} />
                             </Form>
                         )}
                     </Formik>

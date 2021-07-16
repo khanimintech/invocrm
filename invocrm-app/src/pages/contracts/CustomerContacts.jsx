@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 
 
 
-const CustomerContacts = ({ readOnly, type }) => {
+const CustomerContacts = ({ readOnly, type, values }) => {
 
     return (
         <>
@@ -89,7 +89,7 @@ const CustomerContacts = ({ readOnly, type }) => {
                             field={field}
                             form={form}
                             meta={meta}
-                            readOnly={readOnly}
+                            readOnly={!values.custom}
                         />
                     )}
                 </Field>
