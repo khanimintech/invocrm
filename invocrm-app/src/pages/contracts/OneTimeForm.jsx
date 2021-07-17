@@ -18,7 +18,7 @@ const OneTimeForm = ({ handleSubmit, handleClose, selectedContract, units, sales
         created, due_date, id, sales_manager,
         executor, final_amount_with_writing, part_acquisition,
         part_payment, price_offer, price_offer_validity, standard, unpaid_period, unpaid_value, executor_contact,
-        warranty_period, annex
+        warranty_period, annex, status,
     } = selectedContract || {};
 
     const [contractType, setContractType] = useState(selectedContract ? (selectedContract.company ? 1 : 2) : 1);
@@ -44,6 +44,7 @@ const OneTimeForm = ({ handleSubmit, handleClose, selectedContract, units, sales
                         unpaid_value,
                         warranty_period,
                         sales_manager,
+                        status,
                         annex: {
                             ...annex,
                             products: annex && annex.products && annex.products.length ? annex.products.map(p => ({ ...p, id: undefined})) : [{
