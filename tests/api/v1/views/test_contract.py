@@ -197,7 +197,7 @@ class TestContractViewSet:
     def test_trade_edit(self, apiclient, admin_user, sales_manager, responsible_person, executor, company):
 
         t = TradeAgreement.objects.create(plant_name='plant', sales_manager=sales_manager, due_date=timezone.now(),
-                                          type=BaseContract.Type.SERVICE, contract_no='1234', company=company,
+                                          type=BaseContract.Type.TRADE, contract_no='1234', company=company,
                                           executor=executor, responsible_person=responsible_person)
 
         bank = Bank.objects.create(name='bank_name', code='123', tin='1234')

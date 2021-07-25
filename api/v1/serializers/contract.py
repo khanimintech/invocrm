@@ -702,7 +702,7 @@ class AgentUpdateSerializer(serializers.ModelSerializer):
         model = AgentAgreement
 
         fields = [
-            'contract_no', 'sales_manager', 'created', 'due_date', 'executor', 'status'
+            'contract_no', 'sales_manager', 'created', 'due_date', 'executor', 'status',
             'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'territory',
         ]
 
@@ -1072,7 +1072,7 @@ class CustomerUpdateSerializer(serializers.ModelSerializer):
         model = CustomerTemplateAgreement
 
         fields = [
-            'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor', 'status'
+            'contract_no', 'sales_manager', 'created', 'due_date', 'company', 'executor', 'status',
             'bank', 'bank_account', 'contact', 'responsible_person', 'type', 'custom_contract_type'
         ]
 
