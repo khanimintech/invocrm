@@ -140,6 +140,9 @@ class CustomerTemplateAgreement(BaseContract):
             (SERVICE, _('Service')),
             (DISTRIBUTION, _('Distribution')),
             (AGENT, _('Agent')),
+            (RENT, _('Rent')),
+            (ONE_TIME, _('One Time')),
+            (INTERNATIONAL, _('International')),
         )
 
     AG_TYPE = BaseContract.Type.CUSTOMER
