@@ -51,7 +51,10 @@ const Contacts = ({ handleRequest, user, loading, enqueueSnackbar }) => {
         <Tooltip title="Kontakt yarat" placement="top-end">
             <IconButton
                 aria-label="kontakt"
-                onClick={() => toggleCreateModal(true)}
+                onClick={() => {
+                  setSelectedContact({ custom: true})
+                  toggleCreateModal(true)
+                }}
                 className="add-icon"
             >
                 <AddBoxIcon />

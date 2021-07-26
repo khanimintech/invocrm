@@ -303,7 +303,7 @@ const SalesForm = ({ handleSubmit, handleClose, formType, selectedContract, sale
                                 form={form}
                                 meta={meta}
                                 select
-                                options={contractStatuses}
+                                options={contractStatuses.filter(s => s.value !== 3)}
                               />
                             )}
                           </Field>

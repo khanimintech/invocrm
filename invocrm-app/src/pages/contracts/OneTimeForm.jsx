@@ -65,7 +65,7 @@ const OneTimeForm = ({ handleSubmit, handleClose, selectedContract, units, sales
 
                     {({ values, setFieldValue }) => (
                         <Form>
-                            <Grid container spacing={0} justify="space-between" spacing={5}>
+                            <Grid container justify="space-between" spacing={5}>
                                 <Grid item md={6} sm={12} xs={12}>
                                     <Grid item md={12}>
                                         <Typography variant="h6" gutterBottom>

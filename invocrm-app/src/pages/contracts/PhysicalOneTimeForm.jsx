@@ -383,7 +383,7 @@ const PhysicalOneTimeForm = ({ salesManagers, id }) => {
                   form={form}
                   meta={meta}
                   select
-                  options={contractStatuses}
+                  options={contractStatuses.filter(s => s.value !== 3)}
                 />
               )}
             </Field>

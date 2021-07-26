@@ -5,7 +5,7 @@ import SalesForm from './createAnnex/SalesForm';
 import AgentForm from './createAnnex/AgentForm';
 import RentForm from './createAnnex/RentForm';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import OneTimeForm from './createAnnex/OneTimeForm';
 
 const formTypes = {
     1: <SalesForm />,
@@ -13,6 +13,7 @@ const formTypes = {
     3: <SalesForm />,
     4: <AgentForm />,
     5: <RentForm />,
+    6: <OneTimeForm />,
     7: <SalesForm hideAnnexTable/>,
     8: <SalesForm />,
     9: <SalesForm hideAnnexTable/>,
@@ -60,7 +61,7 @@ const ContractAnnexModal = ({
                                 handleClose();
                             })
                             .catch(({ statusCode, body }) => {
-                                if (statusCode == 400) {
+                                if (statusCode === 400) {
                                     Object.keys(body).forEach(field => {
                                         formikBag.setErrors({ [field]: body[field]})
                                     })

@@ -53,7 +53,7 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
 
             {({ values, setErrors }) => (
               <Form>
-                <Grid container spacing={0} justify="space-between" spacing={5}>
+                <Grid container spacing={0} justify="space-between">
                   <Grid item md={6} sm={12} xs={12}>
                     <Grid item md={12}>
                       <Typography variant="h6" gutterBottom>
@@ -209,7 +209,7 @@ const AgentForm = ({ handleSubmit, handleRequest, handleClose, formType, selecte
                                 form={form}
                                 meta={meta}
                                 select
-                                options={contractStatuses}
+                                options={contractStatuses.filter(s => s.value !== 3)}
                               />
                             )}
                           </Field>

@@ -18,7 +18,7 @@ const initialOverviews = [
     { id: 2, status: "ƏDV-li", count: 0, icon: <AccessAlarmIcon />, color: "rgb(90 89 204)"},
     { id: 3, status: "Prosesdə", count: 0, icon: <HourglassEmptyIcon />, color:  "#FFB300"},
     { id: 4, status: "Təsdiqlənib", count: 0, icon: <CheckCircleIcon />, color:"#66BB6A" },
-    { id: 5, status: "Ləğv edilib", count: 0, icon:  <BlockIcon />, color:"rgb(245, 66, 83)" },
+    { id: 5, status: "Ləğv edilib", count: 0, icon:  <BlockIcon />, color: "#585051" },
 ]
 
 const columns = [
@@ -32,6 +32,7 @@ const columns = [
     { field: 'payment_terms', header: "Ödəniş şərti" , filter: true },
     { field: 'sum_no_invoice', header: "Məbləğ (ƏDV-siz)" , filter: false },
     { field: 'sum_with_invoice', header: "Məbləğ (ƏDV-li)" , filter: false },
+    { field: 'revision_count', header: "Revision" , filter: false },
     { field: 'created', header: 'Yaradılma Tarixi', filter: true  },
     { field: 'status', header: 'Status', filter: true  },
 ];
@@ -53,11 +54,16 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
     const [salesManagers, setSalesManagers] = useState([]);
     const [units, setUnits] = useState([]);
 
+
+
     useEffect(() => {
-        getOverviews();
-        getSalesManagers()
+      getSalesManagers()
         getSellers();
         getUnits();
+  }, [])
+
+    useEffect(() => {
+        getOverviews();
     }, [filters.annex_created_after, filters.annex_created_before])
 
 
@@ -146,7 +152,7 @@ const Annexes = ({ handleRequest, user, loading, enqueueSnackbar }) => {
             sum={allCount}
             onExportCSV={() => dt.current.exportCSV()}
             showTimeRange
-            handleFilter={({from, to}) =>  getAnnexes({ ...filters, "annex_created_after": from , "annex_created_before" : to })}
+            handleFilter={({from, to}) =>  setFilters({ ...filters, "annex_created_after": from , "annex_created_before" : to })}
             data={annexes}
             columns={columns}
         >
