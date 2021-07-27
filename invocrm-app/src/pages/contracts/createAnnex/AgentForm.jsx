@@ -177,6 +177,24 @@ const AgentForm = ({ handleSubmit, contract, handleClose, salesManagers, selecte
                             </Grid>
                           </Grid>
                       }
+                      <Grid container>
+                      <Grid item md={6} sm={12} xs={12} className="input-wrapper">
+                          <Field
+                            name="request_no"
+                            validate={validateRequired}
+                          >
+                            {({ field, form, meta }) => (
+                              <Input
+                                label="Sorğu №"
+                                field={field}
+                                form={form}
+                                meta={meta}
+                              />
+                            )}
+                          </Field>
+                        </Grid>
+
+                      </Grid>
                     </Grid>
                     <Divider />
                     <br />

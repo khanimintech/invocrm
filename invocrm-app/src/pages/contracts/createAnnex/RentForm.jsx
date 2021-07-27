@@ -170,6 +170,7 @@ const RentForm = ({ handleSubmit, contract, handleClose, units, salesManagers, s
                                     )}
                                   </Field>
                               </Grid>
+                              
                             </Grid>
                         </Grid>
 
@@ -211,6 +212,21 @@ const RentForm = ({ handleSubmit, contract, handleClose, units, salesManagers, s
                               )}
                             </Field>
                           </Grid>
+                          <Grid item md={12} sm={12} xs={12} className="input-wrapper">
+                                <Field
+                                  name="request_no"
+                                  validate={validateRequired}
+                                >
+                                  {({ field, form, meta }) => (
+                                    <Input
+                                      label="Sorğu №"
+                                      field={field}
+                                      form={form}
+                                      meta={meta}
+                                    />
+                                  )}
+                                </Field>
+                              </Grid>
                             {
                               selectedAnnex ? (
                                 <Grid item md={12}>
@@ -230,9 +246,12 @@ const RentForm = ({ handleSubmit, contract, handleClose, units, salesManagers, s
                               </Grid>
                               ) : null
                             }
+                      
                         </Grid>
+      
 
                       </Grid>
+            
 
 
 
