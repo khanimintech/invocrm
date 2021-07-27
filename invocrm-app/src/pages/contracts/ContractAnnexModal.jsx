@@ -19,7 +19,7 @@ const formTypes = {
     9: <SalesForm hideAnnexTable/>,
 }
 
-const isSalesType = contractType => contractType === 1 ||contractType === 2 ||  contractType  ===  3  || contractType  === 8 ? true : false 
+const isSalesOrOneTimeType = contractType => contractType === 1 ||contractType === 2 ||  contractType  ===  3   || contractType === 6 || contractType  === 8  ? true : false 
 
 const ContractAnnexModal = ({
     open,
@@ -47,9 +47,9 @@ const ContractAnnexModal = ({
                         handleSubmit: (vals, formikBag) => {
                             handleSubmit({
                                 ...vals, 
-                                ...(annexType ? (isSalesType( annexType) && vals.total ? {products: []} : {} ) : {
+                                ...(annexType ? (isSalesOrOneTimeType( annexType) && vals.total ? {products: []} : {} ) : {
                                     contract: contract ? contract.id : undefined,
-                                    ...(isSalesType(contract.type) && vals.total ? {products: []} : {} ),
+                                    ...(isSalesOrOneTimeType(contract.type) && vals.total ? {products: []} : {} ),
                                 }),
                                 type: contract ? contract.type : undefined, 
                                 contract_id: contract ? contract.id : undefined,

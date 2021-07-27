@@ -90,7 +90,6 @@ const OneTimeForm = ({ handleSubmit, contract, handleClose, salesManagers, selec
                         <Grid item md={6} sm={12} xs={12} className="input-wrapper">
                           <Field
                             name="request_no"
-                            validate={validateRequired}
                           >
                             {({ field, form, meta }) => (
                               <Input
@@ -105,7 +104,6 @@ const OneTimeForm = ({ handleSubmit, contract, handleClose, salesManagers, selec
                         <Grid item md={6} sm={12} xs={12} className="input-wrapper">
                           <Field
                             name="payment_terms"
-                            validate={validateRequired}
                           >
                             {({ field, form, meta }) => (
                               <Input
@@ -122,7 +120,6 @@ const OneTimeForm = ({ handleSubmit, contract, handleClose, salesManagers, selec
                         <Grid item md={6} sm={12} xs={12} className="input-wrapper">
                           <Field
                             name="delivery_terms"
-                            validate={validateRequired}
                           >
                             {({ field, form, meta }) => (
                               <Input
@@ -137,7 +134,6 @@ const OneTimeForm = ({ handleSubmit, contract, handleClose, salesManagers, selec
                         <Grid item md={6} sm={12} xs={12} className="input-wrapper">
                           <Field
                             name="acquisition_terms"
-                            validate={validateRequired}
                           >
                             {({ field, form, meta }) => (
                               <Input
@@ -154,7 +150,6 @@ const OneTimeForm = ({ handleSubmit, contract, handleClose, salesManagers, selec
                         <Grid item md={6} sm={12} xs={12} className="input-wrapper">
                           <Field
                             name="seller"
-                            validate={validateRequired}
                           >
                             {({ field, form, meta }) => (
                               <Input
@@ -171,7 +166,6 @@ const OneTimeForm = ({ handleSubmit, contract, handleClose, salesManagers, selec
                         <Grid item md={6} className="input-wrapper">
                           <Field
                             name="sales_manager"
-                            validate={validateRequired}
                           >
                             {({ field, form, meta }) => (
                               <Input
