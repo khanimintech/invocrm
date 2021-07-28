@@ -187,7 +187,7 @@ class OneTimeUpdateProductSerializer(serializers.ModelSerializer):
 
 class OneTimePersonSerializer(serializers.ModelSerializer):
 
-    contact = ContactSerializer()
+    contact = ContactSerializer(required=False, allow_null=True)
 
     class Meta:
 
@@ -880,7 +880,7 @@ class OneTimeGetSerializer(ContractCreateBaseSerializer):
 class OneTimeUpdateSerializer(serializers.ModelSerializer):
 
     company = CompanyUpdateSerializer(required=False)
-    executor = OneTimePersonSerializer()
+    executor = OneTimePersonSerializer(required=False)
     annex = OneTimeUpdateAnnexSerializer(required=False)
 
     class Meta:
