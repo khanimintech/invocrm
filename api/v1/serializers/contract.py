@@ -188,6 +188,7 @@ class OneTimeUpdateProductSerializer(serializers.ModelSerializer):
 class OneTimePersonSerializer(serializers.ModelSerializer):
 
     contact = ContactSerializer(required=False, allow_null=True)
+    type = serializers.IntegerField(required=False)
 
     class Meta:
 
@@ -211,7 +212,7 @@ class OneTimeAnnexGetSerializer(serializers.ModelSerializer):
 
 class OneTimeUpdateAnnexSerializer(serializers.ModelSerializer):
 
-    seller = PersonSerializer()
+    seller = PersonSerializer(required=False, allow_null=True)
     products = OneTimeUpdateProductSerializer(many=True, required=False)
 
     class Meta:
