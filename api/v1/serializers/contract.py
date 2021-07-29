@@ -880,9 +880,9 @@ class OneTimeGetSerializer(ContractCreateBaseSerializer):
 
 class OneTimeUpdateSerializer(serializers.ModelSerializer):
 
-    company = CompanyUpdateSerializer(required=False)
-    executor = OneTimePersonSerializer(required=False)
-    annex = OneTimeUpdateAnnexSerializer(required=False)
+    company = CompanyUpdateSerializer(required=False, allow_null=True)
+    executor = OneTimePersonSerializer(required=False, allow_null=True)
+    annex = OneTimeUpdateAnnexSerializer(required=False, allow_null=True)
 
     class Meta:
         model = OneTimeAgreement
@@ -900,13 +900,14 @@ class OneTimeUpdateSerializer(serializers.ModelSerializer):
         def update_if_not_none(cls, id, data):
             if data:
                 return cls.objects.filter(id=id).update(**data)
-        if instance.company:
-            update_if_not_none(Company, instance.company.id, validated_data.pop('company', None))
+        if validated_data.pop('company', None):
+            Company.objects.update_or_create(id=instance.company.id, defaults=validated_data.pop('company', None))
 
         executor_data = validated_data.pop('executor', None)
         executor_contact_data = executor_data.pop('contact', None)
 
-        update_if_not_none(Contact, instance.executor.contact.id, executor_contact_data)
+        if instance.executor:
+            update_if_not_none(Contact, instance.executor.contact.id, executor_contact_data)
         update_if_not_none(Person, instance.executor.id, executor_data)
         instance.executor.refresh_from_db()
 
@@ -1258,7 +1259,7 @@ class ContactGetSerializer(serializers.ModelSerializer):
 
         model = Contact
         fields = ['address', 'mobile', 'personal_email', 'web_site', 'work_email', 'responsible_person',
-                  'company_name', 'custom']
+                  'company_name', 'custom', 'id']
 
 
 class SalesManagerSerializer(serializers.ModelSerializer):
