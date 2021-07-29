@@ -904,7 +904,8 @@ class OneTimeUpdateSerializer(serializers.ModelSerializer):
             Company.objects.update_or_create(id=instance.company.id, defaults=validated_data.pop('company', None))
 
         executor_data = validated_data.pop('executor', None)
-        executor_contact_data = executor_data.pop('contact', None)
+        if executor_data:
+            executor_contact_data = executor_data.pop('contact', None)
 
         if instance.executor:
             update_if_not_none(Contact, instance.executor.contact.id, executor_contact_data)
