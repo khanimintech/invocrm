@@ -909,8 +909,8 @@ class OneTimeUpdateSerializer(serializers.ModelSerializer):
 
         if instance.executor:
             update_if_not_none(Contact, instance.executor.contact.id, executor_contact_data)
-        update_if_not_none(Person, instance.executor.id, executor_data)
-        instance.executor.refresh_from_db()
+            update_if_not_none(Person, instance.executor.id, executor_data)
+            instance.executor.refresh_from_db()
 
         annex_data = validated_data.pop('annex')
         seller_data = annex_data.pop('seller')
