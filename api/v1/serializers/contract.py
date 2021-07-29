@@ -915,20 +915,24 @@ class OneTimeUpdateSerializer(serializers.ModelSerializer):
         annex_data = validated_data.pop('annex')
         seller_data = annex_data.pop('seller')
         products_data = annex_data.pop('products')
+        if instance.annex_list.last():
+            if instance.annex_list.last().seller:
+                update_if_not_none(Person, instance.annex_list.last().seller.id, seller_data)
+                instance.annex_list.last().seller.refresh_from_db()
 
-        update_if_not_none(Person, instance.annex_list.last().seller.id, seller_data)
-        instance.annex_list.last().seller.refresh_from_db()
-        update_if_not_none(BaseAnnex, instance.annex_list.last().id, annex_data)
+            update_if_not_none(BaseAnnex, instance.annex_list.last().id, annex_data)
 
-        instance.annex_list.last().products.all().delete()
+            instance.annex_list.last().products.all().delete()
 
         for p in products_data:
 
             ProductInvoiceItem.objects.create(annex=instance.annex_list.last(), **p)
 
         # must call save() for Person objects to change fullname(changed in refactored save(), update() dont call save())
-        instance.executor.save()
-        instance.annex_list.last().seller.save()
+        if instance.executor:
+            instance.executor.save()
+        if instance.annex_list.last().seller:
+            instance.annex_list.last().seller.save()
 
         return super().update(instance.onetimeagreement, validated_data)
 
