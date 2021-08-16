@@ -1,0 +1,283 @@
+@import './styleVariables.scss';
+
+.MuiDrawer-root a {
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.87);
+  }
+
+
+.datatable-filter .p-paginator .p-paginator-current {
+    margin-left: auto;
+}
+
+.datatable-filter .p-progressbar {
+    height: .5rem;
+    background-color: #D8DADC;
+}
+
+.datatable-filter .p-progressbar .p-progressbar-value {
+    background-color: #607D8B;
+}
+
+.datatable-filter .table-header {
+    display: flex;
+    justify-content: space-between;
+    .search-wrapper {
+        display: flex;
+        & .MuiGrid-grid-md-4 {
+            justify-content: flex-end;
+        }
+    }
+}
+
+.datatable-filter .p-datepicker {
+    min-width: 25rem;
+}
+
+.datatable-filter .p-datepicker td {
+    font-weight: 400;
+}
+
+.datatable-filter .p-datatable-responsive .p-datatable-header {
+    padding: 1rem;
+    text-align: left;
+    font-size: 1.5rem;
+}
+
+.datatable-filter .p-datatable-responsive .p-paginator {
+    padding: 1rem;
+}
+
+.datatable-filter .p-datatable-responsive .p-datatable-thead > tr > th {
+    text-align: left;
+}
+
+.datatable-filter .p-datatable-responsive .p-datatable-tbody > tr > td {
+    cursor: auto;
+}
+
+.datatable-filter .p-datatable-responsive .p-dropdown-label:not(.p-placeholder) {
+    text-transform: uppercase;
+}
+
+.datatable-filter .p-datatable-responsive .p-datatable-tbody > tr > td .p-column-title {
+    display: none;
+}
+
+@media screen and (max-width: 960px) {
+    .datatable-filter .p-datatable-responsive .p-datatable-thead > tr > th,
+    .datatable-filter .p-datatable-responsive .p-datatable-tfoot > tr > td {
+        display: none !important;
+    }
+
+    .datatable-filter .p-datatable-responsive .p-datatable-tbody > tr {
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .datatable-filter .p-datatable-responsive .p-datatable-tbody > tr > td {
+        text-align: left;
+        display: block;
+        border: 0 none !important;
+        width: 100% !important;
+        float: left;
+        clear: left;
+        border: 0 none;
+    }
+
+    .datatable-filter .p-datatable-responsive .p-datatable-tbody > tr > td .p-column-title {
+        padding: .4rem;
+        min-width: 30%;
+        display: inline-block;
+        margin: -.4rem 1rem -.4rem -.4rem;
+        font-weight: bold;
+    }
+
+    .datatable-filter .p-datatable-responsive .p-datatable-tbody > tr > td .p-progressbar {
+        margin-top: .5rem;
+    }
+}
+
+
+.datatable-responsive .p-datatable-responsive .p-datatable-tbody > tr > td .p-column-title {
+    display: none;
+}
+
+@media screen and (max-width: 40em) {
+    .datatable-responsive .p-datatable.p-datatable-responsive .p-datatable-thead > tr > th,
+    .datatable-responsive .p-datatable.p-datatable-responsive .p-datatable-tfoot > tr > td {
+        display: none !important;
+    }
+
+    .datatable-responsive .p-datatable.p-datatable-responsive .p-datatable-tbody > tr > td {
+        text-align: left;
+        display: block;
+        width: 100%;
+        float: left;
+        clear: left;
+        border: 0 none;
+    }
+
+    .datatable-responsive .p-datatable.p-datatable-responsive .p-datatable-tbody > tr > td .p-column-title {
+        padding: .4rem;
+        min-width: 30%;
+        display: inline-block;
+        margin: -.4em 1em -.4em -.4rem;
+        font-weight: bold;
+    }
+
+    .datatable-responsive .p-datatable.p-datatable-responsive .p-datatable-tbody > tr > td:last-child {
+        border-bottom: 1px solid #e9ecef;
+    }
+}
+
+
+.table-actions-row {
+    display: flex;
+    justify-content: center;
+    svg {
+        font-size: 18px;
+        color: $color-blue;
+        opacity: .7;
+    }
+    .delete-icon {
+        svg{
+            color: $color-red;
+        }
+    }
+    .edit-icon {
+        svg{
+            color: $color-green;
+        }
+    }
+    .attach-icon {
+        svg{
+            color: $color-purple;
+        }
+    }
+}
+
+.p-filter-column input,
+.p-dropdown-clearable {
+    width: 100%;
+}
+
+
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
+  }
+
+
+  .active {
+      svg,
+      .MuiListItemText-root {
+          color: #003059;
+      }
+  }
+
+
+  .status-0{
+      background-color: $color-yellow !important;
+      color: #fff !important;
+  }
+
+  .status-1{
+    background-color: $color-green !important;
+    color: #fff !important;
+}
+.status-2{
+    background-color: $color-blue !important;
+    color: #fff !important;
+}
+.annex-status {
+    &.status-2{
+        background-color: $color-red !important;
+    }
+}
+.status-3{
+    background-color: $color-purple !important;
+    color: #fff !important;
+}
+
+.align-right{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.align-center{
+    display: flex;
+    justify-content: center;
+}
+
+
+.icon-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.clickable-column{
+    cursor: pointer;
+    text-decoration: underline;
+    color: $color-blue;
+}
+
+td {
+    word-break: break-word;
+}
+
+.autocomplete-subtext{
+    color: gray;
+}
+
+.table-header {
+    input,
+    .p-input-icon-left,
+    .p-multiselect {
+        max-width: 100%;
+    }
+}
+
+
+.range-wrapper {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    span {
+        font-size: 16px;
+        color: #495057;
+        font-weight: normal;
+    }
+}
+
+
+.err-text {
+    font-size: 14px;
+    color: #d32f2f;
+}
+
+.MuiSnackbar-root{
+    background-color: yellow;
+}
+
+
+.spinner-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+}
+
+
+#printable-table{
+   color: red;
+}

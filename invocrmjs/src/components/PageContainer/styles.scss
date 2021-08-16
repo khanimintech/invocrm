@@ -1,0 +1,77 @@
+@import 'src/styleVariables.scss';
+
+.header-row{
+    display: flex;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.54);
+    h1 {
+        display: inline-block;
+        font-weight: 400;
+    }
+    svg {
+        color: $color-blue;
+        font-size: 2em;
+        opacity: .7;
+    }
+}
+
+.overview-box{
+    display: flex;
+    flex-direction: column;
+    border-radius: 3px;
+    color: #fff;
+    .overview-box-first-row {
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 5px;
+        font-size: 18px;
+        svg {
+            font-size: 30px;
+        }
+    }
+    .overview-box-second-row{
+        margin-bottom: 15px;
+        opacity: .8;;
+        font-size: 15px;
+        font-weight: 500;
+        span {
+            display: inline-block;
+            padding-left: 13px;
+            border-left: 2px solid #fff;
+        }
+    }
+}
+
+.content-header{
+    color: rgba(0, 0, 0, 0.54);
+}
+
+
+.content-toolbar
+{
+    display: flex;
+    svg {
+        width: 30px;
+        height: 30px;
+    }
+    .csv-icon {
+        color: $color-green;
+    }
+    .pdf-icon {
+        color: $color-red;
+    }
+    .add-icon {
+        color: $color-purple;
+    }
+    .print-icon{
+        color: $color-black;
+    }
+}
+
+
+.page-container-header{
+    align-items: center;
+    justify-content: space-between;
+}

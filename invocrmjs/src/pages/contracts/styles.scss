@@ -1,0 +1,131 @@
+@import "./../../styleVariables.scss";
+
+.product-table {
+    border: 1px solid #E9ECEF;
+    table-layout: auto;
+    border-collapse: collapse;
+    th {
+        border: 1px solid #E9ECEF;
+    }
+}
+
+
+.create-annex-form {
+    .MuiGrid-container {
+        .input-wrapper {
+            &:first-of-type{
+                padding-right: 10px;
+            }
+        }
+    }
+    .MuiFormControlLabel-labelPlacementStart {
+        margin-left: 0;
+        &.error {
+            color: $color-red;
+        }
+    }
+}
+
+.bottom-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    div {
+        h6 {
+            font-weight: 500;
+        }
+    }
+}
+
+
+.attachments-sidebar {
+    &.MuiDrawer-root {
+        height: 50%;
+    }
+    .MuiBackdrop-root{
+        background-color: transparent;
+        z-index: 0;
+    }
+    .MuiDrawer-paper{
+        bottom: 0;
+        top: auto;
+        height: 60%;
+        width: 380px;
+    }
+    .contract-header {
+        background-color: $color-purple;
+        padding: 12px;
+        color: #fff;
+        font-size: 16px;
+        .clickable-column {
+            color: #fff;
+            &:hover {
+                color: $color-blue;
+            }
+        }
+    }
+    .file-row {
+        display: flex;
+        align-items: center;
+        margin: 8px 12px;
+        justify-content: space-between;
+        font-size: 16px;
+        &>div {
+            display: flex;
+            align-items: center;
+            span {
+                max-width: 165px;
+                display: inline-block;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+            }
+        }
+        svg {
+            color: $color-blue;
+            font-size: 18px;
+        }
+    }
+    .spinner {
+        margin: auto;
+    }
+    .hidden-input{
+        display: none;
+    }
+    .upload-row {
+        display: flex;
+        align-items: center;
+        padding-left: 12px;
+        .upload-link{
+            padding: 12px 12px 12px 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        svg {
+            color: $color-blue;
+        }
+    }
+}
+
+.annex-wat-total-row {
+    &>div {
+        // display: flex;
+        // justify-content: space-between;
+        .MuiFormControl-root {
+            width: 50%;
+            margin-bottom: 10px;
+        }
+        .MuiFormControlLabel-root{
+            margin: 0;
+        }
+        .annex-total-row{
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            span {
+                font-weight: 500;
+                margin-left: 5px;
+            }
+        }
+    }
+}
