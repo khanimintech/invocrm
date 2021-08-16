@@ -2,11 +2,11 @@
 
 set -e
 cd invocrmjs
-if  [! -d "node_modules" ] || [ "$REBUILD_FRONT" == "1" ]; then
+#if  [ ! -d "node_modules" ] || [ "$REBUILD_FRONT" == "1" ]; then
 
-  npm install xlsx &&\
+npm install xlsx &&\
   npm run build
-fi
+#fi
 
 npx gulp &&\
  cp build/index.html ../templates/index.html &&\
