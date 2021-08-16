@@ -172,8 +172,8 @@ const ExtendedTable = ({
 
     const cellTemplate = (value, col, row) => {
         const { header, showDetails, add, field } = col;
-        const { type, contract_type } = row;
-        const isColumnClickable = isAnnex ? (contract_type !== 6 && showDetails) : showDetails;
+        const { type } = row;
+        const isColumnClickable =  showDetails;
         if (field === "created" || field === "due_date" || field === "signature_date")
             return (
                 <React.Fragment>

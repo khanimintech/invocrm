@@ -187,7 +187,7 @@ body {
 
 
   .status-0{
-      background-color: $color-yellow !important;
+      background-color: $color-blue !important;
       color: #fff !important;
   }
 
@@ -196,17 +196,23 @@ body {
     color: #fff !important;
 }
 .status-2{
-    background-color: $color-blue !important;
+    background-color: $color-red !important;
     color: #fff !important;
 }
 .annex-status {
     &.status-2{
-        background-color: $color-red !important;
+        background-color: #585051 !important;
     }
 }
 .status-3{
-    background-color: $color-purple !important;
+    background-color: $color-yellow !important;
     color: #fff !important;
+}
+
+
+.status-4{
+  background-color: #585051 !important;
+  color: #fff !important;
 }
 
 .align-right{
@@ -280,4 +286,9 @@ td {
 
 #printable-table{
    color: red;
+}
+
+
+.header-logo{
+  cursor: pointer;
 }

@@ -33,5 +33,5 @@ export const ContactsService = {
     index: (filters) => index(filters),
     remove: id => remove(id),
     save: values => save(values),
-    getItem: id => getContact(id)
+    getItem: id => getContact(id),
 }

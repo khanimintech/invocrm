@@ -29,7 +29,7 @@ const initialOverviews = [
     { id: 3, status: "Vaxtı bitir", count: 0, icon: <AccessAlarmIcon />, color: "#FFB300"  },
     { id: 0, status: "Prosesdə", count: 0, icon: <HourglassEmptyIcon />, color: "rgb(66, 165, 245)"},
     { id: 1, status: "Təsdiqlənib", count: 0, icon: <CheckCircleIcon />, color: "#66BB6A" },
-    { id: 4, status: "Ləğv edildi", count: 0, icon: <BlockIcon />, color:"rgb(245, 66, 83)" },
+    { id: 4, status: "Ləğv edildi", count: 0, icon: <BlockIcon />, color: "#585051"},
 ]
 
 const columns = [
@@ -144,7 +144,7 @@ const Contracts = ({ handleRequest, enqueueSnackbar }) => {
                     if (o.id === 1) return { ...o, count: res.body.approved_count}
                     if (o.id === 2) return { ...o, count: res.body.expired_count}
                     if (o.id === 3) return { ...o, count: res.body.expires_in_2_weeks}
-                    if (o.id === 4) return { ...o, count: res.body.canceled}
+                    if (o.id === 4) return { ...o, count: res.body.canceled_count}
                     return o;
                 })
                 setOverviews(updatedOverviews)
@@ -241,7 +241,7 @@ const Contracts = ({ handleRequest, enqueueSnackbar }) => {
                 columns={columns}
                 statuses={contractStatuses}
                 elRef={dt}
-                actions={{ edit: false, delete: true, attach: true, plus: false, show: true}}
+                actions={{ edit: false, attach: true, plus: false, show: true}}
                 enqueueSnackbar={enqueueSnackbar}
                 onDelete={deleteContract}
                 getData={getContracts}

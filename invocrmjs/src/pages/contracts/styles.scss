@@ -50,7 +50,7 @@
         bottom: 0;
         top: auto;
         height: 60%;
-        width: 380px;
+        width: 482px;
     }
     .contract-header {
         background-color: $color-purple;
@@ -82,8 +82,14 @@
             }
         }
         svg {
-            color: $color-blue;
             font-size: 18px;
+            &.upload-icon{
+                color: $color-blue;
+            }
+            &.clear-icon {
+                font-size: 18px;
+                line-height: 18px;
+            }
         }
     }
     .spinner {

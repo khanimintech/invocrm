@@ -191,7 +191,7 @@ const Layout = props => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
+          <Typography className="header-logo" variant="h6" noWrap onClick={() => history.push("/")}>
             PMZ CRM
           </Typography>
           <div className={classes.grow} />

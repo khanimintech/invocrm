@@ -4,7 +4,6 @@ ENV PYTHONUNBUFFERED 1
 ENV WORKDIR /app
 WORKDIR ${WORKDIR}
 RUN apt update
-RUN apt search npm
 RUN apt install npm -y
 RUN npm install -g n
 RUN n 10.19.0
@@ -12,6 +11,3 @@ COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 COPY . .
-RUN cd invocrmjs &&\
- npm install xlsx &&\
- npm run build

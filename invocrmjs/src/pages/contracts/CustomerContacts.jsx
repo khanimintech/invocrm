@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 
 
 
-const CustomerContacts = ({ readOnly, type }) => {
+const CustomerContacts = ({ readOnly, type, values }) => {
 
     return (
         <>
@@ -79,7 +79,9 @@ const CustomerContacts = ({ readOnly, type }) => {
                     )}
                 </Field>
             </Grid>
-            <Grid item md={12} className="input-wrapper">
+            {
+              values.custom ? (
+                <Grid item md={12} className="input-wrapper">
                 <Field
                     name="company_name"
                 >
@@ -89,11 +91,13 @@ const CustomerContacts = ({ readOnly, type }) => {
                             field={field}
                             form={form}
                             meta={meta}
-                            readOnly={readOnly}
                         />
                     )}
                 </Field>
             </Grid>
+              ) : null
+            }
+           
             <Grid item md={12} className="input-wrapper">
                 <Field
                     name="responsible_person.position"

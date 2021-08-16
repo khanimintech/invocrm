@@ -14,7 +14,6 @@ services:
     build: .
     command: ./update_static_run.sh
     volumes:
-      - front:/app/invocrmjs
       - .:/app
     ports:
       - "8003:8000"

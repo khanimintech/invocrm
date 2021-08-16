@@ -9,16 +9,26 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import { format, parseISO } from 'date-fns';
 import { Divider } from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
+import ClearIcon from '@material-ui/icons/Clear';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
 
-const Files = ({ files }) => {
+const Files = ({ files, onDelete }) => {
     return (
         files.map( file => (
             <div className="file-row" key={file.id}>
                 <div  className="clickable-column" onClick={() => window.open(file.url, "_blank")}>
-                    <DescriptionIcon />
+                    <DescriptionIcon  className="upload-icon"/>
                     <span>{file.name}</span>
                 </div>
-                <span>{ format(parseISO(file.created), 'MM/dd/yyyy')}</span>
+                <div>
+                    <span>{ format(parseISO(file.created), 'MM/dd/yyyy')}</span>
+                    <Tooltip title="Sil" placement="top">
+                        <IconButton size="small" color="secondary" className="clear-icon" onClick={() => onDelete(file)}>
+                            <ClearIcon />
+                        </IconButton>
+                    </Tooltip>
+                </div>
             </div>
         ))
     )
@@ -26,7 +36,7 @@ const Files = ({ files }) => {
 
 const Attachments = ({ open, setOpen, contract, handleOpenContractClick, handleRequest, enqueueSnackbar }) => {
     const [activeTab, setActiveTab] = React.useState(2);
-    const [attachments, setAttachments] = useState({annexes: [], contracts: []});
+    const [attachments, setAttachments] = useState({annexes: [], contracts: [], other: []});
     const [loading, toggleLoading] = useState(false)
 
     useEffect(() => {
@@ -42,20 +52,30 @@ const Attachments = ({ open, setOpen, contract, handleOpenContractClick, handleR
             true
         )
             .then(res => {
-                setAttachments(res.body || { contracts: [], annexes: [] });
+                setAttachments(res.body || { contracts: [], annexes: [], other: [] });
             })
             .finally(() => toggleLoading(false))
     }
 
-
     const handleUploadAttahcment = file => {
-        const type = activeTab === 1 ? "contract" : "annex";
+        const type = activeTab === 1 ? "contract" : activeTab === 2 ?  "annex" : "other";
         const formData = new FormData();
         formData.append("attachment", file);
 
         handleRequest(ContractsService.uploadAttachment(type, formData, contract.id))
         .then(res => {
             enqueueSnackbar("Fayl uğurla əlavə edildi", { variant : "success"})
+            getAttachments()
+        })
+    }
+
+
+    const handleDelete = file => {
+        const type = activeTab === 1 ? "contract" : activeTab === 2 ?  "annex" : "other";
+        handleRequest(
+            ContractsService.deleteAttachment (type, contract.id, file.id)
+        ).then(() => {
+            enqueueSnackbar("Fayl uğurla silindi", { variant : "success"})
             getAttachments()
         })
     }
@@ -86,10 +106,14 @@ const Attachments = ({ open, setOpen, contract, handleOpenContractClick, handleR
                         >
                             <Tab label="Müqavilə" value={1} />
                             <Tab label="Əlavə" value={2} />
+                            <Tab label="Başqa" value={3} />
                         </Tabs>
                         {
                             loading ? <CircularProgress  className="spinner" color="primary"/> : <>
-                                <Files files={activeTab === 1 ?  attachments.contracts : attachments.annexes } />
+                                <Files 
+                                    files={activeTab === 1 ?  attachments.contracts : activeTab === 2 ?  attachments.annexes : attachments.other }
+                                    onDelete={file => handleDelete(file)}
+                                />
                                 <Divider />
                                 <div className="upload-row">
                                     <GetAppIcon  color="primary" />
