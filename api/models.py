@@ -39,6 +39,6 @@ class Person(models.Model):
 
     def save(self, **kwargs):
 
-        self.fullname = self.first_name + ' ' + self.last_name
+        self.fullname = (self.first_name or '') + ' ' + (self.last_name or '')
 
         super(Person, self).save(**kwargs)
