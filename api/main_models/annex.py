@@ -44,7 +44,7 @@ class BaseAnnex(models.Model):
 
     with_vat = models.BooleanField(default=False)
 
-    total = models.IntegerField(null=True, blank=True)
+    total = models.FloatField(null=True, blank=True)
 
     status = models.SmallIntegerField(choices=Status.CHOICES, default=Status.IN_PROCESS)
 
@@ -63,8 +63,8 @@ class ProductInvoiceItem(models.Model):
 
     unit = models.ForeignKey('UnitOfMeasure', on_delete=models.CASCADE)
     quantity = models.IntegerField()
-    price = models.IntegerField()  # single
-    total = models.IntegerField()  # mostly read-only. needed for simplified SQL
+    price = models.FloatField()  # single
+    total = models.FloatField()  # mostly read-only. needed for simplified SQL
 
 
 class AgentInvoiceItem(models.Model):
@@ -94,5 +94,5 @@ class RentItems(models.Model):
     term = models.IntegerField()
     quantity = models.IntegerField()
     one_day_rent = models.IntegerField()
-    total = models.IntegerField()
+    total = models.FloatField()
 
